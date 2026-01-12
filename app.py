@@ -109,6 +109,36 @@ def feedback():
         return redirect(url_for("feedback"))
 
     return render_template("feedback.html")
+
+@app.route("/create-repo")
+def create_repo():
+    return render_template("create_repo.html")
+
+@app.route("/create-issue", methods=["GET", "POST"])
+def create_issue():
+    return render_template("create_issue.html")
+
+
+@app.route("/create-commit", methods=["GET", "POST"])
+def create_commit():
+    return render_template("create_commit.html")
+
+
+@app.route("/repos")
+def repos():
+    return render_template("repos.html")  # repo list page (later)
+
+
+@app.route("/activity")
+def activity():
+    return render_template("activity.html")  # activity log (later)
+
+
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")  # user profile (later)
+
+
    
 if __name__ == "__main__":
     app.run(debug=True)

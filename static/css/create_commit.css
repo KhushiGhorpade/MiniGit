@@ -1,0 +1,186 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #0f2c2c, #000);
+  color: #fff;
+}
+
+.commit-container {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.commit-card {
+  width: 520px;
+  background: #0b0b0b;
+  border-radius: 18px;
+  padding: 40px;
+  box-shadow: 0 0 40px rgba(0,255,240,0.2);
+}
+
+.commit-card h1 {
+  color: #00fff0;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #aaa;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #00fff055;
+  background: #000;
+  color: #fff;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  height: 120px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.radio-label input[type="radio"] {
+  margin-right: 6px; /* small space between dot and text */
+  accent-color: cyan; /* makes the dot cyan to match theme */
+}
+
+
+.create-btn {
+  width: 100%;
+  padding: 14px;
+  background: #00fff0;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.create-btn:hover {
+  background: #00d6c9;
+}
+
+/* ================= AUTH NAVBAR ================= */
+.auth-header {
+  height: 72px;
+  padding: 0 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(0,255,255,0.2);
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-brand .logo {
+  width: 34px;
+  height: 34px;
+  background: cyan;
+  border-radius: 10px;
+  box-shadow: 0 0 18px cyan;
+}
+
+.auth-nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.auth-nav a,
+.auth-nav span {
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.auth-nav a:hover,
+.auth-nav span:hover {
+  color: cyan;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 130%;
+  left: 0;
+  background: rgba(0,0,0,0.9);
+  border: 1px solid rgba(0,255,255,0.3);
+  border-radius: 10px;
+  min-width: 160px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 0 25px rgba(0,255,255,0.4);
+}
+
+.dropdown-menu a {
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(0,255,255,0.15);
+}
+
+.dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, cyan, #00bcd4);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: cyan;
+}

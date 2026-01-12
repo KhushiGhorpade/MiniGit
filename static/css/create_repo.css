@@ -1,0 +1,221 @@
+body {
+  background: #000;
+  color: #fff;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Header */
+.header {
+  height: 72px;
+  padding: 0 60px;
+  display: flex;
+  align-items: center;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(0,255,255,0.2);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 34px;
+  height: 34px;
+  background: cyan;
+  border-radius: 10px;
+  box-shadow: 0 0 20px cyan;
+}
+
+/* Page container */
+.create-container {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+/* Card */
+.repo-card {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(22px);
+  padding: 40px;
+  border-radius: 22px;
+  box-shadow: 0 0 60px rgba(0,255,255,0.35);
+}
+
+.repo-card h1 {
+  color: cyan;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 14px;
+  opacity: 0.75;
+  margin-bottom: 30px;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(0,255,255,0.3);
+  border-radius: 10px;
+  color: #fff;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  height: 80px;
+}
+
+input:focus,
+textarea:focus {
+  border-color: cyan;
+}
+
+/* Radio */
+.radio-group {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+}
+
+/* Checkbox */
+.checkbox {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Button */
+.create-btn {
+  width: 100%;
+  margin-top: 25px;
+  padding: 12px;
+  background: cyan;
+  color: #000;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.create-btn:hover {
+  box-shadow: 0 0 25px cyan;
+  transform: translateY(-2px);
+}
+/* ================= AUTH NAVBAR ================= */
+.auth-header {
+  height: 72px;
+  padding: 0 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(0,255,255,0.2);
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-brand .logo {
+  width: 34px;
+  height: 34px;
+  background: cyan;
+  border-radius: 10px;
+  box-shadow: 0 0 18px cyan;
+}
+
+.auth-nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.auth-nav a,
+.auth-nav span {
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.auth-nav a:hover,
+.auth-nav span:hover {
+  color: cyan;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 130%;
+  left: 0;
+  background: rgba(0,0,0,0.9);
+  border: 1px solid rgba(0,255,255,0.3);
+  border-radius: 10px;
+  min-width: 160px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 0 25px rgba(0,255,255,0.4);
+}
+
+.dropdown-menu a {
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(0,255,255,0.15);
+}
+
+/* Show dropdown */
+.dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
+/* Custom Scrollbar (subtle & professional) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, cyan, #00bcd4);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: cyan;
+}

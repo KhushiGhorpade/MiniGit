@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Commit | MiniGit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/create_commit.css') }}">
+</head>
+<body>
+
+<!-- ================= AUTH NAVBAR ================= -->
+<header class="auth-header">
+  <div class="auth-brand">
+    <div class="logo"></div>
+    <span>MiniGit</span>
+  </div>
+
+  <nav class="auth-nav">
+    <a href="#">Dashboard</a>
+    <a href="#">Repos</a>
+    <a href="#">Activity</a>
+
+    <div class="dropdown">
+      <span>Create ▾</span>
+      <div class="dropdown-menu">
+        <a href="/create-repo">New Repository</a>
+        <a href="/create-issue">New Issue</a>
+        <a href="/create-commit">New Commit</a>
+      </div>
+    </div>
+
+    <a href="#">Profile</a>
+  </nav>
+</header>
+
+<!-- ================= CREATE COMMIT SECTION ================= -->
+<section class="commit-container">
+  <div class="commit-card">
+    <h1>Create New Commit</h1>
+    <p class="subtitle">
+      Commit your changes to a repository with a meaningful message
+    </p>
+
+    <form method="POST">
+
+      <div class="form-group">
+        <label>Repository</label>
+        <select required>
+          <option value="">Select repository</option>
+          <option>mini-git</option>
+          <option>demo-project</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Commit Message</label>
+        <input
+          type="text"
+          placeholder="e.g. Fixed login bug"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Files Changed</label>
+        <textarea
+          placeholder="List the files you changed or added..."
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+  <label>Commit Type (optional)</label>
+  <div class="radio-group">
+    <label class="radio-label">
+      <input type="radio" name="commit_type" value="feature" checked>
+      <span>Feature</span>
+    </label>
+    <label class="radio-label">
+      <input type="radio" name="commit_type" value="bugfix">
+      <span>Bugfix</span>
+    </label>
+    <label class="radio-label">
+      <input type="radio" name="commit_type" value="docs">
+      <span>Documentation</span>
+    </label>
+  </div>
+</div>
+
+      <button type="submit" class="create-btn">
+        Create Commit
+      </button>
+
+    </form>
+  </div>
+</section>
+
+</body>
+</html>

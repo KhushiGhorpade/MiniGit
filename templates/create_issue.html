@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Issue | MiniGit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/create_issue.css') }}">
+</head>
+<body>
+
+<!-- ================= AUTH NAVBAR ================= -->
+<header class="auth-header">
+  <div class="auth-brand">
+    <div class="logo"></div>
+    <span>MiniGit</span>
+  </div>
+
+  <nav class="auth-nav">
+    <a href="#">Dashboard</a>
+    <a href="#">Repos</a>
+    <a href="#">Activity</a>
+
+    <div class="dropdown">
+      <span>Create ▾</span>
+      <div class="dropdown-menu">
+        <a href="/create-repo">New Repository</a>
+        <a href="/create-issue">New Issue</a>
+        <a href="/create-commit">New Commit</a>
+      </div>
+    </div>
+
+    <a href="#">Profile</a>
+  </nav>
+</header>
+
+<!-- ================= CREATE ISSUE SECTION ================= -->
+<section class="issue-container">
+  <div class="issue-card">
+    <h1>Create New Issue</h1>
+    <p class="subtitle">
+      Report a bug or suggest an improvement for a repository
+    </p>
+
+    <form method="POST">
+
+      <div class="form-group">
+        <label>Repository</label>
+        <select required>
+          <option value="">Select repository</option>
+          <option>mini-git</option>
+          <option>demo-project</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Issue Title</label>
+        <input
+          type="text"
+          placeholder="e.g. Login page not loading"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          placeholder="Describe the issue in detail..."
+          required
+        ></textarea>
+      </div>
+
+
+      <button type="submit" class="create-btn">
+        Create Issue
+      </button>
+
+    </form>
+  </div>
+</section>
+
+</body>
+</html>

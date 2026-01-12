@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Repository | MiniGit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/create_repo.css') }}">
+</head>
+<body>
+
+<!-- ================= AUTH NAVBAR ================= -->
+<header class="auth-header">
+  <div class="auth-brand">
+    <div class="logo"></div>
+    <span>MiniGit</span>
+  </div>
+
+  <nav class="auth-nav">
+    <a href="#">Dashboard</a>
+    <a href="#">Repos</a>
+    <a href="#">Activity</a>
+
+    <div class="dropdown">
+      <span>Create ▾</span>
+      <div class="dropdown-menu">
+        <a href="/create-repo">New Repository</a>
+        <a href="/create-issue">New Issue</a>
+        <a href="/create-commit">New Commit</a>
+      </div>
+    </div>
+
+    <a href="#">Profile</a>
+  </nav>
+</header>
+
+<!-- ================= CREATE REPO SECTION ================= -->
+<section class="create-container">
+  <div class="repo-card">
+    <h1>Create a New Repository</h1>
+    <p class="subtitle">
+      Set up a new MiniGit repository for your project
+    </p>
+
+    <form method="POST">
+      <div class="form-group">
+        <label>Repository Name</label>
+        <input
+          type="text"
+          placeholder="e.g. mini-git-project"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          placeholder="Short description of your repository"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Visibility</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="visibility" checked>
+            Public
+          </label>
+          <label>
+            <input type="radio" name="visibility">
+            Private
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group checkbox">
+        <label>
+          <input type="checkbox" checked>
+          Initialize repository with README
+        </label>
+      </div>
+
+      <button type="submit" class="create-btn">
+        Create Repository
+      </button>
+    </form>
+  </div>
+</section>
+
+</body>
+</html>
