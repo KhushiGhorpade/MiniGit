@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
-
+import os
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 app = Flask(__name__)
 app.secret_key = "secret_key_here"
 
@@ -131,13 +134,37 @@ def repos():
 
 @app.route("/activity")
 def activity():
-    return render_template("activity.html")  # activity log (later)
+    # Demo data for charts
+    repo_commits = [
+        {"repo": "Repo A", "commits": 12},
+        {"repo": "Repo B", "commits": 8},
+        {"repo": "Repo C", "commits": 15},
+    ]
+
+    repo_issues = [
+        {"repo": "Repo A", "open_issues": 3},
+        {"repo": "Repo B", "open_issues": 5},
+        {"repo": "Repo C", "open_issues": 2},
+    ]
+
+    repo_names = ["Repo A", "Repo B", "Repo C"]
+
+    return render_template(
+        "activity.html",
+        repo_commits=repo_commits,
+        repo_issues=repo_issues,
+        repo_names=repo_names
+    )
+
 
 
 @app.route("/profile")
 def profile():
     return render_template("profile.html")  # user profile (later)
 
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")  # user profile (later)
 
    
 if __name__ == "__main__":

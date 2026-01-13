@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Activity | MiniGit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/activity.css') }}">
+</head>
+
+<body>
+
+<!-- ================= AUTH NAVBAR ================= -->
+<header class="auth-header">
+  <div class="auth-brand">
+    <div class="logo"></div>
+    <span>MiniGit</span>
+  </div>
+
+  <nav class="auth-nav">
+    <a href="#">Dashboard</a>
+    <a href="#">Repos</a>
+    <a href="#">Activity</a>
+
+    <div class="dropdown">
+      <span>Create ▾</span>
+      <div class="dropdown-menu">
+        <a href="/create-repo">New Repository</a>
+        <a href="/create-issue">New Issue</a>
+        <a href="/create-commit">New Commit</a>
+      </div>
+    </div>
+
+    <a href="#">Profile</a>
+  </nav>
+</header>
+
+<!-- ================= ACTIVITY CONTAINER ================= -->
+<section class="activity-container">
+
+  <div class="activity-header">
+    <h1>Activity Overview</h1>
+    <p class="subtitle">Your recent MiniGit contributions</p>
+  </div>
+
+  <!-- ================= SUMMARY CARDS ================= -->
+  <div class="activity-stats">
+
+    <div class="stat-card">
+      <h3>Total Repositories</h3>
+      <span>3</span>
+    </div>
+
+    <div class="stat-card">
+      <h3>Total Commits</h3>
+      <span>35</span>
+    </div>
+
+    <div class="stat-card">
+      <h3>Open Issues</h3>
+      <span>5</span>
+    </div>
+
+    <div class="stat-card">
+      <h3>Last Activity</h3>
+      <span>2 days ago</span>
+    </div>
+
+  </div>
+
+  <!-- ================= CHARTS ================= -->
+  <div class="activity-card">
+    <h2>Commits Over Time</h2>
+    <canvas id="commitLineChart"></canvas>
+  </div>
+
+  <div class="activity-card">
+    <h2>Repository-wise Activity</h2>
+    <canvas id="repoBarChart"></canvas>
+  </div>
+
+  <!-- ================= RECENT ACTIVITY LOG ================= -->
+  <div class="activity-card">
+    <h2>Recent Activity</h2>
+    <ul class="activity-log">
+      <li>Committed to <b>mini-git</b> — “Fixed login bug”</li>
+      <li>Created repository <b>demo-project</b></li>
+      <li>Opened issue — “UI alignment issue”</li>
+      <li>Committed to <b>mini-git</b> — “Added activity page”</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- ================= DUMMY DATA FOR CHARTS ================= -->
+<script>
+  // Demo data
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const commitCounts = [5, 8, 3, 10, 7, 2, 6];
+  const repoNames = ["Repo A", "Repo B", "Repo C"];
+  const repoCommits = [
+      { repo: "Repo A", commits: 12 },
+      { repo: "Repo B", commits: 8 },
+      { repo: "Repo C", commits: 15 }
+  ];
+</script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // Line chart: commits over time with gradient
+  const ctxLine = document.getElementById('commitLineChart').getContext('2d');
+  const gradient = ctxLine.createLinearGradient(0, 0, 0, 220);
+  gradient.addColorStop(0, 'rgba(0,255,240,0.4)');
+  gradient.addColorStop(1, 'rgba(0,255,240,0)');
+  
+  new Chart(ctxLine, {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [{
+        label: 'Commits',
+        data: commitCounts,
+        fill: true,
+        backgroundColor: gradient,
+        borderColor: '#00fff0',
+        borderWidth: 3,
+        tension: 0.4,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        pointBackgroundColor: '#00fff0',
+        pointBorderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#00fff0' } } },
+      scales: {
+        x: { ticks: { color: '#fff' }, grid: { color: 'rgba(0,255,240,0.1)' } },
+        y: { ticks: { color: '#fff' }, grid: { color: 'rgba(0,255,240,0.1)' } }
+      }
+    }
+  });
+
+  // Bar chart: repo-wise activity with shades
+  const ctxBar = document.getElementById('repoBarChart').getContext('2d');
+  new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+      labels: repoCommits.map(c => c.repo),
+      datasets: [{
+        label: 'Commits per Repo',
+        data: repoCommits.map(c => c.commits),
+        backgroundColor: [
+          'rgba(0,255,240,0.6)',
+          'rgba(0,200,255,0.6)',
+          'rgba(0,150,255,0.6)'
+        ],
+        borderColor: '#00fff0',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#00fff0' } } },
+      scales: {
+        x: { ticks: { color: '#fff' }, grid: { color: 'rgba(0,255,240,0.1)' } },
+        y: { ticks: { color: '#fff' }, grid: { color: 'rgba(0,255,240,0.1)' } }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

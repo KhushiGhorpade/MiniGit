@@ -16,13 +16,16 @@
     </div>
 
     <nav class="nav">
-      <a href="/">Home</a>
+      <a href="#" class="active">Home</a>
       <a href="{{ url_for('features') }}">Features</a>
-      <a href="#" class="active">Demo</a>
+      <a href="{{ url_for('demo') }}">Demo</a>
       <a href="{{ url_for('privacy') }}">Privacy</a>
       <a href="{{ url_for('help') }}">Help</a>
       <a href="{{ url_for('feedback') }}">Feedback</a>
     </nav>
+
+    <a href="{{ url_for('login') }}" class="login">Login</a>
+
   </header>
 
   <!-- DEMO HERO -->
