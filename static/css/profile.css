@@ -1,0 +1,452 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #0f2c2c, #000);
+  color: #fff;
+}
+
+/* ================= PROFILE LAYOUT ================= */
+
+.profile-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 44px;
+  padding: 60px 80px;
+}
+
+/* ================= SIDEBAR ================= */
+
+.profile-sidebar {
+  background: #0b0b0b;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 0 35px rgba(0,255,240,0.2);
+  text-align: center;
+}
+
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: cyan;
+  color: #000;
+  font-size: 42px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 0 25px cyan;
+}
+
+.username {
+  color: #aaa;
+  margin-bottom: 14px;
+}
+
+.bio {
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.tech-stack span {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  background: rgba(0,255,240,0.15);
+  margin: 4px;
+  color: cyan;
+}
+
+/* ================= MAIN ================= */
+
+.profile-card {
+  background: #0b0b0b;
+  border-radius: 18px;
+  padding: 32px;
+  margin-bottom: 38px;
+  box-shadow: 0 0 35px rgba(0,255,240,0.2);
+}
+
+.profile-card h3 {
+  color: #00fff0;
+  margin-bottom: 20px;
+}
+.profile-sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  box-shadow: 0 0 25px rgba(0,255,240,0.15);
+}
+.dropdown-menu {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+}
+
+/* ================= OVERVIEW ================= */
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Circular progress (CSS only) */
+.progress-ring {
+  text-align: center;
+}
+
+.ring {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background:
+    conic-gradient(cyan 78%, rgba(255,255,255,0.1) 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.ring span {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+/* .quick-stats {
+  display: flex;
+  gap: 30px;
+}
+
+.quick-stats div b {
+  display: block;
+  font-size: 26px;
+  color: cyan;
+}
+
+.quick-stats div span {
+  font-size: 13px;
+  color: #aaa;
+} */
+
+/* ================= HEATMAP ================= */
+
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(7, 18px);
+  gap: 8px;
+}
+
+.cell {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.l0 { background: #111; }
+.l1 { background: rgba(0,255,240,0.25); }
+.l2 { background: rgba(0,255,240,0.45); }
+.l3 { background: rgba(0,255,240,0.7); }
+.l4 { background: cyan; }
+
+/* ================= REPOS ================= */
+
+.repo-list {
+  display: grid;
+  gap: 16px;
+}
+
+.repo-card {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,255,255,0.2);
+  transition: transform 0.25s ease;
+}
+
+.repo-card:hover {
+  transform: translateY(-4px);
+}
+
+.repo-card h4 {
+  color: cyan;
+  margin-bottom: 6px;
+}
+
+.repo-card p {
+  font-size: 13px;
+  color: #ccc;
+}
+
+.repo-card span {
+  font-size: 12px;
+  color: #aaa;
+}
+/* ================= ACTIVITY TIMELINE ================= */
+
+/* ================= ACTIVITY TIMELINE – FIXED ================= */
+
+.activity-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.activity-timeline::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(0,255,240,0.25);
+}
+
+.activity-timeline li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  column-gap: 22px;
+  padding-bottom: 40px;
+  position: relative;
+}
+
+.activity-timeline .dot {
+  width: 14px;
+  height: 14px;
+  background: cyan;
+  border-radius: 50%;
+  margin-top: 6px;
+  box-shadow: 0 0 10px rgba(0,255,240,0.8);
+  justify-self: center;
+}
+
+.activity-timeline .content {
+  background: rgba(255,255,255,0.02);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.activity-timeline .content b {
+  display: block;
+  color: cyan;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.activity-timeline .content p {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: #ddd;
+}
+
+.activity-timeline .content small {
+  font-size: 11px;
+  color: #888;
+}
+.activity-timeline .dot {
+  box-shadow: 0 0 6px rgba(0,255,240,0.6);
+}
+
+
+/* ================= CLEAN REPO LIST ================= */
+
+.repo-list-clean {
+  display: flex;
+  flex-direction: column;
+}
+
+.repo-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.repo-row:last-child {
+  border-bottom: none;
+}
+
+.repo-row h4 {
+  color: cyan;
+  margin-bottom: 4px;
+}
+
+.repo-row p {
+  font-size: 13px;
+  color: #bbb;
+}
+
+.repo-meta {
+  display: flex;
+  gap: 18px;
+  font-size: 12px;
+  color: #aaa;
+  align-items: center;
+}
+/* ================= AUTH NAVBAR ================= */
+.auth-header {
+  height: 72px;
+  padding: 0 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(0,255,255,0.2);
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-brand .logo {
+  width: 34px;
+  height: 34px;
+  background: cyan;
+  border-radius: 10px;
+  box-shadow: 0 0 18px cyan;
+}
+
+.auth-nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.auth-nav a,
+.auth-nav span {
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.auth-nav a:hover,
+.auth-nav span:hover {
+  color: cyan;
+}
+.auth-nav a.active, .auth-nav span.active {
+    color: cyan;
+    border-bottom: 2px solid cyan;
+    padding-bottom: 4px;
+    font-weight: bold;
+    text-shadow: 0 0 6px cyan;
+}
+/* ================= DROPDOWN BASE ================= */
+
+.dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Trigger text */
+.dropdown > span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: 130%;
+  right: 0;
+  min-width: 180px;
+
+  background: #0b0f0f;
+  border-radius: 10px;
+  padding: 6px 0;
+
+  box-shadow: 0 12px 30px rgba(0, 255, 255, 0.18);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+
+  transition: all 0.25s ease;
+  z-index: 1000;
+
+  list-style: none;
+}
+
+/* SHOW dropdown (IMPORTANT FIX) */
+.dropdown:hover .dropdown-menu,
+.dropdown-menu:hover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Links */
+.dropdown-menu a {
+  display: block;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #e6ffff;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(0, 255, 255, 0.12);
+}
+
+/* Divider */
+.dropdown-menu hr {
+  border: none;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 6px 0;
+}
+
+/* Logout highlight */
+.dropdown-menu a.logout {
+  color: #ff6b6b;
+}
+
+.dropdown-menu a.logout:hover {
+  background: rgba(255, 107, 107, 0.15);
+}
+
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, cyan, #00bcd4);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: cyan;
+}
+.profile-main {
+  max-width: 920px;
+}
+.repo-row h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.repo-meta span {
+  opacity: 0.85;
+}
+
+.repo-row {
+  padding: 18px 0;
+}
+.repo-row:hover h4 {
+  text-decoration: underline;
+}

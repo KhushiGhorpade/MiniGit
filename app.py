@@ -5,6 +5,7 @@ import os
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
 app = Flask(__name__)
 app.secret_key = "secret_key_here"
 
@@ -17,12 +18,11 @@ db = mysql.connector.connect(
 )
 cursor = db.cursor(dictionary=True)
 
-# HOME
+# ========================= BEFORE LOGIN PAGES =========================
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("index.html", active_page="home")
 
-# LOGIN
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -34,14 +34,13 @@ def login():
 
         if user and check_password_hash(user["password"], password):
             flash("Login successful!", "success")
-            return redirect(url_for("home"))
+            return redirect(url_for("dashboard"))
         else:
             flash("Invalid username or password!", "error")
             return redirect(url_for("login"))
 
-    return render_template("login.html")
+    return render_template("login.html", active_page="login")
 
-# REGISTER
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -64,27 +63,23 @@ def register():
             flash("Username or email already exists!", "error")
             return redirect(url_for("register"))
 
-    return render_template("register.html")
+    return render_template("register.html", active_page="register")
 
-# FEATURES
 @app.route("/features")
 def features():
-    return render_template("features.html")
+    return render_template("features.html", active_page="features")
 
-# DEMO
 @app.route("/demo")
 def demo():
-    return render_template("demo.html")
+    return render_template("demo.html", active_page="demo")
 
-# HELP
 @app.route("/help")
 def help():
-    return render_template("help.html")
+    return render_template("help.html", active_page="help")
 
-# PRIVACY
 @app.route("/privacy")
 def privacy():
-    return render_template("privacy.html")
+    return render_template("privacy.html", active_page="privacy")
 
 @app.route("/feedback", methods=["GET", "POST"])
 def feedback():
@@ -111,30 +106,19 @@ def feedback():
 
         return redirect(url_for("feedback"))
 
-    return render_template("feedback.html")
+    return render_template("feedback.html", active_page="feedback")
 
-@app.route("/create-repo")
-def create_repo():
-    return render_template("create_repo.html")
-
-@app.route("/create-issue", methods=["GET", "POST"])
-def create_issue():
-    return render_template("create_issue.html")
-
-
-@app.route("/create-commit", methods=["GET", "POST"])
-def create_commit():
-    return render_template("create_commit.html")
-
+# ========================= AFTER LOGIN PAGES =========================
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html", active_page="dashboard")
 
 @app.route("/repos")
 def repos():
-    return render_template("repos.html")  # repo list page (later)
-
+    return render_template("repos.html", active_page="repos")
 
 @app.route("/activity")
 def activity():
-    # Demo data for charts
     repo_commits = [
         {"repo": "Repo A", "commits": 12},
         {"repo": "Repo B", "commits": 8},
@@ -153,19 +137,35 @@ def activity():
         "activity.html",
         repo_commits=repo_commits,
         repo_issues=repo_issues,
-        repo_names=repo_names
+        repo_names=repo_names,
+        active_page="activity"
     )
-
-
 
 @app.route("/profile")
 def profile():
-    return render_template("profile.html")  # user profile (later)
+    return render_template("profile.html", active_page="profile")
 
-@app.route("/dashboard")
-def dashboard():
-    return render_template("dashboard.html")  # user profile (later)
+@app.route("/my-repos")
+def my_repos():
+    return render_template("my_repos.html", active_page="my-repos")
 
-   
+@app.route("/create-repo")
+def create_repo():
+    return render_template("create_repo.html", active_page="create-repo")
+
+@app.route("/create-issue", methods=["GET", "POST"])
+def create_issue():
+    return render_template("create_issue.html", active_page="create-issue")
+
+@app.route("/create-commit", methods=["GET", "POST"])
+def create_commit():
+    return render_template("create_commit.html", active_page="create-commit")
+
+@app.route("/logout")
+def logout():
+    # session.clear()
+    return redirect(url_for("login"))
+
+# ========================= RUN APP =========================
 if __name__ == "__main__":
     app.run(debug=True)

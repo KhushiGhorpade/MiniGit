@@ -15,21 +15,32 @@
   </div>
 
   <nav class="auth-nav">
-    <a href="#">Dashboard</a>
-    <a href="#">Repos</a>
-    <a href="#">Activity</a>
+    <a href="/dashboard" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
+    <a href="/repositories" class="{% if active_page == 'repositories' %}active{% endif %}">Repositories</a>
+    <a href="/activity" class="{% if active_page == 'activity' %}active{% endif %}">Activity</a>
 
+    <!-- Create Dropdown -->
     <div class="dropdown">
       <span>Create ▾</span>
       <div class="dropdown-menu">
-        <a href="/create-repo">New Repository</a>
-        <a href="/create-issue">New Issue</a>
-        <a href="/create-commit">New Commit</a>
+        <a href="/create-repo" class="{% if active_page == 'create-repo' %}active{% endif %}">New Repository</a>
+        <a href="/create-issue" class="{% if active_page == 'create-issue' %}active{% endif %}">New Issue</a>
+        <a href="/create-commit" class="{% if active_page == 'create-commit' %}active{% endif %}">New Commit</a>
       </div>
     </div>
 
-    <a href="#">Profile</a>
-  </nav>
+    <!-- Profile Dropdown -->
+    <div class="dropdown profile-dropdown">
+      <span class="{% if active_page in ['profile', 'my-repos', 'activity'] %}active{% endif %}">Profile ▾</span>
+      <div class="dropdown-menu">
+        <a href="/profile" class="{% if active_page == 'profile' %}active{% endif %}">View Profile</a>
+        <a href="/my-repos" class="{% if active_page == 'my-repos' %}active{% endif %}">My Repositories</a>
+        <a href="/activity" class="{% if active_page == 'activity' %}active{% endif %}">My Activity</a>
+        <a href="/logout" class="logout">Logout</a>
+      </div>
+    </div>
+</nav>
+
 </header>
 
 <!-- ================= CREATE COMMIT SECTION ================= -->

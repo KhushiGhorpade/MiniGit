@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile | MiniGit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+
+<body>
+
+<!-- ================= AUTH NAVBAR ================= -->
+<header class="auth-header">
+  <div class="auth-brand">
+    <div class="logo"></div>
+    <span>MiniGit</span>
+  </div>
+
+ <nav class="auth-nav">
+    <a href="/dashboard" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
+    <a href="/repositories" class="{% if active_page == 'repositories' %}active{% endif %}">Repositories</a>
+    <a href="/activity" class="{% if active_page == 'activity' %}active{% endif %}">Activity</a>
+
+    <!-- Create Dropdown -->
+    <div class="dropdown">
+      <span>Create ▾</span>
+      <div class="dropdown-menu">
+        <a href="/create-repo" class="{% if active_page == 'create-repo' %}active{% endif %}">New Repository</a>
+        <a href="/create-issue" class="{% if active_page == 'create-issue' %}active{% endif %}">New Issue</a>
+        <a href="/create-commit" class="{% if active_page == 'create-commit' %}active{% endif %}">New Commit</a>
+      </div>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div class="dropdown profile-dropdown">
+      <span class="{% if active_page in ['profile', 'my-repos', 'activity'] %}active{% endif %}">Profile ▾</span>
+      <div class="dropdown-menu">
+        <a href="/profile" class="{% if active_page == 'profile' %}active{% endif %}">View Profile</a>
+        <a href="/my-repos" class="{% if active_page == 'my-repos' %}active{% endif %}">My Repositories</a>
+        <a href="/activity" class="{% if active_page == 'activity' %}active{% endif %}">My Activity</a>
+        <a href="/logout" class="logout">Logout</a>
+      </div>
+    </div>
+</nav>
+
+</header>
+
+<!-- ================= PROFILE CONTAINER ================= -->
+<section class="profile-container">
+
+  <!-- LEFT PANEL -->
+  <aside class="profile-sidebar">
+    <div class="avatar">K</div>
+
+    <h2>Kevin Mitnick</h2>
+    <p class="username">@kevinmitnick</p>
+
+    <p class="bio">
+      BCA Student | Web Developer
+       Exploring Cybersecurity ⚡
+    </p>
+
+    <!-- <div class="tech-stack">
+      <span>Python</span>
+      <span>Flask</span>
+      <span>MySQL</span>
+      <span>HTML</span>
+      <span>CSS</span>
+    </div> -->
+  </aside>
+
+  <!-- RIGHT PANEL -->
+  <main class="profile-main">
+
+    <!-- ================= CONTRIBUTION OVERVIEW ================= -->
+    <div class="profile-card">
+      <h3>Contribution Overview</h3>
+
+      <div class="overview-grid">
+
+        <!-- CSS Circular Progress -->
+        <div class="progress-ring">
+          <div class="ring">
+            <span>78%</span>
+          </div>
+          <p>Overall Activity</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="quick-stats">
+          <div><b>4</b><span>Repositories</span></div>
+          <div><b>38</b><span>Commits</span></div>
+          <div><b>6</b><span>Issues</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="profile-card">
+  <h3>Recent Contributions</h3>
+
+  <ul class="activity-timeline">
+    <li>
+      <span class="dot"></span>
+      <div class="content">
+        <b>Commit</b> to <span>mini-git</span>
+        <p>“Added profile page layout”</p>
+        <small>2 days ago</small>
+      </div>
+    </li>
+
+    <li>
+      <span class="dot"></span>
+      <div class="content">
+        <b>Created Repository</b>
+        <p>ui-theme</p>
+        <small>4 days ago</small>
+      </div>
+    </li>
+
+    <li>
+      <span class="dot"></span>
+      <div class="content">
+        <b>Opened Issue</b>
+        <p>Navbar alignment issue</p>
+        <small>1 week ago</small>
+      </div>
+    </li>
+  </ul>
+</div>
+
+
+    <!-- ================= REPOSITORIES ================= -->
+   <div class="profile-card">
+  <h3>Repositories</h3>
+
+  <div class="repo-list-clean">
+
+    <div class="repo-row">
+      <div>
+        <h4>mini-git</h4>
+        <p>Core MiniGit version control system</p>
+      </div>
+      <div class="repo-meta">
+        <span>12 commits</span>
+        <span>3 issues</span>
+        <span>Updated 2d ago</span>
+      </div>
+    </div>
+
+    <div class="repo-row">
+      <div>
+        <h4>auth-module</h4>
+        <p>Login & session handling</p>
+      </div>
+      <div class="repo-meta">
+        <span>9 commits</span>
+        <span>1 issue</span>
+        <span>Updated 5d ago</span>
+      </div>
+    </div>
+
+    <div class="repo-row">
+      <div>
+        <h4>ui-theme</h4>
+        <p>Dark cyan UI components</p>
+      </div>
+      <div class="repo-meta">
+        <span>7 commits</span>
+        <span>2 issues</span>
+        <span>Updated 1w ago</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  </main>
+</section>
+
+</body>
+</html>

@@ -257,3 +257,11 @@ body {
 .nav a.active {
   color: cyan;
 }
+.login {
+  background: cyan;
+  color: black;
+  padding: 8px 22px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+}
