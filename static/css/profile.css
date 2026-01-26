@@ -24,6 +24,12 @@ body {
   text-align: center;
 }
 
+/* === Sidebar breathing space === */
+.profile-sidebar {
+  padding-top: 36px;
+  padding-bottom: 36px;
+}
+
 .avatar {
   width: 90px;
   height: 90px;
@@ -58,6 +64,20 @@ body {
   background: rgba(0,255,240,0.15);
   margin: 4px;
   color: cyan;
+}
+
+/* === Username polish (safe override) === */
+.profile-sidebar h2 {
+  margin-bottom: 4px;
+}
+
+.username {
+  display: inline-block;
+  margin-top: 6px;
+  margin-bottom: 18px;
+  letter-spacing: 0.6px;
+  font-size: 14px;
+  text-align: center;
 }
 
 /* ================= MAIN ================= */
@@ -117,9 +137,15 @@ body {
   font-weight: bold;
 }
 
-/* .quick-stats {
+.quick-stats {
   display: flex;
   gap: 30px;
+}
+
+.quick-stats div {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
 }
 
 .quick-stats div b {
@@ -131,7 +157,7 @@ body {
 .quick-stats div span {
   font-size: 13px;
   color: #aaa;
-} */
+}
 
 /* ================= HEATMAP ================= */
 
@@ -449,4 +475,20 @@ body {
 }
 .repo-row:hover h4 {
   text-decoration: underline;
+}
+.logout-btn {
+  display: block;
+  margin: 8px 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+  text-align: center;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #ff6b6b;
+  color: #000;
 }

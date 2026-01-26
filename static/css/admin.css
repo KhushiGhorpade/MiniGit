@@ -1,0 +1,425 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #000;
+  color: #e5e7eb;
+}
+
+/* LAYOUT */
+.admin {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  background: linear-gradient(180deg, #021c1a, #000);
+  border-right: 1px solid #0f766e;
+  padding: 30px 20px;
+}
+
+.logo {
+  color: #22f5ff;
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 22px;
+}
+
+.menu h3 {
+  color: #22f5ff;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.menu button {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  background: transparent;
+  border: 1px solid #0f766e;
+  border-radius: 8px;
+  color: #94a3b8;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.menu button:hover,
+.menu button.active {
+  background: rgba(34,245,255,0.15);
+  color: #22f5ff;
+}
+
+/* MAIN */
+.main {
+  padding: 25px 35px;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.header h1 {
+  color: #22f5ff;
+  font-size: 26px;
+}
+
+/* LOGOUT BUTTON - Simple href style */
+.logout-btn {
+  background: #22f5ff;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  background: #0fd8e1;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(34, 245, 255, 0.4);
+}
+
+.logout-icon {
+  font-size: 16px;
+}
+
+/* REPORT AREA */
+.report-area {
+  height: calc(100vh - 110px);
+  overflow: hidden;
+}
+
+/* REPORT CARD */
+.report {
+  display: none;
+  height: 100%;
+  background: radial-gradient(circle at top, #052e2b, #000);
+  border: 1px solid #0f766e;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 0 20px rgba(34,245,255,0.15);
+  overflow-y: auto;
+}
+
+.report.show {
+  display: block;
+}
+
+.report-header {
+  margin-bottom: 20px;
+}
+
+.report-header h2 {
+  color: #22f5ff;
+  margin-bottom: 6px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.report-header p {
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* SUMMARY CARDS */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.card {
+  background: rgba(5, 46, 43, 0.7);
+  border: 1px solid #0f766e;
+  border-radius: 10px;
+  padding: 18px;
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100px;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #22f5ff;
+}
+
+.card h3 {
+  color: #94a3b8;
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.card .value {
+  color: #22f5ff;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.card .trend {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.trend.positive {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.trend.negative {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.trend.neutral {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.trend.warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+/* HYBRID LAYOUT - FIXED ALIGNMENT */
+.hybrid-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-top: 20px;
+}
+
+.table-container.full-width {
+  grid-column: 1 / -1;
+}
+
+.table-container h3,
+.chart-container h3 {
+  color: #22f5ff;
+  margin-bottom: 12px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* SMALLER CHART CONTAINERS */
+.chart-container {
+  background: rgba(5, 46, 43, 0.5);
+  border: 1px solid #0f766e;
+  border-radius: 10px;
+  padding: 15px;
+  height: 220px; /* Fixed height for consistency */
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-container.small-chart {
+  height: 220px;
+}
+
+.chart-container canvas {
+  flex-grow: 1;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* DATA TABLE */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(5, 46, 43, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.data-table thead {
+  background: rgba(15, 118, 110, 0.3);
+}
+
+.data-table th {
+  color: #22f5ff;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #0f766e;
+  font-size: 13px;
+}
+
+.data-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid rgba(15, 118, 110, 0.3);
+  color: #e5e7eb;
+  font-size: 13px;
+}
+
+.data-table tbody tr {
+  transition: background 0.3s;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(34, 245, 255, 0.1);
+}
+
+/* STATUS BADGES */
+.status {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status.active {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.status.idle {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.status.inactive {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.status.normal {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.status.warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+/* ACTION BUTTONS */
+.action-btn {
+  padding: 5px 12px;
+  border: 1px solid #0f766e;
+  background: rgba(34, 245, 255, 0.1);
+  color: #22f5ff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  background: rgba(34, 245, 255, 0.2);
+  border-color: #22f5ff;
+}
+
+.action-btn.warning {
+  border-color: #f59e0b;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.action-btn.danger {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ICONS */
+.table-icon,
+.chart-icon,
+.user-badge,
+.repo-icon {
+  font-size: 16px;
+}
+
+/* TREND INDICATORS - FIXED */
+.positive {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.negative {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.neutral {
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+/* SCROLLBAR */
+.report::-webkit-scrollbar {
+  width: 6px;
+}
+
+.report::-webkit-scrollbar-track {
+  background: rgba(5, 46, 43, 0.3);
+  border-radius: 4px;
+}
+
+.report::-webkit-scrollbar-thumb {
+  background: #0f766e;
+  border-radius: 4px;
+}
+
+.report::-webkit-scrollbar-thumb:hover {
+  background: #22f5ff;
+}
+/* Fix for pie chart legend spacing */
+.chart-container.small-chart {
+  height: 250px; /* Make chart container taller */
+}
+
+/* Add more space around the chart */
+#repoChart {
+  margin-bottom: 20px !important;
+}
+
+/* Make legend more readable */
+.chartjs-legend {
+  padding-top: 15px !important;
+}
+
+.chartjs-legend li {
+  margin: 4px 10px !important;
+  padding: 2px !important;
+}
+
+.chartjs-legend-text {
+  font-size: 12px !important;
+  color: #94a3b8 !important;
+}

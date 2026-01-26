@@ -166,6 +166,10 @@ def logout():
     # session.clear()
     return redirect(url_for("login"))
 
+@app.route("/admin")
+def admin():
+    return render_template("admin.html", active_page="admin")
+
 # ========================= RUN APP =========================
 if __name__ == "__main__":
     app.run(debug=True)
