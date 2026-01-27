@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Activity | MiniGit</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/activity.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -40,7 +42,7 @@
         <a href="/logout" class="logout">Logout</a>
       </div>
     </div>
-</nav>
+  </nav>
 
 </header>
 
@@ -48,149 +50,461 @@
 <!-- ================= ACTIVITY CONTAINER ================= -->
 <section class="activity-container">
 
+  <!-- Enhanced Header with Animated Elements -->
   <div class="activity-header">
-    <h1>Activity Overview</h1>
-    <p class="subtitle">Your recent MiniGit contributions</p>
+    <div class="header-content">
+      <h1><i class="fas fa-chart-line"></i> Activity Overview</h1>
+      <p class="subtitle">Your recent MiniGit contributions at a glance</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-badge">
+        <i class="fas fa-fire"></i>
+        <span>5-Day Streak</span>
+      </div>
+      <div class="stat-badge">
+        <i class="fas fa-trophy"></i>
+        <span>Top 10%</span>
+      </div>
+    </div>
   </div>
 
-  <!-- ================= SUMMARY CARDS ================= -->
+  <!-- ================= ENHANCED SUMMARY CARDS ================= -->
   <div class="activity-stats">
 
-    <div class="stat-card">
-      <h3>Total Repositories</h3>
-      <span>3</span>
+    <div class="stat-card enhanced-card">
+      <div class="stat-icon">
+        <i class="fas fa-code-branch"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Repositories</h3>
+        <span class="stat-value">12</span>
+        <div class="stat-trend up">
+          <i class="fas fa-arrow-up"></i> 2 new this month
+        </div>
+      </div>
+      <div class="card-glow"></div>
     </div>
 
-    <div class="stat-card">
-      <h3>Total Commits</h3>
-      <span>35</span>
+    <div class="stat-card enhanced-card">
+      <div class="stat-icon">
+        <i class="fas fa-code-commit"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Total Commits</h3>
+        <span class="stat-value">142</span>
+        <div class="stat-trend up">
+          <i class="fas fa-arrow-up"></i> 18 this week
+        </div>
+      </div>
+      <div class="card-glow"></div>
     </div>
 
-    <div class="stat-card">
-      <h3>Open Issues</h3>
-      <span>5</span>
+    <div class="stat-card enhanced-card">
+      <div class="stat-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Open Issues</h3>
+        <span class="stat-value">8</span>
+        <div class="stat-trend down">
+          <i class="fas fa-arrow-down"></i> 3 resolved
+        </div>
+      </div>
+      <div class="card-glow"></div>
     </div>
 
-    <div class="stat-card">
-      <h3>Last Activity</h3>
-      <span>2 days ago</span>
+    <div class="stat-card enhanced-card">
+      <div class="stat-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Last Activity</h3>
+        <span class="stat-value">2 hours ago</span>
+        <div class="stat-trend">
+          <i class="fas fa-check-circle"></i> Active today
+        </div>
+      </div>
+      <div class="card-glow"></div>
     </div>
 
   </div>
 
-  <!-- ================= CHARTS ================= -->
-  <div class="activity-card">
-    <h2>Commits Over Time</h2>
-    <canvas id="commitLineChart"></canvas>
+  <!-- ================= CHART CONTAINER ================= -->
+  <div class="charts-container">
+    
+    <!-- Line Chart Card -->
+    <div class="chart-card line-chart">
+      <div class="chart-header">
+        <h2><i class="fas fa-chart-line"></i> Commits Over Time</h2>
+        <div class="time-filter">
+          <span class="active">Week</span>
+          <span>Month</span>
+          <span>Year</span>
+        </div>
+      </div>
+      <div class="chart-visual">
+        <!-- Visual representation without JS -->
+        <div class="chart-graphic">
+          <div class="chart-axis-y">
+            <span>20</span>
+            <span>15</span>
+            <span>10</span>
+            <span>5</span>
+            <span>0</span>
+          </div>
+          <div class="chart-content">
+            <div class="chart-bars">
+              <div class="chart-bar" style="height: 65%;" data-value="13"></div>
+              <div class="chart-bar" style="height: 90%;" data-value="18"></div>
+              <div class="chart-bar" style="height: 40%;" data-value="8"></div>
+              <div class="chart-bar" style="height: 100%;" data-value="20"></div>
+              <div class="chart-bar" style="height: 75%;" data-value="15"></div>
+              <div class="chart-bar" style="height: 25%;" data-value="5"></div>
+              <div class="chart-bar" style="height: 85%;" data-value="17"></div>
+            </div>
+            <div class="chart-axis-x">
+              <span>Mon</span>
+              <span>Tue</span>
+              <span>Wed</span>
+              <span>Thu</span>
+              <span>Fri</span>
+              <span>Sat</span>
+              <span>Sun</span>
+            </div>
+          </div>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(90deg, #00fff0, #00bcd4);"></div>
+            <span>Daily Commits</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: rgba(0, 255, 240, 0.1);"></div>
+            <span>Projected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bar Chart Card -->
+    <div class="chart-card bar-chart">
+      <div class="chart-header">
+        <h2><i class="fas fa-chart-bar"></i> Repository-wise Activity</h2>
+        <div class="view-toggle">
+          <span class="active">Commits</span>
+          <span>Issues</span>
+          <span>PRs</span>
+        </div>
+      </div>
+      <div class="chart-visual">
+        <div class="bar-chart-graphic">
+          <div class="bar-chart-bars">
+            <div class="bar-chart-item">
+              <div class="bar-label">web-ui</div>
+              <div class="bar-container">
+                <div class="bar-value" style="width: 85%;">
+                  <span class="bar-count">24</span>
+                </div>
+              </div>
+            </div>
+            <div class="bar-chart-item">
+              <div class="bar-label">api-backend</div>
+              <div class="bar-container">
+                <div class="bar-value" style="width: 65%;">
+                  <span class="bar-count">18</span>
+                </div>
+              </div>
+            </div>
+            <div class="bar-chart-item">
+              <div class="bar-label">mobile-app</div>
+              <div class="bar-container">
+                <div class="bar-value" style="width: 95%;">
+                  <span class="bar-count">32</span>
+                </div>
+              </div>
+            </div>
+            <div class="bar-chart-item">
+              <div class="bar-label">docs</div>
+              <div class="bar-container">
+                <div class="bar-value" style="width: 45%;">
+                  <span class="bar-count">12</span>
+                </div>
+              </div>
+            </div>
+            <div class="bar-chart-item">
+              <div class="bar-label">dev-tools</div>
+              <div class="bar-container">
+                <div class="bar-value" style="width: 55%;">
+                  <span class="bar-count">15</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-stats">
+          <div class="chart-stat">
+            <span class="stat-label">Most Active</span>
+            <span class="stat-value">mobile-app</span>
+          </div>
+          <div class="chart-stat">
+            <span class="stat-label">Total Commits</span>
+            <span class="stat-value">101</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="activity-card">
-    <h2>Repository-wise Activity</h2>
-    <canvas id="repoBarChart"></canvas>
+  <!-- ================= ACTIVITY TIMELINE ================= -->
+  <div class="activity-card visual-timeline">
+    <div class="card-header">
+      <h2><i class="fas fa-stream"></i> Development Timeline</h2>
+      <div class="time-filter">
+        <span class="active">Week</span>
+        <span>Month</span>
+        <span>Year</span>
+      </div>
+    </div>
+    
+    <div class="timeline-container">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-marker commit">
+            <i class="fas fa-code-commit"></i>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="repo-label">web-ui</span>
+              <span class="time">Today, 10:42 AM</span>
+            </div>
+            <p>Fixed responsive layout issue on dashboard</p>
+            <div class="commit-hash">
+              <i class="fas fa-hashtag"></i> a1b2c3d
+            </div>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-marker issue">
+            <i class="fas fa-exclamation-circle"></i>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="repo-label">api-backend</span>
+              <span class="time">Yesterday, 3:15 PM</span>
+            </div>
+            <p>Opened issue #42: "Authentication timeout too short"</p>
+            <div class="issue-tag open">Open</div>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-marker repo">
+            <i class="fas fa-plus-circle"></i>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="repo-label">new-project</span>
+              <span class="time">2 days ago</span>
+            </div>
+            <p>Created new repository "analytics-dashboard"</p>
+            <div class="repo-stats">
+              <span><i class="fas fa-star"></i> 3</span>
+              <span><i class="fas fa-code-branch"></i> 1</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-marker merge">
+            <i class="fas fa-code-merge"></i>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="repo-label">main-app</span>
+              <span class="time">3 days ago</span>
+            </div>
+            <p>Merged feature branch "dark-mode" into main</p>
+            <div class="merge-info">
+              <i class="fas fa-code-merge"></i> 4 commits merged
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- ================= RECENT ACTIVITY LOG ================= -->
+  <!-- ================= REPOSITORY ACTIVITY GRID ================= -->
   <div class="activity-card">
-    <h2>Recent Activity</h2>
-    <ul class="activity-log">
-      <li>Committed to <b>mini-git</b> — “Fixed login bug”</li>
-      <li>Created repository <b>demo-project</b></li>
-      <li>Opened issue — “UI alignment issue”</li>
-      <li>Committed to <b>mini-git</b> — “Added activity page”</li>
-    </ul>
+    <div class="card-header">
+      <h2><i class="fas fa-project-diagram"></i> Repository Activity</h2>
+      <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="repo-grid">
+      <div class="repo-card">
+        <div class="repo-header">
+          <h3><i class="fas fa-book"></i> web-ui</h3>
+          <span class="repo-lang">JavaScript</span>
+        </div>
+        <div class="repo-stats">
+          <div class="repo-stat">
+            <i class="fas fa-code-commit"></i>
+            <span>24 commits</span>
+          </div>
+          <div class="repo-stat">
+            <i class="fas fa-user-friends"></i>
+            <span>3 contributors</span>
+          </div>
+        </div>
+        <div class="repo-metrics">
+          <div class="metric">
+            <span class="metric-label">Activity</span>
+            <div class="metric-bar">
+              <div class="metric-fill" style="width: 85%;"></div>
+            </div>
+            <span class="metric-value">85%</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Health</span>
+            <div class="metric-bar">
+              <div class="metric-fill" style="width: 92%; background: linear-gradient(90deg, #22c55e, #16a34a);"></div>
+            </div>
+            <span class="metric-value">92%</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="repo-card">
+        <div class="repo-header">
+          <h3><i class="fas fa-book"></i> api-backend</h3>
+          <span class="repo-lang">Python</span>
+        </div>
+        <div class="repo-stats">
+          <div class="repo-stat">
+            <i class="fas fa-code-commit"></i>
+            <span>18 commits</span>
+          </div>
+          <div class="repo-stat">
+            <i class="fas fa-user-friends"></i>
+            <span>2 contributors</span>
+          </div>
+        </div>
+        <div class="repo-metrics">
+          <div class="metric">
+            <span class="metric-label">Activity</span>
+            <div class="metric-bar">
+              <div class="metric-fill" style="width: 65%;"></div>
+            </div>
+            <span class="metric-value">65%</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Health</span>
+            <div class="metric-bar">
+              <div class="metric-fill" style="width: 78%; background: linear-gradient(90deg, #22c55e, #16a34a);"></div>
+            </div>
+            <span class="metric-value">78%</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="repo-card">
+        <div class="repo-header">
+          <h3><i class="fas fa-book"></i> mobile-app</h3>
+          <span class="repo-lang">Dart</span>
+        </div>
+        <div class="repo-stats">
+          <div class="repo-stat">
+            <i class="fas fa-code-commit"></i>
+            <span>32 commits</span>
+          </div>
+          <div class="repo-stat">
+            <i class="fas fa-user-friends"></i>
+            <span>5 contributors</span>
+          </div>
+        </div>
+        <div class="repo-metrics">
+          <div class="metric">
+            <span class="metric-label">Activity</span>
+            <div class="metric-bar">
+              <div class="metric-fill" style="width: 95%;"></div>
+            </div>
+            <span class="metric-value">95%</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Health</span>
+            <div class="metric-bar">
+              <div class="metric-fill" style="width: 88%; background: linear-gradient(90deg, #22c55e, #16a34a);"></div>
+            </div>
+            <span class="metric-value">88%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RECENT ACTIVITY FEED ================= -->
+  <div class="activity-card">
+    <div class="card-header">
+      <h2><i class="fas fa-history"></i> Recent Activity Feed</h2>
+      <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="activity-feed">
+      <div class="feed-item">
+        <div class="feed-icon commit">
+          <i class="fas fa-code-commit"></i>
+        </div>
+        <div class="feed-content">
+          <p>You committed to <b>web-ui</b> — "Fixed login validation bug"</p>
+          <span class="feed-time">2 hours ago</span>
+        </div>
+      </div>
+      
+      <div class="feed-item">
+        <div class="feed-icon repo">
+          <i class="fas fa-plus-circle"></i>
+        </div>
+        <div class="feed-content">
+          <p>You created repository <b>analytics-dashboard</b></p>
+          <span class="feed-time">Yesterday</span>
+        </div>
+      </div>
+      
+      <div class="feed-item">
+        <div class="feed-icon issue">
+          <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <div class="feed-content">
+          <p>You opened issue <b>#42</b> in api-backend — "UI alignment issue on mobile"</p>
+          <span class="feed-time">2 days ago</span>
+        </div>
+      </div>
+      
+      <div class="feed-item">
+        <div class="feed-icon merge">
+          <i class="fas fa-code-merge"></i>
+        </div>
+        <div class="feed-content">
+          <p>You merged pull request <b>#15</b> in mobile-app — "Dark mode implementation"</p>
+          <span class="feed-time">3 days ago</span>
+        </div>
+      </div>
+      
+      <div class="feed-item">
+        <div class="feed-icon star">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="feed-content">
+          <p>You starred <b>dev-tools</b> repository</p>
+          <span class="feed-time">4 days ago</span>
+        </div>
+      </div>
+    </div>
   </div>
 
 </section>
-
-<!-- ================= DUMMY DATA FOR CHARTS ================= -->
-<script>
-  // Demo data
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const commitCounts = [5, 8, 3, 10, 7, 2, 6];
-  const repoNames = ["Repo A", "Repo B", "Repo C"];
-  const repoCommits = [
-      { repo: "Repo A", commits: 12 },
-      { repo: "Repo B", commits: 8 },
-      { repo: "Repo C", commits: 15 }
-  ];
-</script>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-  // Line chart: commits over time with gradient
-  const ctxLine = document.getElementById('commitLineChart').getContext('2d');
-  const gradient = ctxLine.createLinearGradient(0, 0, 0, 220);
-  gradient.addColorStop(0, 'rgba(0,255,240,0.4)');
-  gradient.addColorStop(1, 'rgba(0,255,240,0)');
-  
-  new Chart(ctxLine, {
-    type: 'line',
-    data: {
-      labels: days,
-      datasets: [{
-        label: 'Commits',
-        data: commitCounts,
-        fill: true,
-        backgroundColor: gradient,
-        borderColor: '#00fff0',
-        borderWidth: 3,
-        tension: 0.4,
-        pointRadius: 6,
-        pointHoverRadius: 8,
-        pointBackgroundColor: '#00fff0',
-        pointBorderColor: '#fff'
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { labels: { color: '#00fff0' } } },
-      scales: {
-        x: { ticks: { color: '#fff' }, grid: { color: 'rgba(0,255,240,0.1)' } },
-        y: { ticks: { color: '#fff' }, grid: { color: 'rgba(0,255,240,0.1)' } }
-      }
-    }
-  });
-
-  // Bar chart: repo-wise activity with shades
-  const ctxBar = document.getElementById('repoBarChart').getContext('2d');
-  new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-      labels: repoCommits.map(c => c.repo),
-      datasets: [{
-        barThickness: 45,
-borderRadius: 8,
-
-        label: 'Commits per Repo',
-        data: repoCommits.map(c => c.commits),
-        backgroundColor: [
-  'rgba(34, 211, 238, 0.85)',
-  'rgba(34, 211, 238, 0.65)',
-  'rgba(34, 211, 238, 0.95)'
-],
-borderColor: 'rgba(34, 211, 238, 1)',
-
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-
-  animation: {
-    duration: 900,
-    easing: 'easeOutQuart'
-  },
-      plugins: { legend: { labels: { color: '#00fff0' } } },
-      scales: {
-        x: { ticks: { color: '#fff' }, grid: { color: 'rgba(0,255,240,0.1)' } },
-        y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.05)' } }
-      }
-    }
-  });
-</script>
 
 </body>
 </html>
