@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
@@ -8,6 +8,11 @@ import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 app.secret_key = "secret_key_here"
+
+# ======== SET ADMIN CREDENTIALS HERE ========
+ADMIN_USERNAME = "admin"  # Change this to your desired admin username
+ADMIN_PASSWORD = "admin123"  # Change this to your desired admin password
+# ============================================
 
 # Database connection
 db = mysql.connector.connect(
@@ -29,15 +34,27 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
+        # FIRST: Check if it's admin login
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['logged_in'] = True
+            session['username'] = username
+            session['is_admin'] = True
+            flash("Admin login successful!", "success")
+            return redirect(url_for("admin"))  # Redirect to admin page
+        
+        # SECOND: Check if it's regular user login (from database)
         cursor.execute("SELECT * FROM users WHERE username=%s", (username,))
         user = cursor.fetchone()
 
         if user and check_password_hash(user["password"], password):
+            session['logged_in'] = True
+            session['username'] = username
+            session['is_admin'] = False
             flash("Login successful!", "success")
             return redirect(url_for("dashboard"))
         else:
             flash("Invalid username or password!", "error")
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("login"))  # Fixed: redirect back to login, not dashboard
 
     return render_template("login.html", active_page="login")
 
@@ -111,14 +128,21 @@ def feedback():
 # ========================= AFTER LOGIN PAGES =========================
 @app.route("/dashboard")
 def dashboard():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
     return render_template("dashboard.html", active_page="dashboard")
 
 @app.route("/repos")
 def repos():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
     return render_template("repos.html", active_page="repos")
 
 @app.route("/activity")
 def activity():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
+        
     repo_commits = [
         {"repo": "Repo A", "commits": 12},
         {"repo": "Repo B", "commits": 8},
@@ -143,31 +167,44 @@ def activity():
 
 @app.route("/profile")
 def profile():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
     return render_template("profile.html", active_page="profile")
 
 @app.route("/my-repos")
 def my_repos():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
     return render_template("my_repos.html", active_page="my-repos")
 
 @app.route("/create-repo")
 def create_repo():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
     return render_template("create_repo.html", active_page="create-repo")
 
 @app.route("/create-issue", methods=["GET", "POST"])
 def create_issue():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
     return render_template("create_issue.html", active_page="create-issue")
 
 @app.route("/create-commit", methods=["GET", "POST"])
 def create_commit():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
     return render_template("create_commit.html", active_page="create-commit")
 
 @app.route("/logout")
 def logout():
-    # session.clear()
+    session.clear()
     return redirect(url_for("login"))
 
 @app.route("/admin")
 def admin():
+    # Only allow access if user is logged in AND is admin
+    if not session.get('logged_in') or not session.get('is_admin'):
+        return redirect(url_for("login"))
     return render_template("admin.html", active_page="admin")
 
 # ========================= RUN APP =========================
