@@ -423,3 +423,16 @@ body {
   font-size: 12px !important;
   color: #94a3b8 !important;
 }
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, cyan, #00bcd4);
+  border-radius: 10px;
+}

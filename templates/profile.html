@@ -15,165 +15,210 @@
     <span>MiniGit</span>
   </div>
 
- <nav class="auth-nav">
+  <nav class="auth-nav">
     <a href="/dashboard" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
     <a href="/repositories" class="{% if active_page == 'repositories' %}active{% endif %}">Repositories</a>
     <a href="/activity" class="{% if active_page == 'activity' %}active{% endif %}">Activity</a>
 
-    <!-- Create Dropdown -->
     <div class="dropdown">
       <span>Create ▾</span>
       <div class="dropdown-menu">
-        <a href="/create-repo" class="{% if active_page == 'create-repo' %}active{% endif %}">New Repository</a>
-        <a href="/create-issue" class="{% if active_page == 'create-issue' %}active{% endif %}">New Issue</a>
-        <a href="/create-commit" class="{% if active_page == 'create-commit' %}active{% endif %}">New Commit</a>
+        <a href="/create-repo">New Repository</a>
+        <a href="/create-issue">New Issue</a>
+        <a href="/create-commit">New Commit</a>
       </div>
     </div>
 
-    <!-- Profile Dropdown -->
     <div class="dropdown profile-dropdown">
       <span class="{% if active_page in ['profile', 'my-repos', 'activity'] %}active{% endif %}">Profile ▾</span>
       <div class="dropdown-menu">
-        <a href="/profile" class="{% if active_page == 'profile' %}active{% endif %}">View Profile</a>
-        <a href="/my-repos" class="{% if active_page == 'my-repos' %}active{% endif %}">My Repositories</a>
-        <a href="/activity" class="{% if active_page == 'activity' %}active{% endif %}">My Activity</a>
+        <a href="/profile" class="active">View Profile</a>
+        <a href="/my-repos">My Repositories</a>
+        <a href="/activity">My Activity</a>
         <a href="/logout" class="logout-btn">Logout</a>
-
       </div>
     </div>
-</nav>
-
+  </nav>
 </header>
 
 <!-- ================= PROFILE CONTAINER ================= -->
 <section class="profile-container">
 
-  <!-- LEFT PANEL -->
+  <!-- LEFT PANEL - ENHANCED -->
   <aside class="profile-sidebar">
-    <div class="avatar">K</div>
+    <div class="avatar-wrapper">
+      <div class="avatar-glow"></div>
+      <div class="avatar">K</div>
+    </div>
 
     <h2>Kevin Mitnick</h2>
     <p class="username">@kevinmitnick</p>
+    
+    <div class="profile-stats">
+      <div class="stat-item">
+        <span class="stat-number">1,248</span>
+        <span class="stat-label">Contributions</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">4</span>
+        <span class="stat-label">Repos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">38</span>
+        <span class="stat-label">Commits</span>
+      </div>
+    </div>
 
     <p class="bio">
       BCA Student | Web Developer
-       Exploring Cybersecurity ⚡
+      Exploring Cybersecurity ⚡
     </p>
 
-    <!-- <div class="tech-stack">
-      <span>Python</span>
-      <span>Flask</span>
-      <span>MySQL</span>
-      <span>HTML</span>
-      <span>CSS</span>
-    </div> -->
+    <div class="tech-stack">
+      <span class="tech-tag">Python</span>
+      <span class="tech-tag">Flask</span>
+      <span class="tech-tag">MySQL</span>
+      <span class="tech-tag">HTML/CSS</span>
+      <span class="tech-tag">Git</span>
+    </div>
+
+    <div class="join-date">
+      <span class="date-icon">📅</span>
+      Joined {{ join_date }}
+    </div>
   </aside>
 
-  <!-- RIGHT PANEL -->
+  <!-- RIGHT PANEL - ENHANCED -->
   <main class="profile-main">
 
-    <!-- ================= CONTRIBUTION OVERVIEW ================= -->
+    <!-- ================= VISUAL CONTRIBUTION METRICS ================= -->
     <div class="profile-card">
-      <h3>Contribution Overview</h3>
+      <div class="card-header">
+        <h3>Contribution Analytics</h3>
+        <span class="card-badge">Last 30 Days</span>
+      </div>
 
-      <div class="overview-grid">
-
-        <!-- CSS Circular Progress -->
-        <div class="progress-ring">
-          <div class="ring">
-            <span>78%</span>
+      <div class="metrics-grid">
+        <!-- Activity Ring -->
+        <div class="metric-item">
+          <div class="ring-container">
+            <div class="progress-ring" style="--progress: 78%">
+              <span>78%</span>
+            </div>
+            <p>Overall Activity</p>
           </div>
-          <p>Overall Activity</p>
         </div>
 
-        <!-- Stats -->
-        <div class="quick-stats">
-          <div><b>4</b><span>Repositories</span></div>
-          <div><b>38</b><span>Commits</span></div>
-          <div><b>6</b><span>Issues</span></div>
+        <!-- Contribution Heatmap (Generated with Matplotlib) -->
+        <div class="metric-item">
+          <h4>Contribution Heatmap</h4>
+          <div class="heatmap-container">
+            {% if heatmap_img %}
+              <img src="data:image/png;base64,{{ heatmap_img }}" alt="Contribution Heatmap">
+            {% else %}
+              <div class="heatmap-placeholder">
+                <!-- Fallback CSS heatmap -->
+                <div class="heatmap-grid">
+                  {% for _ in range(7*4) %}
+                  <div class="heat-cell l{{ range(0, 5)|random }}"></div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
         </div>
 
+        <!-- Stats Cards -->
+        <div class="metric-item stats-cards">
+          <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+              <span class="stat-value">12</span>
+              <span class="stat-label">Active Days</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-content">
+              <span class="stat-value">38</span>
+              <span class="stat-label">Commits</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-content">
+              <span class="stat-value">92%</span>
+              <span class="stat-label">Efficiency</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- ================= ENHANCED ACTIVITY TIMELINE ================= -->
     <div class="profile-card">
-  <h3>Recent Contributions</h3>
-
-  <ul class="activity-timeline">
-    <li>
-      <span class="dot"></span>
-      <div class="content">
-        <b>Commit</b> to <span>mini-git</span>
-        <p>“Added profile page layout”</p>
-        <small>2 days ago</small>
-      </div>
-    </li>
-
-    <li>
-      <span class="dot"></span>
-      <div class="content">
-        <b>Created Repository</b>
-        <p>ui-theme</p>
-        <small>4 days ago</small>
-      </div>
-    </li>
-
-    <li>
-      <span class="dot"></span>
-      <div class="content">
-        <b>Opened Issue</b>
-        <p>Navbar alignment issue</p>
-        <small>1 week ago</small>
-      </div>
-    </li>
-  </ul>
-</div>
-
-
-    <!-- ================= REPOSITORIES ================= -->
-   <div class="profile-card">
-  <h3>Repositories</h3>
-
-  <div class="repo-list-clean">
-
-    <div class="repo-row">
-      <div>
-        <h4>mini-git</h4>
-        <p>Core MiniGit version control system</p>
-      </div>
-      <div class="repo-meta">
-        <span>12 commits</span>
-        <span>3 issues</span>
-        <span>Updated 2d ago</span>
+      <h3>Recent Activity</h3>
+      <div class="activity-container">
+        {% for activity in recent_activities %}
+        <div class="activity-item">
+          <div class="activity-icon {{ activity.type }}">
+            {% if activity.type == 'commit' %}📝
+            {% elif activity.type == 'repo' %}📁
+            {% elif activity.type == 'issue' %}⚠️
+            {% elif activity.type == 'merge' %}🔄
+            {% else %}⚡{% endif %}
+          </div>
+          <div class="activity-content">
+            <div class="activity-header">
+              <strong>{{ activity.title }}</strong>
+              <span class="activity-time">{{ activity.time }}</span>
+            </div>
+            <p>{{ activity.description }}</p>
+            {% if activity.repo %}
+            <span class="activity-repo">{{ activity.repo }}</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
 
-    <div class="repo-row">
-      <div>
-        <h4>auth-module</h4>
-        <p>Login & session handling</p>
+    <!-- ================= ENHANCED REPOSITORIES ================= -->
+    <div class="profile-card">
+      <div class="card-header">
+        <h3>My Repositories</h3>
+        <a href="/my-repos" class="view-all">View All →</a>
       </div>
-      <div class="repo-meta">
-        <span>9 commits</span>
-        <span>1 issue</span>
-        <span>Updated 5d ago</span>
+
+      <div class="repos-grid">
+        {% for repo in repositories %}
+        <div class="repo-card">
+          <div class="repo-header">
+            <h4>{{ repo.name }}</h4>
+            <span class="repo-visibility {{ 'public' if repo.public else 'private' }}">
+              {{ 'Public' if repo.public else 'Private' }}
+            </span>
+          </div>
+          <p class="repo-desc">{{ repo.description }}</p>
+          <div class="repo-stats">
+            <span class="repo-stat">
+              <span class="stat-icon">📊</span> {{ repo.stats.commits }} commits
+            </span>
+            <span class="repo-stat">
+              <span class="stat-icon">⚠️</span> {{ repo.stats.issues }} issues
+            </span>
+            <span class="repo-stat">
+              <span class="stat-icon">⭐</span> {{ repo.stats.stars }} stars
+            </span>
+          </div>
+          <div class="repo-footer">
+            <span class="repo-updated">Updated {{ repo.updated }}</span>
+            <span class="repo-language">{{ repo.language }}</span>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
-
-    <div class="repo-row">
-      <div>
-        <h4>ui-theme</h4>
-        <p>Dark cyan UI components</p>
-      </div>
-      <div class="repo-meta">
-        <span>7 commits</span>
-        <span>2 issues</span>
-        <span>Updated 1w ago</span>
-      </div>
-    </div>
-
-  </div>
-</div>
 
   </main>
 </section>
