@@ -14,7 +14,7 @@
     <span>MiniGit</span>
   </div>
 
-<nav class="auth-nav">
+  <nav class="auth-nav">
     <a href="/dashboard" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
     <a href="/repositories" class="{% if active_page == 'repositories' %}active{% endif %}">Repositories</a>
     <a href="/activity" class="{% if active_page == 'activity' %}active{% endif %}">Activity</a>
@@ -39,15 +39,13 @@
         <a href="/logout" class="logout">Logout</a>
       </div>
     </div>
-</nav>
-
+  </nav>
 </header>
 
-
-<!-- DASHBOARD LAYOUT -->
+<!-- ================= DASHBOARD ================= -->
 <main class="dashboard">
 
-  <!-- LEFT: LATEST REPOS -->
+  <!-- LEFT -->
   <aside class="panel left-panel">
     <h3>Latest Repos</h3>
     <div class="panel-content">
@@ -58,7 +56,7 @@
     </div>
   </aside>
 
-  <!-- CENTER: SEARCH + RESULTS -->
+  <!-- CENTER -->
   <section class="center-panel">
     <div class="search-box">
       <input type="text" placeholder="Search repositories, users, commits...">
@@ -69,7 +67,7 @@
     </div>
   </section>
 
-  <!-- RIGHT: LATEST COMMITS -->
+  <!-- RIGHT -->
   <aside class="panel right-panel">
     <h3>Latest Commits</h3>
     <div class="panel-content">

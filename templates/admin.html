@@ -9,30 +9,26 @@
 <body>
 
 <div class="admin">
-
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <h2 class="logo">MiniGit Admin</h2>
-
     <div class="menu">
       <h3>Reports</h3>
-
-      <button class="active" onclick="showReport('user')">User Growth</button>
-      <button onclick="showReport('login')">Login Activity</button>
-      <button onclick="showReport('repo')">Repository Usage</button>
-      <button onclick="showReport('commit')">Commit Trends</button>
-      <button onclick="showReport('inactive')">Inactive Users</button>
-      <button onclick="showReport('system')">System Load</button>
+      <button class="active" onclick="showReport('user')">📋 User Report</button>
+      <button onclick="showReport('repo')">📚 Repository Report</button>
+      <button onclick="showReport('commit')">💾 Commit Report</button>
+      <button onclick="showReport('popularity')">⭐ Popularity Report</button>
+      <button onclick="showReport('issue')">🐛 Issue Report</button>
+      <button onclick="showReport('activity')">📊 Activity Report</button>
+      <button onclick="showReport('feedback')">💬 Feedback Report</button> <!-- NEW -->
     </div>
   </aside>
 
   <!-- MAIN -->
   <main class="main">
-
     <!-- TOP BAR -->
     <header class="header">
-      <h1>Reports Panel</h1>
-      <!-- Simple logout button with href -->
+      <h1>MiniGit Admin Dashboard</h1>
       <a href="/logout" class="logout-btn">
         <span class="logout-icon">🚪</span> Logout
       </a>
@@ -40,504 +36,304 @@
 
     <!-- REPORT CONTENT -->
     <section class="report-area">
-
-      <!-- USER GROWTH REPORT -->
+      <!-- 1. USER REPORT -->
       <div id="user" class="report show">
         <div class="report-header">
-          <h2>📈 User Growth Report</h2>
-          <p>Daily and monthly new user registrations with trend analysis</p>
+          <h2>📋 User Report</h2>
+          <p>User ID, Username, Email, Registration Date, Status</p>
         </div>
         
         <div class="summary-cards">
           <div class="card">
             <h3>Total Users</h3>
-            <div class="value">1,248</div>
-            <div class="trend positive">↑ 12% this month</div>
+            <div class="value" id="totalUsers">0</div>
+            <div class="trend neutral">All time</div>
+          </div>
+          <div class="card">
+            <h3>Active Users</h3>
+            <div class="value" id="activeUsers">0</div>
+            <div class="trend positive">Last 30 days</div>
           </div>
           <div class="card">
             <h3>New Today</h3>
-            <div class="value">24</div>
-            <div class="trend positive">↑ 8 from yesterday</div>
-          </div>
-          <div class="card">
-            <h3>Growth Rate</h3>
-            <div class="value">3.2%</div>
-            <div class="trend positive">Steady increase</div>
+            <div class="value" id="newToday">0</div>
+            <div class="trend positive">Today</div>
           </div>
         </div>
 
-        <div class="hybrid-section">
-          <div class="table-container">
-            <h3><span class="table-icon">📊</span> Daily User Growth</h3>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>New Users</th>
-                  <th>Total Users</th>
-                  <th>Growth %</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>24 Jan 2025</td>
-                  <td>24</td>
-                  <td>1,248</td>
-                  <td><span class="positive">2.0%</span></td>
-                </tr>
-                <tr>
-                  <td>23 Jan 2025</td>
-                  <td>22</td>
-                  <td>1,224</td>
-                  <td><span class="positive">1.8%</span></td>
-                </tr>
-                <tr>
-                  <td>22 Jan 2025</td>
-                  <td>19</td>
-                  <td>1,202</td>
-                  <td><span class="positive">1.6%</span></td>
-                </tr>
-                <tr>
-                  <td>21 Jan 2025</td>
-                  <td>26</td>
-                  <td>1,183</td>
-                  <td><span class="positive">2.2%</span></td>
-                </tr>
-                <tr>
-                  <td>20 Jan 2025</td>
-                  <td>18</td>
-                  <td>1,157</td>
-                  <td><span class="positive">1.6%</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="chart-container small-chart">
-            <h3><span class="chart-icon">📈</span> Weekly Trend</h3>
-            <canvas id="userChart" width="300" height="150"></canvas>
-          </div>
+        <div class="table-container full-width">
+          <h3><span class="table-icon">👥</span> User Details</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <!-- Data will be loaded here via JavaScript -->
+              <tr><td colspan="5">Loading users...</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- LOGIN ACTIVITY REPORT -->
-      <div id="login" class="report">
-        <div class="report-header">
-          <h2>🔐 Login Activity Report</h2>
-          <p>User login frequency and last login time monitoring</p>
-        </div>
-        
-        <div class="summary-cards">
-          <div class="card">
-            <h3>Total Logins</h3>
-            <div class="value">4,892</div>
-            <div class="trend positive">↑ 18% this week</div>
-          </div>
-          <div class="card">
-            <h3>Active Now</h3>
-            <div class="value">42</div>
-            <div class="trend neutral">Peak hours</div>
-          </div>
-          <div class="card">
-            <h3>Avg Session</h3>
-            <div class="value">28 min</div>
-            <div class="trend positive">↑ 5 min</div>
-          </div>
-        </div>
-
-        <div class="hybrid-section">
-          <div class="table-container full-width">
-            <h3><span class="table-icon">👥</span> User Login Activity</h3>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Last Login</th>
-                  <th>Login Count</th>
-                  <th>IP Address</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="user-badge">👑</span> admin_user</td>
-                  <td>24-Jan 10:20 AM</td>
-                  <td>156</td>
-                  <td>192.168.1.45</td>
-                  <td><span class="status active">Active</span></td>
-                </tr>
-                <tr>
-                  <td><span class="user-badge">🔧</span> sys_admin</td>
-                  <td>24-Jan 09:10 AM</td>
-                  <td>89</td>
-                  <td>192.168.1.1</td>
-                  <td><span class="status active">Active</span></td>
-                </tr>
-                <tr>
-                  <td><span class="user-badge">👤</span> dev_rahul</td>
-                  <td>23-Jan 11:30 PM</td>
-                  <td>42</td>
-                  <td>192.168.1.78</td>
-                  <td><span class="status idle">Idle</span></td>
-                </tr>
-                <tr>
-                  <td><span class="user-badge">👤</span> designer_priya</td>
-                  <td>23-Jan 08:45 AM</td>
-                  <td>67</td>
-                  <td>192.168.1.32</td>
-                  <td><span class="status idle">Idle</span></td>
-                </tr>
-                <tr>
-                  <td><span class="user-badge">👤</span> test_amit</td>
-                  <td>22-Jan 04:20 PM</td>
-                  <td>31</td>
-                  <td>192.168.1.99</td>
-                  <td><span class="status inactive">Inactive</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- REPOSITORY USAGE REPORT -->
+      <!-- 2. REPOSITORY REPORT -->
       <div id="repo" class="report">
         <div class="report-header">
-          <h2>📚 Repository Usage Report</h2>
-          <p>Most active repositories and contributions analysis</p>
+          <h2>📚 Repository Report</h2>
+          <p>Repo ID, Repo Name, Owner, Created Date, Total Commits</p>
         </div>
         
         <div class="summary-cards">
           <div class="card">
             <h3>Total Repos</h3>
-            <div class="value">87</div>
-            <div class="trend positive">↑ 5 this month</div>
+            <div class="value" id="totalRepos">0</div>
+            <div class="trend neutral">All repositories</div>
           </div>
           <div class="card">
-            <h3>Active Today</h3>
-            <div class="value">23</div>
-            <div class="trend neutral">Normal activity</div>
+            <h3>Public Repos</h3>
+            <div class="value" id="publicRepos">0</div>
+            <div class="trend positive">Visible to all</div>
           </div>
           <div class="card">
-            <h3>Total Commits</h3>
-            <div class="value">1,245</div>
-            <div class="trend positive">↑ 18% growth</div>
+            <h3>Most Active</h3>
+            <div class="value" id="mostActiveRepo">-</div>
+            <div class="trend positive">By commits</div>
           </div>
         </div>
 
-        <div class="hybrid-section">
-          <div class="table-container">
-            <h3><span class="table-icon">🏆</span> Top Repositories</h3>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Repository</th>
-                  <th>Owner</th>
-                  <th>Commits</th>
-                  <th>Last Updated</th>
-                  <th>Stars</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="repo-icon">💻</span> MiniGit-Core</td>
-                  <td>admin_user</td>
-                  <td>148</td>
-                  <td>23-Jan 10:30 PM</td>
-                  <td>⭐ 42</td>
-                </tr>
-                <tr>
-                  <td><span class="repo-icon">🔒</span> CyberCare</td>
-                  <td>sys_admin</td>
-                  <td>131</td>
-                  <td>22-Jan 04:20 PM</td>
-                  <td>⭐ 38</td>
-                </tr>
-                <tr>
-                  <td><span class="repo-icon">🎨</span> UI-Components</td>
-                  <td>designer_priya</td>
-                  <td>89</td>
-                  <td>21-Jan 11:15 AM</td>
-                  <td>⭐ 31</td>
-                </tr>
-                <tr>
-                  <td><span class="repo-icon">📊</span> Analytics-Dash</td>
-                  <td>dev_rahul</td>
-                  <td>76</td>
-                  <td>20-Jan 03:45 PM</td>
-                  <td>⭐ 24</td>
-                </tr>
-                <tr>
-                  <td><span class="repo-icon">📱</span> Mobile-App</td>
-                  <td>test_amit</td>
-                  <td>62</td>
-                  <td>19-Jan 09:20 AM</td>
-                  <td>⭐ 19</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="chart-container small-chart">
-            <h3><span class="chart-icon">📊</span> Commit Distribution</h3>
-            <canvas id="repoChart" width="250" height="150"></canvas>
-          </div>
+        <div class="table-container full-width">
+          <h3><span class="table-icon">📁</span> Repository Details</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Repo ID</th>
+                <th>Repo Name</th>
+                <th>Owner</th>
+                <th>Created Date</th>
+                <th>Total Commits</th>
+              </tr>
+            </thead>
+            <tbody id="repoTableBody">
+              <tr><td colspan="5">Loading repositories...</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- COMMIT TRENDS REPORT -->
+      <!-- 3. COMMIT REPORT -->
       <div id="commit" class="report">
         <div class="report-header">
-          <h2>🔄 Commit Trends Report</h2>
-          <p>Daily and weekly commit patterns across all repositories</p>
+          <h2>💾 Commit Report</h2>
+          <p>Commit ID, Repo Name, Commit Message, Committed By, Date</p>
         </div>
         
         <div class="summary-cards">
           <div class="card">
+            <h3>Total Commits</h3>
+            <div class="value" id="totalCommits">0</div>
+            <div class="trend neutral">All time</div>
+          </div>
+          <div class="card">
             <h3>Today's Commits</h3>
-            <div class="value">87</div>
-            <div class="trend positive">↑ 12 from yesterday</div>
+            <div class="value" id="todayCommits">0</div>
+            <div class="trend positive">Today</div>
           </div>
           <div class="card">
-            <h3>Weekly Avg</h3>
-            <div class="value">65/day</div>
-            <div class="trend positive">↑ 8% growth</div>
-          </div>
-          <div class="card">
-            <h3>Peak Hour</h3>
-            <div class="value">14:00-16:00</div>
-            <div class="trend neutral">Afternoon spike</div>
+            <h3>Most Active User</h3>
+            <div class="value" id="mostActiveUser">-</div>
+            <div class="trend positive">By commits</div>
           </div>
         </div>
 
+        <div class="table-container full-width">
+          <h3><span class="table-icon">📝</span> Recent Commits</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Commit ID</th>
+                <th>Repo Name</th>
+                <th>Commit Message</th>
+                <th>Committed By</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="commitTableBody">
+              <tr><td colspan="5">Loading commits...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. POPULARITY REPORT -->
+      <div id="popularity" class="report">
+        <div class="report-header">
+          <h2>⭐ Repository Popularity Report</h2>
+          <p>Repo ID, Repo Name, Owner, Views, Stars, Contributions, Growth Rate</p>
+        </div>
+        
         <div class="hybrid-section">
           <div class="table-container">
-            <h3><span class="table-icon">📅</span> Daily Commit Activity</h3>
+            <h3><span class="table-icon">📊</span> Popularity Ranking</h3>
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Commits</th>
-                  <th>Contributors</th>
-                  <th>Repositories</th>
-                  <th>Trend</th>
+                  <th>Rank</th>
+                  <th>Repo Name</th>
+                  <th>Owner</th>
+                  <th>⭐ Stars</th>
+                  <th>👁️ Views</th>
+                  <th>📈 Growth</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>24 Jan 2025</td>
-                  <td>87</td>
-                  <td>14</td>
-                  <td>8</td>
-                  <td><span class="positive">↑ High</span></td>
-                </tr>
-                <tr>
-                  <td>23 Jan 2025</td>
-                  <td>75</td>
-                  <td>12</td>
-                  <td>7</td>
-                  <td><span class="positive">↑ Medium</span></td>
-                </tr>
-                <tr>
-                  <td>22 Jan 2025</td>
-                  <td>92</td>
-                  <td>15</td>
-                  <td>9</td>
-                  <td><span class="positive">↑ High</span></td>
-                </tr>
-                <tr>
-                  <td>21 Jan 2025</td>
-                  <td>68</td>
-                  <td>11</td>
-                  <td>6</td>
-                  <td><span class="neutral">→ Stable</span></td>
-                </tr>
-                <tr>
-                  <td>20 Jan 2025</td>
-                  <td>81</td>
-                  <td>13</td>
-                  <td>8</td>
-                  <td><span class="positive">↑ Medium</span></td>
-                </tr>
+              <tbody id="popularityTableBody">
+                <tr><td colspan="6">Loading popularity data...</td></tr>
               </tbody>
             </table>
           </div>
 
           <div class="chart-container small-chart">
-            <h3><span class="chart-icon">📈</span> Weekly Trend</h3>
-            <canvas id="commitChart" width="300" height="150"></canvas>
+            <h3><span class="chart-icon">📈</span> Top 5 Repositories</h3>
+            <canvas id="popularityChart" width="300" height="150"></canvas>
           </div>
         </div>
       </div>
 
-      <!-- INACTIVE USERS REPORT -->
-      <div id="inactive" class="report">
+      <!-- 5. ISSUE REPORT -->
+      <div id="issue" class="report">
         <div class="report-header">
-          <h2>⏸️ Inactive Users Report</h2>
-          <p>Users with no recent activity (more than 30 days)</p>
+          <h2>🐛 Issue Report</h2>
+          <p>Issue ID, Repo Name, Issue Title, Created By, Status, Date</p>
         </div>
         
         <div class="summary-cards">
           <div class="card">
-            <h3>Inactive Users</h3>
-            <div class="value">24</div>
-            <div class="trend negative">↑ 3 this month</div>
+            <h3>Total Issues</h3>
+            <div class="value" id="totalIssues">0</div>
+            <div class="trend neutral">All time</div>
           </div>
           <div class="card">
-            <h3>At Risk</h3>
-            <div class="value">12</div>
-            <div class="trend negative">> 60 days</div>
+            <h3>Open Issues</h3>
+            <div class="value" id="openIssues">0</div>
+            <div class="trend warning">Need attention</div>
           </div>
           <div class="card">
-            <h3>Reactivated</h3>
-            <div class="value">8</div>
-            <div class="trend positive">This month</div>
+            <h3>Closed Today</h3>
+            <div class="value" id="closedToday">0</div>
+            <div class="trend positive">Today</div>
           </div>
         </div>
 
+        <div class="table-container full-width">
+          <h3><span class="table-icon">⚠️</span> Issue Details</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Issue ID</th>
+                <th>Repo Name</th>
+                <th>Issue Title</th>
+                <th>Created By</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="issueTableBody">
+              <tr><td colspan="6">Loading issues...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 6. ACTIVITY REPORT -->
+      <div id="activity" class="report">
+        <div class="report-header">
+          <h2>📊 Activity / Contribution Report</h2>
+          <p>Username, Total Repos, Total Commits, Total Issues, Last Activity</p>
+        </div>
+        
         <div class="hybrid-section">
-          <div class="table-container full-width">
-            <h3><span class="table-icon">👥</span> Inactive User List</h3>
+          <div class="table-container">
+            <h3><span class="table-icon">👤</span> User Contributions</h3>
             <table class="data-table">
               <thead>
                 <tr>
                   <th>Username</th>
-                  <th>Last Active</th>
-                  <th>Days Inactive</th>
-                  <th>Role</th>
-                  <th>Action</th>
+                  <th>Total Repos</th>
+                  <th>Total Commits</th>
+                  <th>Total Issues</th>
+                  <th>Last Activity</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><span class="user-badge">👤</span> testuser001</td>
-                  <td>10-Dec-2024</td>
-                  <td><span class="negative">45 days</span></td>
-                  <td>Developer</td>
-                  <td><button class="action-btn">Notify</button></td>
-                </tr>
-                <tr>
-                  <td><span class="user-badge">👤</span> demo_2024</td>
-                  <td>02-Dec-2024</td>
-                  <td><span class="negative">53 days</span></td>
-                  <td>Tester</td>
-                  <td><button class="action-btn">Notify</button></td>
-                </tr>
-                <tr>
-                  <td><span class="user-badge">👤</span> john_developer</td>
-                  <td>25-Nov-2024</td>
-                  <td><span class="negative">60 days</span></td>
-                  <td>Viewer</td>
-                  <td><button class="action-btn warning">Deactivate</button></td>
-                </tr>
-                <tr>
-                  <td><span class="user-badge">👤</span> mary_smith</td>
-                  <td>15-Nov-2024</td>
-                  <td><span class="negative">70 days</span></td>
-                  <td>Developer</td>
-                  <td><button class="action-btn warning">Deactivate</button></td>
-                </tr>
-                <tr>
-                  <td><span class="user-badge">👤</span> temp_user</td>
-                  <td>05-Nov-2024</td>
-                  <td><span class="negative">80 days</span></td>
-                  <td>Tester</td>
-                  <td><button class="action-btn danger">Delete</button></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <tbody id="activityTableBody">
+              <tr><td colspan="5">Loading activity data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="chart-container small-chart">
+          <h3><span class="chart-icon">📈</span> Top Contributors</h3>
+          <canvas id="activityChart" width="300" height="150"></canvas>
         </div>
       </div>
+    </div>
 
-      <!-- SYSTEM LOAD REPORT -->
-      <div id="system" class="report">
+      <!-- 7. FEEDBACK REPORT - NEW -->
+      <div id="feedback" class="report">
         <div class="report-header">
-          <h2>⚡ System Load Report</h2>
-          <p>Peak usage times and system performance metrics</p>
+          <h2>💬 Feedback Report</h2>
+          <p>User feedback analysis: Categories, Experience Ratings, Sentiments</p>
         </div>
         
         <div class="summary-cards">
           <div class="card">
-            <h3>CPU Usage</h3>
-            <div class="value">68%</div>
-            <div class="trend neutral">Normal</div>
+            <h3>Total Feedback</h3>
+            <div class="value" id="totalFeedback">0</div>
+            <div class="trend neutral">All time</div>
           </div>
           <div class="card">
-            <h3>Memory</h3>
-            <div class="value">74%</div>
-            <div class="trend warning">Moderate</div>
+            <h3>Positive</h3>
+            <div class="value" id="positiveFeedback">0</div>
+            <div class="trend positive">Good experience</div>
           </div>
           <div class="card">
-            <h3>Response Time</h3>
-            <div class="value">142ms</div>
-            <div class="trend positive">Good</div>
+            <h3>Need Action</h3>
+            <div class="value" id="actionNeeded">0</div>
+            <div class="trend warning">Issues reported</div>
           </div>
         </div>
 
         <div class="hybrid-section">
           <div class="table-container">
-            <h3><span class="table-icon">🕒</span> Hourly System Load</h3>
+            <h3><span class="table-icon">📋</span> Recent Feedback</h3>
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Time</th>
-                  <th>Active Users</th>
-                  <th>CPU Usage</th>
-                  <th>Memory</th>
+                  <th>Feedback ID</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Experience</th>
+                  <th>Date</th>
                   <th>Status</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>10:00 AM</td>
-                  <td>91</td>
-                  <td>65%</td>
-                  <td>71%</td>
-                  <td><span class="status normal">Normal</span></td>
-                </tr>
-                <tr>
-                  <td>12:00 PM</td>
-                  <td>130</td>
-                  <td>78%</td>
-                  <td>82%</td>
-                  <td><span class="status warning">High</span></td>
-                </tr>
-                <tr>
-                  <td>02:00 PM</td>
-                  <td>145</td>
-                  <td>82%</td>
-                  <td>85%</td>
-                  <td><span class="status warning">High</span></td>
-                </tr>
-                <tr>
-                  <td>04:00 PM</td>
-                  <td>112</td>
-                  <td>71%</td>
-                  <td>76%</td>
-                  <td><span class="status normal">Normal</span></td>
-                </tr>
-                <tr>
-                  <td>06:00 PM</td>
-                  <td>85</td>
-                  <td>62%</td>
-                  <td>68%</td>
-                  <td><span class="status normal">Normal</span></td>
-                </tr>
+              <tbody id="feedbackTableBody">
+                <tr><td colspan="6">Loading feedback...</td></tr>
               </tbody>
             </table>
           </div>
 
           <div class="chart-container small-chart">
-            <h3><span class="chart-icon">📊</span> Performance Trend</h3>
-            <canvas id="systemChart" width="300" height="150"></canvas>
+            <h3><span class="chart-icon">📊</span> Feedback by Category</h3>
+            <canvas id="feedbackChart" width="300" height="150"></canvas>
           </div>
         </div>
       </div>
-
     </section>
   </main>
-
 </div>
 
 <script>
@@ -547,60 +343,169 @@ function showReport(id) {
   document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('show');
   event.target.classList.add('active');
+  loadReportData(id); // Load data when switching reports
 }
 
-// Initialize charts when page loads
+// Load sample data (you'll replace this with real API calls)
+function loadReportData(reportType) {
+  // Sample data for demonstration
+  const sampleData = {
+    user: {
+      total: 1248,
+      active: 42,
+      newToday: 24,
+      users: [
+        {id: 1, username: "admin_user", email: "admin@minigit.com", regDate: "2024-01-15", status: "Active"},
+        {id: 2, username: "dev_rahul", email: "rahul@dev.com", regDate: "2024-01-20", status: "Active"},
+        {id: 3, username: "test_amit", email: "amit@test.com", regDate: "2024-01-25", status: "Inactive"}
+      ]
+    },
+    repo: {
+      total: 87,
+      public: 65,
+      mostActive: "MiniGit-Core",
+      repos: [
+        {id: 1, name: "MiniGit-Core", owner: "admin_user", created: "2024-01-16", commits: 148},
+        {id: 2, name: "UI-Components", owner: "dev_rahul", created: "2024-01-18", commits: 89},
+        {id: 3, name: "Mobile-App", owner: "test_amit", created: "2024-01-22", commits: 62}
+      ]
+    },
+    feedback: {
+      total: 156,
+      positive: 124,
+      actionNeeded: 12,
+      feedbacks: [
+        {id: 1, name: "John Doe", category: "Bug Report", experience: "Poor", date: "2024-01-24", status: "Pending"},
+        {id: 2, name: "Jane Smith", category: "Feature Request", experience: "Good", date: "2024-01-23", status: "Resolved"},
+        {id: 3, name: "Bob Wilson", category: "UI/UX", experience: "Average", date: "2024-01-22", status: "In Progress"},
+        {id: 4, name: "Alice Brown", category: "Performance", experience: "Excellent", date: "2024-01-21", status: "Resolved"},
+        {id: 5, name: "Charlie Davis", category: "Documentation", experience: "Good", date: "2024-01-20", status: "Pending"}
+      ]
+    }
+  };
+
+  // Update UI with sample data
+  if (reportType === 'user') {
+    document.getElementById('totalUsers').textContent = sampleData.user.total;
+    document.getElementById('activeUsers').textContent = sampleData.user.active;
+    document.getElementById('newToday').textContent = sampleData.user.newToday;
+    
+    const tbody = document.getElementById('userTableBody');
+    tbody.innerHTML = sampleData.user.users.map(user => `
+      <tr>
+        <td>${user.id}</td>
+        <td>${user.username}</td>
+        <td>${user.email}</td>
+        <td>${user.regDate}</td>
+        <td><span class="status ${user.status.toLowerCase()}">${user.status}</span></td>
+      </tr>
+    `).join('');
+  }
+  
+  if (reportType === 'repo') {
+    document.getElementById('totalRepos').textContent = sampleData.repo.total;
+    document.getElementById('publicRepos').textContent = sampleData.repo.public;
+    document.getElementById('mostActiveRepo').textContent = sampleData.repo.mostActive;
+    
+    const tbody = document.getElementById('repoTableBody');
+    tbody.innerHTML = sampleData.repo.repos.map(repo => `
+      <tr>
+        <td>${repo.id}</td>
+        <td>${repo.name}</td>
+        <td>${repo.owner}</td>
+        <td>${repo.created}</td>
+        <td>${repo.commits}</td>
+      </tr>
+    `).join('');
+  }
+  
+  if (reportType === 'feedback') {
+    document.getElementById('totalFeedback').textContent = sampleData.feedback.total;
+    document.getElementById('positiveFeedback').textContent = sampleData.feedback.positive;
+    document.getElementById('actionNeeded').textContent = sampleData.feedback.actionNeeded;
+    
+    const tbody = document.getElementById('feedbackTableBody');
+    tbody.innerHTML = sampleData.feedback.feedbacks.map(fb => `
+      <tr>
+        <td>${fb.id}</td>
+        <td>${fb.name}</td>
+        <td>${fb.category}</td>
+        <td>
+          <span class="experience ${fb.experience.toLowerCase()}">
+            ${fb.experience}
+          </span>
+        </td>
+        <td>${fb.date}</td>
+        <td>
+          <span class="status ${fb.status.toLowerCase().replace(' ', '-')}">
+            ${fb.status}
+          </span>
+        </td>
+      </tr>
+    `).join('');
+  }
+}
+
+// Initialize charts
 document.addEventListener('DOMContentLoaded', function() {
-  // User Growth Chart
-  const userCtx = document.getElementById('userChart').getContext('2d');
-  new Chart(userCtx, {
-    type: 'line',
+  // Load first report
+  loadReportData('user');
+  
+  // Popularity Chart
+  const popCtx = document.getElementById('popularityChart').getContext('2d');
+  new Chart(popCtx, {
+    type: 'bar',
     data: {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      labels: ['MiniGit-Core', 'UI-Components', 'Mobile-App', 'Analytics', 'API-Service'],
       datasets: [{
-        label: 'New Users',
-        data: [18, 22, 26, 19, 24, 15, 20],
+        label: 'Stars',
+        data: [42, 31, 19, 24, 15],
+        backgroundColor: 'rgba(34, 245, 255, 0.7)',
         borderColor: '#22f5ff',
-        backgroundColor: 'rgba(34, 245, 255, 0.1)',
-        fill: true,
-        tension: 0.4
+        borderWidth: 1
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { 
-        legend: { display: false }
-      },
+      plugins: { legend: { display: false } },
       scales: {
-        y: { 
-          beginAtZero: true, 
-          grid: { color: 'rgba(255,255,255,0.1)' },
-          ticks: { color: '#94a3b8' }
-        },
-        x: { 
-          grid: { color: 'rgba(255,255,255,0.1)' },
-          ticks: { color: '#94a3b8' }
-        }
+        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
+        x: { grid: { color: 'rgba(255,255,255,0.1)' } }
       }
     }
   });
 
-  // Repository Chart - Smaller pie chart
-  const repoCtx = document.getElementById('repoChart').getContext('2d');
-  new Chart(repoCtx, {
+  // Activity Chart
+  const actCtx = document.getElementById('activityChart').getContext('2d');
+  new Chart(actCtx, {
     type: 'doughnut',
     data: {
-      labels: ['MiniGit-Core', 'CyberCare', 'UI-Components', 'Analytics', 'Mobile-App'],
+      labels: ['admin_user', 'dev_rahul', 'test_amit', 'designer_priya'],
       datasets: [{
-        data: [148, 131, 89, 76, 62],
-        backgroundColor: [
-          '#22f5ff',
-          '#0ea5e9',
-          '#8b5cf6',
-          '#10b981',
-          '#f59e0b'
-        ],
+        data: [148, 89, 62, 45],
+        backgroundColor: ['#22f5ff', '#0ea5e9', '#8b5cf6', '#10b981'],
+        borderWidth: 1,
+        borderColor: '#021c1a'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } },
+      cutout: '50%'
+    }
+  });
+
+  // Feedback Chart
+  const fbCtx = document.getElementById('feedbackChart').getContext('2d');
+  new Chart(fbCtx, {
+    type: 'pie',
+    data: {
+      labels: ['Bug Report', 'Feature Request', 'UI/UX', 'Performance', 'Documentation'],
+      datasets: [{
+        data: [45, 38, 28, 25, 20],
+        backgroundColor: ['#ef4444', '#22f5ff', '#8b5cf6', '#10b981', '#f59e0b'],
         borderWidth: 1,
         borderColor: '#021c1a'
       }]
@@ -610,104 +515,55 @@ document.addEventListener('DOMContentLoaded', function() {
       maintainAspectRatio: false,
       plugins: { 
         legend: { 
-          position: 'bottom', 
+          position: 'right', 
           labels: { 
             color: '#94a3b8',
-            padding: 10,
+            padding: 15,
             boxWidth: 12,
-            font: { size: 10 }
-          }
-        } 
-      },
-      cutout: '50%'
-    }
-  });
-
-  // Commit Chart
-  const commitCtx = document.getElementById('commitChart').getContext('2d');
-  new Chart(commitCtx, {
-    type: 'bar',
-    data: {
-      labels: ['24 Jan', '23 Jan', '22 Jan', '21 Jan', '20 Jan'],
-      datasets: [{
-        label: 'Commits',
-        data: [87, 75, 92, 68, 81],
-        backgroundColor: 'rgba(34, 245, 255, 0.7)',
-        borderColor: '#22f5ff',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { 
-        legend: { display: false } 
-      },
-      scales: {
-        y: { 
-          beginAtZero: true, 
-          grid: { color: 'rgba(255,255,255,0.1)' },
-          ticks: { color: '#94a3b8' }
-        },
-        x: { 
-          grid: { color: 'rgba(255,255,255,0.1)' },
-          ticks: { color: '#94a3b8' }
-        }
-      }
-    }
-  });
-
-  // System Chart
-  const systemCtx = document.getElementById('systemChart').getContext('2d');
-  new Chart(systemCtx, {
-    type: 'line',
-    data: {
-      labels: ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'],
-      datasets: [
-        {
-          label: 'CPU Usage',
-          data: [58, 65, 72, 78, 75, 82, 80, 71],
-          borderColor: '#22f5ff',
-          backgroundColor: 'transparent',
-          tension: 0.4,
-          borderWidth: 2
-        },
-        {
-          label: 'Memory',
-          data: [65, 71, 75, 82, 79, 85, 83, 76],
-          borderColor: '#8b5cf6',
-          backgroundColor: 'transparent',
-          tension: 0.4,
-          borderWidth: 2
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: { 
-          beginAtZero: true, 
-          grid: { color: 'rgba(255,255,255,0.1)' },
-          ticks: { color: '#94a3b8' }
-        },
-        x: { 
-          grid: { color: 'rgba(255,255,255,0.1)' },
-          ticks: { color: '#94a3b8' }
-        }
-      },
-      plugins: {
-        legend: {
-          labels: {
-            color: '#94a3b8',
             font: { size: 11 }
           }
-        }
+        } 
       }
     }
   });
 });
 </script>
+
+<style>
+/* Add experience rating styles */
+.experience {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.experience.excellent {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.experience.good {
+  background: rgba(34, 245, 255, 0.2);
+  color: #22f5ff;
+}
+
+.experience.average {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.experience.poor {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+/* Make chart container taller for feedback */
+#feedbackChart {
+  margin-top: 10px;
+}
+</style>
 
 </body>
 </html>

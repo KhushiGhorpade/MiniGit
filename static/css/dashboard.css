@@ -9,6 +9,7 @@
 body {
   background: #000;
   color: #fff;
+  min-height: 100vh;
 }
 
 /* ================= AUTH NAVBAR ================= */
@@ -63,16 +64,16 @@ body {
   color: cyan;
 }
 
-.auth-nav a.active, .auth-nav span.active {
-    color: cyan;
-    border-bottom: 2px solid cyan;
-    padding-bottom: 4px;
-    font-weight: bold;
-    text-shadow: 0 0 6px cyan;
+.auth-nav a.active,
+.auth-nav span.active {
+  color: cyan;
+  border-bottom: 2px solid cyan;
+  padding-bottom: 4px;
+  font-weight: bold;
+  text-shadow: 0 0 6px cyan;
 }
 
-/* ================= DROPDOWN (REUSABLE) ================= */
-
+/* ================= DROPDOWN ================= */
 .dropdown {
   position: relative;
 }
@@ -83,7 +84,6 @@ body {
   gap: 4px;
 }
 
-/* Menu */
 .dropdown-menu {
   position: absolute;
   top: 140%;
@@ -99,12 +99,10 @@ body {
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
-
   transition: all 0.25s ease;
   z-index: 2000;
 }
 
-/* Hover-safe open */
 .dropdown:hover .dropdown-menu,
 .dropdown-menu:hover {
   opacity: 1;
@@ -112,47 +110,43 @@ body {
   transform: translateY(0);
 }
 
-/* Menu links */
 .dropdown-menu a {
   display: block;
   padding: 10px 16px;
   font-size: 14px;
   color: #e6ffff;
   text-decoration: none;
-  white-space: nowrap;
 }
 
 .dropdown-menu a:hover {
   background: rgba(0,255,255,0.12);
 }
 
-/* Logout */
 .dropdown-menu a.logout {
   color: #ff6b6b;
 }
 
-.dropdown-menu a.logout:hover {
-  background: rgba(255,107,107,0.15);
-}
-
 /* ================= DASHBOARD LAYOUT ================= */
-
 .dashboard {
-  padding: 110px 60px 60px;
+  padding: 110px 60px 40px;
+  min-height: 100vh;              /* 🔥 fills screen */
   display: grid;
   grid-template-columns: 1fr 2.2fr 1fr;
   gap: 30px;
+  align-items: stretch;           /* 🔥 stretch columns */
 }
 
-/* Panels */
+/* ================= PANELS ================= */
 .panel {
   background: rgba(255,255,255,0.06);
   backdrop-filter: blur(18px);
   border-radius: 22px;
   padding: 24px;
   box-shadow: 0 0 30px rgba(0,255,255,0.2);
+
   display: flex;
   flex-direction: column;
+  height: 100%;                   /* 🔥 full column height */
 }
 
 .panel h3 {
@@ -161,6 +155,7 @@ body {
 }
 
 .panel-content {
+  flex: 1;                         /* 🔥 stretch content */
   overflow-y: auto;
   padding-right: 6px;
 }
@@ -175,11 +170,12 @@ body {
   color: cyan;
 }
 
-/* Center */
+/* ================= CENTER ================= */
 .center-panel {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  height: 100%;                    /* 🔥 match side panels */
 }
 
 .search-box input {
@@ -191,16 +187,13 @@ body {
   color: #fff;
 }
 
-.search-box input::placeholder {
-  color: rgba(255,255,255,0.6);
-}
-
 .results-box {
-  flex: 1;
+  flex: 1;                         /* 🔥 fills remaining space */
   background: rgba(255,255,255,0.05);
   border-radius: 22px;
   padding: 30px;
   box-shadow: inset 0 0 0 1px rgba(0,255,255,0.15);
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -208,7 +201,6 @@ body {
 }
 
 /* ================= SCROLLBAR ================= */
-
 ::-webkit-scrollbar {
   width: 8px;
 }
