@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Repositories | MiniGit</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/repositories.css') }}"
+    />
+  </head>
+  <body>
+    <!-- ================= AUTH NAVBAR ================= -->
+    <header class="auth-header">
+      <div class="auth-brand">
+        <div class="logo"></div>
+        <span>MiniGit</span>
+      </div>
+
+      <nav class="auth-nav">
+        <a
+          href="/dashboard"
+          class="{% if active_page == 'dashboard' %}active{% endif %}"
+          >Dashboard</a
+        >
+        <a
+          href="/repositories"
+          class="{% if active_page == 'repositories' %}active{% endif %}"
+          >Repositories</a
+        >
+        <a
+          href="/activity"
+          class="{% if active_page == 'activity' %}active{% endif %}"
+          >Activity</a
+        >
+
+        <!-- Create Dropdown -->
+        <div class="dropdown">
+          <span>Create ▾</span>
+          <div class="dropdown-menu">
+            <a
+              href="/create-repo"
+              class="{% if active_page == 'create-repo' %}active{% endif %}"
+              >New Repository</a
+            >
+            <a
+              href="/create-issue"
+              class="{% if active_page == 'create-issue' %}active{% endif %}"
+              >New Issue</a
+            >
+            <a
+              href="/create-commit"
+              class="{% if active_page == 'create-commit' %}active{% endif %}"
+              >New Commit</a
+            >
+          </div>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="dropdown profile-dropdown">
+          <span
+            class="{% if active_page in ['profile', 'my-repos', 'activity'] %}active{% endif %}"
+            >Profile ▾</span
+          >
+          <div class="dropdown-menu">
+            <a
+              href="/profile"
+              class="{% if active_page == 'profile' %}active{% endif %}"
+              >View Profile</a
+            >
+            <a
+              href="/my-repos"
+              class="{% if active_page == 'my-repos' %}active{% endif %}"
+              >My Repositories</a
+            >
+            <a
+              href="/activity"
+              class="{% if active_page == 'activity' %}active{% endif %}"
+              >My Activity</a
+            >
+            <a href="/logout" class="logout">Logout</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <!-- ================= REPOSITORIES CONTENT ================= -->
+    <main class="repositories-main">
+      <h1>All Repositories</h1>
+      <div class="repo-list">
+        {% for repo in repositories %}
+        <div class="repo-card">
+          <h2><a href="/repositories/{{ repo.id }}">{{ repo.name }}</a></h2>
+          <p>{{ repo.description }}</p>
+          <p class="repo-meta">
+            Created by {{ repo.owner }} on {{ repo.created_at.strftime('%Y-%m-%d') }}
+          </p>
+        </div>
+        {% else %}
+        <p>No repositories found.</p>
+        {% endfor %}
+      </div>
+    </main>
+  </body>
+</html>

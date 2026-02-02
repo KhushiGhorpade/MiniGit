@@ -182,11 +182,11 @@ def dashboard():
                          recent_activity=recent_activity,
                          recent_commits=recent_commits)
 
-@app.route("/repos")
+@app.route("/repositories")
 def repos():
     if not session.get('logged_in'):
         return redirect(url_for("login"))
-    return render_template("repos.html", active_page="repos")
+    return render_template("repositories.html", active_page="repositories")
 
 @app.route("/activity")
 def activity():
