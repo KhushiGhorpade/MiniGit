@@ -29,37 +29,75 @@ def home():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-
-        # Check if it's admin login
+        username = request.form["username"].strip()
+        password = request.form["password"].strip()
+        
+        print(f"Login attempt - Username: {username}, Password: {password}")  # Debug
+        
+        # ---- ADMIN LOGIN ----
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-            session['logged_in'] = True
-            session['username'] = username
-            session['is_admin'] = True
+            session["logged_in"] = True
+            session["username"] = username
+            session["is_admin"] = True
             flash("Admin login successful!", "success")
             return redirect(url_for("admin"))
-        
-        # Check if it's regular user login
+
+        # ---- USER LOGIN ----
         db = get_db_connection()
         cursor = db.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE username=%s", (username,))
+
+        cursor.execute(
+            "SELECT * FROM users WHERE username = %s OR email = %s",
+            (username, username)
+        )
+
         user = cursor.fetchone()
+        
+        if user:
+            print(f"User found: {user['username']}")
+            print(f"Stored password hash: {user['password']}")
+            print(f"Password starts with scrypt?: {user['password'].startswith('scrypt:')}")
+            
+            # Check if password hash starts with scrypt (which indicates werkzeug's scrypt method)
+            if user["password"].startswith("scrypt:"):
+                # Use werkzeug's check_password_hash
+                if check_password_hash(user["password"], password):
+                    print("Password check PASSED with werkzeug")
+                    session["logged_in"] = True
+                    session["username"] = user["username"]
+                    session["is_admin"] = False
+                    session["user_id"] = user["user_id"]
+                    
+                    # Update last login time
+                    update_cursor = db.cursor()
+                    update_cursor.execute(
+                        "UPDATE users SET last_login = NOW() WHERE user_id = %s",
+                        (user["user_id"],)
+                    )
+                    db.commit()
+                    update_cursor.close()
+                    
+                    cursor.close()
+                    db.close()
+                    
+                    flash("Login successful!", "success")
+                    return redirect(url_for("dashboard"))
+                else:
+                    print("Password check FAILED with werkzeug")
+            else:
+                # Handle other password formats if needed
+                print("Password hash format not recognized")
+        else:
+            print(f"No user found with username/email: {username}")
+        
         cursor.close()
         db.close()
+        flash("Invalid username or password", "error")
+        return redirect(url_for("login"))
 
-        if user and check_password_hash(user["password"], password):
-            session['logged_in'] = True
-            session['username'] = username
-            session['is_admin'] = False
-            session['user_id'] = user['user_id']
-            flash("Login successful!", "success")
-            return redirect(url_for("dashboard"))
-        else:
-            flash("Invalid username or password!", "error")
-            return redirect(url_for("login"))
-
+    # ---- GET REQUEST ----
     return render_template("login.html", active_page="login")
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -69,7 +107,10 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
 
-        hashed_password = generate_password_hash(password)
+        # Generate password hash using scrypt (werkzeug's default)
+        hashed_password = generate_password_hash(password, method='scrypt')
+        print(f"Generated hash: {hashed_password}")  # Debug
+        
         db = get_db_connection()
         cursor = db.cursor(dictionary=True)
 
@@ -85,6 +126,12 @@ def register():
             return redirect(url_for("login"))
         except mysql.connector.IntegrityError:
             flash("Username or email already exists!", "error")
+            cursor.close()
+            db.close()
+            return redirect(url_for("register"))
+        except Exception as e:
+            print(f"Registration error: {e}")
+            flash(f"Registration error: {e}", "error")
             cursor.close()
             db.close()
             return redirect(url_for("register"))
@@ -300,7 +347,12 @@ def get_user_report_data_simple():
     
     # Get all users
     cursor.execute("""
-        SELECT user_id, username, email, created_at, 'active' as status
+        SELECT user_id, username, email, created_at, last_login,
+               CASE 
+                   WHEN last_login IS NULL THEN 'Never'
+                   WHEN last_login >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 'Active'
+                   ELSE 'Inactive'
+               END as status
         FROM users
         ORDER BY created_at DESC
         LIMIT 50
