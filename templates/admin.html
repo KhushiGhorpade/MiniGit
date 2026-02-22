@@ -20,7 +20,7 @@
       <button onclick="showReport('popularity')">⭐ Popularity Report</button>
       <button onclick="showReport('issue')">🐛 Issue Report</button>
       <button onclick="showReport('activity')">📊 Activity Report</button>
-      <button onclick="showReport('feedback')">💬 Feedback Report</button> <!-- NEW -->
+      <button onclick="showReport('feedback')">💬 Feedback Report</button>
     </div>
   </aside>
 
@@ -74,14 +74,13 @@
               </tr>
             </thead>
             <tbody id="userTableBody">
-              <!-- Data will be loaded here via JavaScript -->
               <tr><td colspan="5">Loading users...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- 2. REPOSITORY REPORT -->
+      <!-- 2. REPOSITORY REPORT (Sample) -->
       <div id="repo" class="report">
         <div class="report-header">
           <h2>📚 Repository Report</h2>
@@ -91,17 +90,17 @@
         <div class="summary-cards">
           <div class="card">
             <h3>Total Repos</h3>
-            <div class="value" id="totalRepos">0</div>
+            <div class="value" id="totalRepos">87</div>
             <div class="trend neutral">All repositories</div>
           </div>
           <div class="card">
             <h3>Public Repos</h3>
-            <div class="value" id="publicRepos">0</div>
+            <div class="value" id="publicRepos">65</div>
             <div class="trend positive">Visible to all</div>
           </div>
           <div class="card">
             <h3>Most Active</h3>
-            <div class="value" id="mostActiveRepo">-</div>
+            <div class="value" id="mostActiveRepo">MiniGit-Core</div>
             <div class="trend positive">By commits</div>
           </div>
         </div>
@@ -119,13 +118,15 @@
               </tr>
             </thead>
             <tbody id="repoTableBody">
-              <tr><td colspan="5">Loading repositories...</td></tr>
+              <tr><td>1</td><td>MiniGit-Core</td><td>admin_user</td><td>2024-01-16</td><td>148</td></tr>
+              <tr><td>2</td><td>UI-Components</td><td>dev_rahul</td><td>2024-01-18</td><td>89</td></tr>
+              <tr><td>3</td><td>Mobile-App</td><td>test_amit</td><td>2024-01-22</td><td>62</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- 3. COMMIT REPORT -->
+      <!-- 3. COMMIT REPORT (Sample) -->
       <div id="commit" class="report">
         <div class="report-header">
           <h2>💾 Commit Report</h2>
@@ -135,17 +136,17 @@
         <div class="summary-cards">
           <div class="card">
             <h3>Total Commits</h3>
-            <div class="value" id="totalCommits">0</div>
+            <div class="value" id="totalCommits">324</div>
             <div class="trend neutral">All time</div>
           </div>
           <div class="card">
             <h3>Today's Commits</h3>
-            <div class="value" id="todayCommits">0</div>
+            <div class="value" id="todayCommits">12</div>
             <div class="trend positive">Today</div>
           </div>
           <div class="card">
             <h3>Most Active User</h3>
-            <div class="value" id="mostActiveUser">-</div>
+            <div class="value" id="mostActiveUser">admin_user</div>
             <div class="trend positive">By commits</div>
           </div>
         </div>
@@ -163,13 +164,15 @@
               </tr>
             </thead>
             <tbody id="commitTableBody">
-              <tr><td colspan="5">Loading commits...</td></tr>
+              <tr><td>101</td><td>MiniGit-Core</td><td>Fix auth bug</td><td>admin_user</td><td>2024-01-24</td></tr>
+              <tr><td>102</td><td>UI-Components</td><td>Add new button</td><td>dev_rahul</td><td>2024-01-24</td></tr>
+              <tr><td>103</td><td>Mobile-App</td><td>Update UI</td><td>test_amit</td><td>2024-01-23</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- 4. POPULARITY REPORT -->
+      <!-- 4. POPULARITY REPORT (Sample) -->
       <div id="popularity" class="report">
         <div class="report-header">
           <h2>⭐ Repository Popularity Report</h2>
@@ -191,7 +194,9 @@
                 </tr>
               </thead>
               <tbody id="popularityTableBody">
-                <tr><td colspan="6">Loading popularity data...</td></tr>
+                <tr><td>1</td><td>MiniGit-Core</td><td>admin_user</td><td>42</td><td>1250</td><td>+15%</td></tr>
+                <tr><td>2</td><td>UI-Components</td><td>dev_rahul</td><td>31</td><td>890</td><td>+8%</td></tr>
+                <tr><td>3</td><td>Mobile-App</td><td>test_amit</td><td>19</td><td>560</td><td>+5%</td></tr>
               </tbody>
             </table>
           </div>
@@ -203,7 +208,7 @@
         </div>
       </div>
 
-      <!-- 5. ISSUE REPORT -->
+      <!-- 5. ISSUE REPORT (Sample) -->
       <div id="issue" class="report">
         <div class="report-header">
           <h2>🐛 Issue Report</h2>
@@ -213,17 +218,17 @@
         <div class="summary-cards">
           <div class="card">
             <h3>Total Issues</h3>
-            <div class="value" id="totalIssues">0</div>
+            <div class="value" id="totalIssues">56</div>
             <div class="trend neutral">All time</div>
           </div>
           <div class="card">
             <h3>Open Issues</h3>
-            <div class="value" id="openIssues">0</div>
+            <div class="value" id="openIssues">23</div>
             <div class="trend warning">Need attention</div>
           </div>
           <div class="card">
             <h3>Closed Today</h3>
-            <div class="value" id="closedToday">0</div>
+            <div class="value" id="closedToday">5</div>
             <div class="trend positive">Today</div>
           </div>
         </div>
@@ -242,13 +247,15 @@
               </tr>
             </thead>
             <tbody id="issueTableBody">
-              <tr><td colspan="6">Loading issues...</td></tr>
+              <tr><td>201</td><td>MiniGit-Core</td><td>Login fails</td><td>test_amit</td><td><span class="status">Open</span></td><td>2024-01-24</td></tr>
+              <tr><td>202</td><td>UI-Components</td><td>Button misaligned</td><td>dev_rahul</td><td><span class="status in-progress">In Progress</span></td><td>2024-01-23</td></tr>
+              <tr><td>203</td><td>Mobile-App</td><td>App crashes</td><td>admin_user</td><td><span class="status resolved">Closed</span></td><td>2024-01-22</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- 6. ACTIVITY REPORT -->
+      <!-- 6. ACTIVITY REPORT (Sample) -->
       <div id="activity" class="report">
         <div class="report-header">
           <h2>📊 Activity / Contribution Report</h2>
@@ -268,20 +275,22 @@
                   <th>Last Activity</th>
                 </tr>
               </thead>
-            <tbody id="activityTableBody">
-              <tr><td colspan="5">Loading activity data...</td></tr>
-            </tbody>
-          </table>
-        </div>
+              <tbody id="activityTableBody">
+                <tr><td>admin_user</td><td>5</td><td>148</td><td>12</td><td>Today</td></tr>
+                <tr><td>dev_rahul</td><td>3</td><td>89</td><td>8</td><td>Yesterday</td></tr>
+                <tr><td>test_amit</td><td>2</td><td>62</td><td>5</td><td>2 days ago</td></tr>
+              </tbody>
+            </table>
+          </div>
 
-        <div class="chart-container small-chart">
-          <h3><span class="chart-icon">📈</span> Top Contributors</h3>
-          <canvas id="activityChart" width="300" height="150"></canvas>
+          <div class="chart-container small-chart">
+            <h3><span class="chart-icon">📈</span> Top Contributors</h3>
+            <canvas id="activityChart" width="300" height="150"></canvas>
+          </div>
         </div>
       </div>
-    </div>
 
-      <!-- 7. FEEDBACK REPORT - NEW -->
+      <!-- 7. FEEDBACK REPORT -->
       <div id="feedback" class="report">
         <div class="report-header">
           <h2>💬 Feedback Report</h2>
@@ -343,113 +352,147 @@ function showReport(id) {
   document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('show');
   event.target.classList.add('active');
-  loadReportData(id); // Load data when switching reports
+  loadReportData(id);
 }
 
-// Load sample data (you'll replace this with real API calls)
+// Load REAL data from database
 function loadReportData(reportType) {
-  // Sample data for demonstration
-  const sampleData = {
-    user: {
-      total: 1248,
-      active: 42,
-      newToday: 24,
-      users: [
-        {id: 1, username: "admin_user", email: "admin@minigit.com", regDate: "2024-01-15", status: "Active"},
-        {id: 2, username: "dev_rahul", email: "rahul@dev.com", regDate: "2024-01-20", status: "Active"},
-        {id: 3, username: "test_amit", email: "amit@test.com", regDate: "2024-01-25", status: "Inactive"}
-      ]
-    },
-    repo: {
-      total: 87,
-      public: 65,
-      mostActive: "MiniGit-Core",
-      repos: [
-        {id: 1, name: "MiniGit-Core", owner: "admin_user", created: "2024-01-16", commits: 148},
-        {id: 2, name: "UI-Components", owner: "dev_rahul", created: "2024-01-18", commits: 89},
-        {id: 3, name: "Mobile-App", owner: "test_amit", created: "2024-01-22", commits: 62}
-      ]
-    },
-    feedback: {
-      total: 156,
-      positive: 124,
-      actionNeeded: 12,
-      feedbacks: [
-        {id: 1, name: "John Doe", category: "Bug Report", experience: "Poor", date: "2024-01-24", status: "Pending"},
-        {id: 2, name: "Jane Smith", category: "Feature Request", experience: "Good", date: "2024-01-23", status: "Resolved"},
-        {id: 3, name: "Bob Wilson", category: "UI/UX", experience: "Average", date: "2024-01-22", status: "In Progress"},
-        {id: 4, name: "Alice Brown", category: "Performance", experience: "Excellent", date: "2024-01-21", status: "Resolved"},
-        {id: 5, name: "Charlie Davis", category: "Documentation", experience: "Good", date: "2024-01-20", status: "Pending"}
-      ]
-    }
-  };
-
-  // Update UI with sample data
   if (reportType === 'user') {
-    document.getElementById('totalUsers').textContent = sampleData.user.total;
-    document.getElementById('activeUsers').textContent = sampleData.user.active;
-    document.getElementById('newToday').textContent = sampleData.user.newToday;
-    
-    const tbody = document.getElementById('userTableBody');
-    tbody.innerHTML = sampleData.user.users.map(user => `
-      <tr>
-        <td>${user.id}</td>
-        <td>${user.username}</td>
-        <td>${user.email}</td>
-        <td>${user.regDate}</td>
-        <td><span class="status ${user.status.toLowerCase()}">${user.status}</span></td>
-      </tr>
-    `).join('');
-  }
-  
-  if (reportType === 'repo') {
-    document.getElementById('totalRepos').textContent = sampleData.repo.total;
-    document.getElementById('publicRepos').textContent = sampleData.repo.public;
-    document.getElementById('mostActiveRepo').textContent = sampleData.repo.mostActive;
-    
-    const tbody = document.getElementById('repoTableBody');
-    tbody.innerHTML = sampleData.repo.repos.map(repo => `
-      <tr>
-        <td>${repo.id}</td>
-        <td>${repo.name}</td>
-        <td>${repo.owner}</td>
-        <td>${repo.created}</td>
-        <td>${repo.commits}</td>
-      </tr>
-    `).join('');
-  }
-  
-  if (reportType === 'feedback') {
-    document.getElementById('totalFeedback').textContent = sampleData.feedback.total;
-    document.getElementById('positiveFeedback').textContent = sampleData.feedback.positive;
-    document.getElementById('actionNeeded').textContent = sampleData.feedback.actionNeeded;
-    
-    const tbody = document.getElementById('feedbackTableBody');
-    tbody.innerHTML = sampleData.feedback.feedbacks.map(fb => `
-      <tr>
-        <td>${fb.id}</td>
-        <td>${fb.name}</td>
-        <td>${fb.category}</td>
-        <td>
-          <span class="experience ${fb.experience.toLowerCase()}">
-            ${fb.experience}
-          </span>
-        </td>
-        <td>${fb.date}</td>
-        <td>
-          <span class="status ${fb.status.toLowerCase().replace(' ', '-')}">
-            ${fb.status}
-          </span>
-        </td>
-      </tr>
-    `).join('');
+    loadUserReport();
+  } else if (reportType === 'feedback') {
+    loadFeedbackReport();
   }
 }
 
-// Initialize charts
+// Load User Report from API
+function loadUserReport() {
+  fetch('/api/admin/users')
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('totalUsers').textContent = data.total;
+      document.getElementById('activeUsers').textContent = data.active;
+      document.getElementById('newToday').textContent = data.newToday;
+      
+      const tbody = document.getElementById('userTableBody');
+      if (data.users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">No users found</td></tr>';
+      } else {
+        tbody.innerHTML = data.users.map(user => `
+          <tr>
+            <td>${user.id}</td>
+            <td>${user.username}</td>
+            <td>${user.email}</td>
+            <td>${user.regDate}</td>
+            <td><span class="status ${user.status.toLowerCase()}">${user.status}</span></td>
+          </tr>
+        `).join('');
+      }
+    })
+    .catch(error => {
+      console.error('Error loading users:', error);
+      document.getElementById('userTableBody').innerHTML = 
+        '<tr><td colspan="5">Error loading users</td></tr>';
+    });
+}
+
+// Load Feedback Report from API
+function loadFeedbackReport() {
+  console.log("Loading feedback...");
+  
+  fetch('/api/admin/feedback')
+    .then(response => response.json())
+    .then(data => {
+      console.log("Feedback data received:", data);
+      
+      document.getElementById('totalFeedback').textContent = data.total || 0;
+      document.getElementById('positiveFeedback').textContent = data.positive || 0;
+      document.getElementById('actionNeeded').textContent = data.actionNeeded || 0;
+      
+      const tbody = document.getElementById('feedbackTableBody');
+      
+      if (!data.feedbacks || data.feedbacks.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6">No feedback found</td></tr>';
+      } else {
+        let html = '';
+        data.feedbacks.forEach(fb => {
+          let expClass = fb.experience ? fb.experience.toLowerCase().replace(/ /g, '-') : '';
+          let statusClass = fb.status ? fb.status.toLowerCase().replace(/ /g, '-') : '';
+          
+          html += `
+            <tr>
+              <td>${fb.id || ''}</td>
+              <td>${fb.name || ''}</td>
+              <td>${fb.category || ''}</td>
+              <td>
+                <span class="experience ${expClass}">
+                  ${fb.experience || ''}
+                </span>
+              </td>
+              <td>${fb.date || ''}</td>
+              <td>
+                <span class="status ${statusClass}">
+                  ${fb.status || ''}
+                </span>
+              </td>
+            </tr>
+          `;
+        });
+        tbody.innerHTML = html;
+      }
+      
+      if (data.categories && data.categories.length > 0) {
+        updateFeedbackChart(data.categories);
+      }
+    })
+    .catch(error => {
+      console.error('Error loading feedback:', error);
+      document.getElementById('feedbackTableBody').innerHTML = 
+        '<tr><td colspan="6">Error loading feedback: ' + error.message + '</td></tr>';
+    });
+}
+
+// Function to update feedback chart
+function updateFeedbackChart(categories) {
+  const fbCtx = document.getElementById('feedbackChart').getContext('2d');
+  
+  // Safely destroy existing chart
+  if (window.feedbackChart && typeof window.feedbackChart.destroy === 'function') {
+    window.feedbackChart.destroy();
+  }
+  
+  // Create new chart
+  window.feedbackChart = new Chart(fbCtx, {
+    type: 'pie',
+    data: {
+      labels: categories.map(c => c.category),
+      datasets: [{
+        data: categories.map(c => c.count),
+        backgroundColor: ['#ef4444', '#22f5ff', '#8b5cf6', '#10b981', '#f59e0b', '#3b82f6', '#ec4899'],
+        borderWidth: 1,
+        borderColor: '#021c1a'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { 
+        legend: { 
+          position: 'right', 
+          labels: { 
+            color: '#94a3b8',
+            padding: 15,
+            boxWidth: 12,
+            font: { size: 11 }
+          }
+        } 
+      }
+    }
+  });
+}
+
+// Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-  // Load first report
-  loadReportData('user');
+  loadUserReport();
   
   // Popularity Chart
   const popCtx = document.getElementById('popularityChart').getContext('2d');
@@ -468,11 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
-        x: { grid: { color: 'rgba(255,255,255,0.1)' } }
-      }
+      plugins: { legend: { display: false } }
     }
   });
 
@@ -496,41 +535,10 @@ document.addEventListener('DOMContentLoaded', function() {
       cutout: '50%'
     }
   });
-
-  // Feedback Chart
-  const fbCtx = document.getElementById('feedbackChart').getContext('2d');
-  new Chart(fbCtx, {
-    type: 'pie',
-    data: {
-      labels: ['Bug Report', 'Feature Request', 'UI/UX', 'Performance', 'Documentation'],
-      datasets: [{
-        data: [45, 38, 28, 25, 20],
-        backgroundColor: ['#ef4444', '#22f5ff', '#8b5cf6', '#10b981', '#f59e0b'],
-        borderWidth: 1,
-        borderColor: '#021c1a'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { 
-        legend: { 
-          position: 'right', 
-          labels: { 
-            color: '#94a3b8',
-            padding: 15,
-            boxWidth: 12,
-            font: { size: 11 }
-          }
-        } 
-      }
-    }
-  });
 });
 </script>
 
 <style>
-/* Add experience rating styles */
 .experience {
   padding: 3px 8px;
   border-radius: 10px;
@@ -554,12 +562,11 @@ document.addEventListener('DOMContentLoaded', function() {
   color: #f59e0b;
 }
 
-.experience.poor {
+.experience.poor, .experience.very-poor {
   background: rgba(239, 68, 68, 0.2);
   color: #ef4444;
 }
 
-/* Make chart container taller for feedback */
 #feedbackChart {
   margin-top: 10px;
 }
