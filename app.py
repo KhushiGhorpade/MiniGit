@@ -32,13 +32,13 @@ def login():
         username = request.form["username"].strip()
         password = request.form["password"].strip()
         
-        print(f"Login attempt - Username: {username}, Password: {password}")  # Debug
-        
         # ---- ADMIN LOGIN ----
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session["logged_in"] = True
             session["username"] = username
+            session["full_name"] = "Administrator"
             session["is_admin"] = True
+            session["user_id"] = 0
             flash("Admin login successful!", "success")
             return redirect(url_for("admin"))
 
@@ -53,49 +53,39 @@ def login():
 
         user = cursor.fetchone()
         
-        if user:
-            print(f"User found: {user['username']}")
-            print(f"Stored password hash: {user['password']}")
-            print(f"Password starts with scrypt?: {user['password'].startswith('scrypt:')}")
+        if user and check_password_hash(user["password"], password):
+            # Store ALL user data in session
+            session["logged_in"] = True
+            session["user_id"] = user["user_id"]
+            session["username"] = user["username"]
+            session["full_name"] = user["full_name"]
+            session["email"] = user["email"]
+            session["is_admin"] = (user["role"] == 'admin')
             
-            # Check if password hash starts with scrypt (which indicates werkzeug's scrypt method)
-            if user["password"].startswith("scrypt:"):
-                # Use werkzeug's check_password_hash
-                if check_password_hash(user["password"], password):
-                    print("Password check PASSED with werkzeug")
-                    session["logged_in"] = True
-                    session["username"] = user["username"]
-                    session["is_admin"] = False
-                    session["user_id"] = user["user_id"]
-                    
-                    # Update last login time
-                    update_cursor = db.cursor()
-                    update_cursor.execute(
-                        "UPDATE users SET last_login = NOW() WHERE user_id = %s",
-                        (user["user_id"],)
-                    )
-                    db.commit()
-                    update_cursor.close()
-                    
-                    cursor.close()
-                    db.close()
-                    
-                    flash("Login successful!", "success")
-                    return redirect(url_for("dashboard"))
-                else:
-                    print("Password check FAILED with werkzeug")
-            else:
-                # Handle other password formats if needed
-                print("Password hash format not recognized")
+            # Update last login time
+            update_cursor = db.cursor()
+            update_cursor.execute(
+                "UPDATE users SET last_login = NOW() WHERE user_id = %s",
+                (user["user_id"],)
+            )
+            db.commit()
+            update_cursor.close()
+            
+            cursor.close()
+            db.close()
+            
+            flash(f"Welcome back, {user['full_name']}!", "success")
+            
+            # Redirect based on role
+            if user["role"] == 'admin':
+                return redirect(url_for("admin"))
+            return redirect(url_for("dashboard"))
         else:
-            print(f"No user found with username/email: {username}")
-        
-        cursor.close()
-        db.close()
-        flash("Invalid username or password", "error")
-        return redirect(url_for("login"))
+            cursor.close()
+            db.close()
+            flash("Invalid username or password", "error")
+            return redirect(url_for("login"))
 
-    # ---- GET REQUEST ----
     return render_template("login.html", active_page="login")
 
 
@@ -107,9 +97,8 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
 
-        # Generate password hash using scrypt (werkzeug's default)
-        hashed_password = generate_password_hash(password, method='scrypt')
-        print(f"Generated hash: {hashed_password}")  # Debug
+        # Generate password hash
+        hashed_password = generate_password_hash(password)
         
         db = get_db_connection()
         cursor = db.cursor(dictionary=True)
@@ -120,18 +109,30 @@ def register():
                 (full_name, username, email, hashed_password)
             )
             db.commit()
-            flash("Account created successfully!", "success")
+            
+            # Get the new user's ID
+            user_id = cursor.lastrowid
+            
+            # Auto-login the user
+            session["logged_in"] = True
+            session["user_id"] = user_id
+            session["username"] = username
+            session["full_name"] = full_name
+            session["email"] = email
+            session["is_admin"] = False
+            
+            flash(f"Welcome to MiniGit, {full_name}!", "success")
             cursor.close()
             db.close()
-            return redirect(url_for("login"))
-        except mysql.connector.IntegrityError:
-            flash("Username or email already exists!", "error")
-            cursor.close()
-            db.close()
-            return redirect(url_for("register"))
-        except Exception as e:
-            print(f"Registration error: {e}")
-            flash(f"Registration error: {e}", "error")
+            return redirect(url_for("dashboard"))
+            
+        except mysql.connector.IntegrityError as e:
+            if "username" in str(e):
+                flash("Username already exists!", "error")
+            elif "email" in str(e):
+                flash("Email already exists!", "error")
+            else:
+                flash("Registration failed!", "error")
             cursor.close()
             db.close()
             return redirect(url_for("register"))
@@ -188,10 +189,10 @@ def dashboard():
     if not session.get('logged_in'):
         return redirect(url_for("login"))
     
-    # TEMPORARY SAMPLE DATA - Replace with real database queries later
-    username = session.get('username', 'User')
+    # Get user data from session
+    username = session.get('full_name', session.get('username', 'User'))
     
-    # Sample stats
+    # Sample stats (will be replaced with real data later)
     user_stats = {
         'total_repos': 3,
         'total_commits': 35,
@@ -209,16 +210,13 @@ def dashboard():
     recent_activity = [
         {'icon': '📝', 'description': 'Committed to mini-git-core', 'time_ago': '2 hours ago'},
         {'icon': '📁', 'description': 'Created repository ui-dashboard', 'time_ago': '1 day ago'},
-        {'icon': '⭐', 'description': 'Starred repo auth-service', 'time_ago': '3 days ago'},
-        {'icon': '🐛', 'description': 'Opened issue #42', 'time_ago': '1 week ago'}
+        {'icon': '⭐', 'description': 'Starred repo auth-service', 'time_ago': '3 days ago'}
     ]
     
     # Sample commits
     recent_commits = [
-        {'commit_message': 'Fixed authentication bug in login page', 'repo_name': 'mini-git-core', 'commit_date': datetime.now()},
-        {'commit_message': 'Updated README documentation', 'repo_name': 'mini-git-core', 'commit_date': datetime.now()},
-        {'commit_message': 'Refactored dashboard UI components', 'repo_name': 'ui-dashboard', 'commit_date': datetime.now()},
-        {'commit_message': 'Optimized database queries', 'repo_name': 'auth-service', 'commit_date': datetime.now()}
+        {'commit_message': 'Fixed authentication bug', 'repo_name': 'mini-git-core', 'commit_date': datetime.now()},
+        {'commit_message': 'Updated README', 'repo_name': 'mini-git-core', 'commit_date': datetime.now()}
     ]
     
     return render_template("dashboard.html", 
@@ -295,6 +293,7 @@ def create_commit():
 @app.route("/logout")
 def logout():
     session.clear()
+    flash("You have been logged out", "info")
     return redirect(url_for("login"))
 
 # ========================= ADMIN PAGES =========================
@@ -309,32 +308,32 @@ def admin():
     
     # Fetch data based on report type
     if report_type == 'user':
-        data = get_user_report_data_simple()
+        data = get_user_report_data()
     elif report_type == 'feedback':
-        data = get_feedback_report_data_simple()
+        data = get_feedback_report_data()
     else:
-        data = get_user_report_data_simple()
+        data = get_user_report_data()
         report_type = 'user'
     
     # Pass active report to template
     data['active_report'] = report_type
+    data['admin_name'] = session.get('full_name', 'Admin')
     
     return render_template("admin.html", **data)
 
-# ========================= SIMPLIFIED ADMIN FUNCTIONS (NO ERRORS) =========================
-def get_user_report_data_simple():
+# ========================= ADMIN DATA FUNCTIONS =========================
+def get_user_report_data():
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     
-    # Get user stats - simplified without activity_logs
+    # Get user stats
     cursor.execute("SELECT COUNT(*) as total_users FROM users")
     total_users = cursor.fetchone()['total_users']
     
-    # Simple active users calculation (users with recent created_at)
     cursor.execute("""
         SELECT COUNT(*) as active_users 
         FROM users 
-        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        WHERE last_login >= DATE_SUB(NOW(), INTERVAL 30 DAY)
     """)
     active_users = cursor.fetchone()['active_users']
     
@@ -345,18 +344,22 @@ def get_user_report_data_simple():
     """)
     new_today = cursor.fetchone()['new_today']
     
-    # Get all users
+    # Get all users - FIXED DATE FORMAT
     cursor.execute("""
-        SELECT user_id, username, email, created_at, last_login,
-               CASE 
-                   WHEN last_login IS NULL THEN 'Never'
-                   WHEN last_login >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 'Active'
-                   ELSE 'Inactive'
-               END as status
+        SELECT 
+            user_id,
+            username,
+            email,
+            DATE_FORMAT(created_at, '%Y-%m-%d') as registration_date,
+            CASE 
+                WHEN last_login IS NULL THEN 'Inactive'
+                WHEN last_login >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 'Active'
+                ELSE 'Inactive'
+            END as status
         FROM users
         ORDER BY created_at DESC
-        LIMIT 50
     """)
+    
     users = cursor.fetchall()
     
     cursor.close()
@@ -371,7 +374,7 @@ def get_user_report_data_simple():
         'users': users
     }
 
-def get_feedback_report_data_simple():
+def get_feedback_report_data():
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     
@@ -393,22 +396,27 @@ def get_feedback_report_data_simple():
     """)
     action_needed = cursor.fetchone()['action_needed']
     
-    # Get all feedback
+    # Get all feedback - FIXED to use feedback_id not id
     cursor.execute("""
-        SELECT feedback_id, name, category, experience, 
-               DATE(created_at) as date, 
-               CASE 
-                   WHEN experience IN ('Excellent', 'Good') THEN 'Resolved'
-                   WHEN experience = 'Average' THEN 'In Progress'
-                   ELSE 'Pending'
-               END as status
+        SELECT 
+            feedback_id,
+            name,
+            category,
+            experience,
+            DATE_FORMAT(created_at, '%Y-%m-%d') as date,
+            CASE 
+                WHEN experience IN ('Excellent', 'Good') THEN 'Resolved'
+                WHEN experience = 'Average' THEN 'In Progress'
+                ELSE 'Pending'
+            END as status,
+            message
         FROM feedback
         ORDER BY created_at DESC
         LIMIT 50
     """)
     feedbacks = cursor.fetchall()
     
-    # Prepare data for chart
+    # Get category counts for chart
     cursor.execute("""
         SELECT category, COUNT(*) as count
         FROM feedback
@@ -416,10 +424,7 @@ def get_feedback_report_data_simple():
         ORDER BY count DESC
         LIMIT 10
     """)
-    chart_data = cursor.fetchall()
-    
-    feedback_labels = [item['category'] for item in chart_data]
-    feedback_values = [item['count'] for item in chart_data]
+    categories = cursor.fetchall()
     
     cursor.close()
     db.close()
@@ -431,9 +436,139 @@ def get_feedback_report_data_simple():
             'action_needed': action_needed
         },
         'feedbacks': feedbacks,
-        'feedback_labels': feedback_labels,
-        'feedback_values': feedback_values
+        'categories': categories
     }
+
+# ========================= ADMIN API ENDPOINTS =========================
+@app.route("/api/admin/users")
+def api_admin_users():
+    # Only allow access if user is logged in AND is admin
+    if not session.get('logged_in') or not session.get('is_admin'):
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    # Get user stats
+    cursor.execute("SELECT COUNT(*) as total_users FROM users")
+    total_users = cursor.fetchone()['total_users']
+    
+    cursor.execute("""
+        SELECT COUNT(*) as active_users 
+        FROM users 
+        WHERE last_login >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+    """)
+    active_users = cursor.fetchone()['active_users']
+    
+    cursor.execute("""
+        SELECT COUNT(*) as new_today 
+        FROM users 
+        WHERE DATE(created_at) = CURDATE()
+    """)
+    new_today = cursor.fetchone()['new_today']
+    
+    # Get all users - FIXED DATE FORMAT
+    cursor.execute("""
+        SELECT 
+            user_id as id,
+            username,
+            email,
+            DATE_FORMAT(created_at, '%Y-%m-%d') as regDate,
+            CASE 
+                WHEN last_login IS NULL THEN 'Inactive'
+                WHEN last_login >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 'Active'
+                ELSE 'Inactive'
+            END as status
+        FROM users
+        ORDER BY created_at DESC
+    """)
+    
+    users = cursor.fetchall()
+    
+    cursor.close()
+    db.close()
+    
+    return jsonify({
+        "total": total_users,
+        "active": active_users,
+        "newToday": new_today,
+        "users": users
+    })
+
+@app.route("/api/admin/feedback")
+def api_admin_feedback():
+    # Only allow access if user is logged in AND is admin
+    if not session.get('logged_in') or not session.get('is_admin'):
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    try:
+        # Get feedback stats
+        cursor.execute("SELECT COUNT(*) as total_feedback FROM feedback")
+        result = cursor.fetchone()
+        total_feedback = result['total_feedback'] if result else 0
+        
+        cursor.execute("""
+            SELECT COUNT(*) as positive_feedback 
+            FROM feedback 
+            WHERE experience IN ('Excellent', 'Good', 'Very Good')
+        """)
+        result = cursor.fetchone()
+        positive_feedback = result['positive_feedback'] if result else 0
+        
+        cursor.execute("""
+            SELECT COUNT(*) as action_needed 
+            FROM feedback 
+            WHERE experience IN ('Poor', 'Very Poor')
+        """)
+        result = cursor.fetchone()
+        action_needed = result['action_needed'] if result else 0
+        
+        # Get all feedback - FIXED: using feedback_id as id for JavaScript
+        cursor.execute("""
+            SELECT 
+                feedback_id as id,
+                name,
+                category,
+                experience,
+                DATE_FORMAT(created_at, '%Y-%m-%d') as date,
+                CASE 
+                    WHEN experience IN ('Excellent', 'Good') THEN 'Resolved'
+                    WHEN experience = 'Average' THEN 'In Progress'
+                    ELSE 'Pending'
+                END as status
+            FROM feedback
+            ORDER BY created_at DESC
+            LIMIT 50
+        """)
+        feedbacks = cursor.fetchall()
+        
+        # Get category counts for chart
+        cursor.execute("""
+            SELECT category, COUNT(*) as count
+            FROM feedback
+            GROUP BY category
+            ORDER BY count DESC
+            LIMIT 10
+        """)
+        categories = cursor.fetchall()
+        
+        cursor.close()
+        db.close()
+        
+        return jsonify({
+            "total": total_feedback,
+            "positive": positive_feedback,
+            "actionNeeded": action_needed,
+            "feedbacks": feedbacks,
+            "categories": categories
+        })
+    
+    except Exception as e:
+        print(f"ERROR in feedback API: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 # ========================= RUN APP =========================
 if __name__ == "__main__":

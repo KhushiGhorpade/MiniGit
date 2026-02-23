@@ -277,7 +277,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 25px;
-  align-items: start;
+  align-items: stretch;
   margin-top: 25px;
 }
 
@@ -309,12 +309,31 @@ body {
   border-bottom: 1px solid rgba(15, 118, 110, 0.3);
 }
 
+/* Make table and chart containers equal height */
+.hybrid-section .table-container,
+.hybrid-section .chart-container {
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure table takes appropriate space */
+.hybrid-section .table-container {
+  overflow-y: auto;
+}
+
+.hybrid-section .table-container table {
+  width: 100%;
+}
+
 /* =========== CHART CONTAINERS =========== */
 .chart-container {
   height: 320px;
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
+  padding: 15px;
 }
 
 .chart-container.small-chart {
@@ -322,38 +341,70 @@ body {
 }
 
 .chart-container canvas {
-  flex-grow: 1;
+  flex: 1;
   width: 100% !important;
-  height: calc(100% - 40px) !important;
-  min-height: 250px;
+  height: 100% !important;
+  max-height: 220px;
+  margin: 0 auto;
+  display: block;
+}
+
+/* Fix for feedback chart specifically */
+#feedbackChart {
+  max-height: 210px;
+  width: auto !important;
+  margin: 5px auto;
+}
+
+/* Fix for activity chart */
+#activityChart {
+  max-height: 200px;
+  margin: 10px auto;
+}
+
+/* Fix for popularity chart */
+#popularityChart {
+  max-height: 200px;
+  margin: 10px auto;
 }
 
 /* Chart.js Legend Fix */
 .chartjs-legend {
-  position: absolute;
-  bottom: 10px;
-  left: 20px;
-  right: 20px;
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  margin-top: 15px;
+  padding-top: 10px;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
-  padding-top: 15px;
+  gap: 8px;
   border-top: 1px solid rgba(15, 118, 110, 0.3);
 }
 
 .chartjs-legend li {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
-  margin: 0 5px !important;
-  padding: 3px 8px !important;
+  margin: 0 !important;
+  padding: 4px 10px !important;
   background: rgba(5, 46, 43, 0.7);
   border-radius: 6px;
   border: 1px solid #0f766e;
+  cursor: default;
+  list-style: none;
+}
+
+.chartjs-legend li span {
+  border-radius: 50%;
+  margin-right: 6px;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
 }
 
 .chartjs-legend-text {
-  font-size: 12px !important;
+  font-size: 11px !important;
   color: #94a3b8 !important;
   margin-left: 5px;
 }
@@ -417,10 +468,16 @@ body {
   border: 1px solid transparent;
 }
 
-.status.active {
+.status.active, .status.Active {
   background: rgba(16, 185, 129, 0.2);
   color: #10b981;
   border-color: rgba(16, 185, 129, 0.3);
+}
+
+.status.inactive, .status.Inactive {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
 }
 
 .status.idle {
@@ -429,22 +486,22 @@ body {
   border-color: rgba(245, 158, 11, 0.3);
 }
 
-.status.inactive {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-.status.normal {
+.status.resolved {
   background: rgba(16, 185, 129, 0.2);
   color: #10b981;
   border-color: rgba(16, 185, 129, 0.3);
 }
 
-.status.warning {
+.status.in-progress {
   background: rgba(245, 158, 11, 0.3);
   color: #f59e0b;
   border-color: rgba(245, 158, 11, 0.5);
+}
+
+.status.pending {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
 }
 
 /* Experience Ratings */
@@ -477,7 +534,7 @@ body {
   border-color: rgba(245, 158, 11, 0.3);
 }
 
-.experience.poor {
+.experience.poor, .experience.very-poor {
   background: rgba(239, 68, 68, 0.2);
   color: #ef4444;
   border-color: rgba(239, 68, 68, 0.3);
@@ -623,6 +680,12 @@ body {
   .chart-container {
     height: 250px;
   }
+  
+  .hybrid-section .table-container,
+  .hybrid-section .chart-container {
+    height: auto;
+    min-height: 350px;
+  }
 }
 
 /* =========== ANIMATIONS =========== */
@@ -699,18 +762,4 @@ body {
   white-space: normal;
   max-width: 300px;
   word-wrap: break-word;
-}
-/* These fix Chart.js alignment issues */
-.chart-container canvas {
-  flex-grow: 1;
-  width: 100% !important;
-  height: calc(100% - 40px) !important;
-  min-height: 250px;
-}
-
-.chartjs-legend {
-  position: absolute;
-  bottom: 10px;
-  left: 20px;
-  right: 20px;
 }
