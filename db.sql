@@ -1,4 +1,3 @@
--- Use your database
 USE repo_management;
 
 -- 1. USERS TABLE (Already exists)
