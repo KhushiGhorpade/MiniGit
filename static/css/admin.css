@@ -763,3 +763,40 @@ body {
   max-width: 300px;
   word-wrap: break-word;
 }
+/* Change the hybrid section grid to give more space to table */
+.hybrid-section {
+  display: grid;
+  grid-template-columns: 1.5fr 0.5fr; /* Table gets 1.5 parts, graph gets 0.5 part */
+  gap: 25px;
+  align-items: stretch;
+  margin-top: 25px;
+}
+
+/* Make chart container smaller */
+.chart-container {
+  height: 320px; /* Keep same height */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  padding: 15px;
+}
+
+/* Make the chart smaller inside */
+#feedbackChart {
+  max-height: 150px !important; /* Reduced from 210px */
+  width: auto !important;
+  margin: 0 auto;
+}
+
+/* Adjust category list if that's what you're using instead of chart */
+.category-list {
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.category-list div {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(15, 118, 110, 0.2);
+  color: #94a3b8;
+}
