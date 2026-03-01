@@ -495,6 +495,38 @@ def api_admin_users():
         "users": users
     })
 
+@app.route("/api/admin/popularity")
+def api_admin_popularity():
+
+    # Only allow access if user is logged in AND is admin
+    if not session.get('logged_in') or not session.get('is_admin'):
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT 
+            r.repo_id,
+            r.repo_name,
+            u.username AS owner,
+            COUNT(DISTINCT rs.star_id) AS stars,
+            COUNT(DISTINCT rv.view_id) AS views
+        FROM repositories r
+        JOIN users u ON r.owner_id = u.user_id
+        LEFT JOIN repo_stars rs ON r.repo_id = rs.repo_id
+        LEFT JOIN repo_views rv ON r.repo_id = rv.repo_id
+        GROUP BY r.repo_id
+        ORDER BY stars DESC
+        LIMIT 5;
+    """)
+
+    repos = cursor.fetchall()
+    cursor.close()
+    db.close()
+
+    return jsonify(repos)
+
 @app.route("/api/admin/feedback")
 def api_admin_feedback():
     # Only allow access if user is logged in AND is admin
