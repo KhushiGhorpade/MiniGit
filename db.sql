@@ -1,93 +1,135 @@
-USE repo_management;
-
--- 1. USERS TABLE (Already exists)
--- Check if it exists first
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('user','admin') DEFAULT 'user',
+    role ENUM('user', 'admin') DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL
 );
 
--- 2. FEEDBACK TABLE (Already exists)
-CREATE TABLE IF NOT EXISTS feedback (
-    feedback_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    category VARCHAR(50),
-    experience VARCHAR(20),
-    message TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- 3. REPOSITORIES TABLE
-CREATE TABLE IF NOT EXISTS repositories (
+CREATE TABLE repositories (
     repo_id INT AUTO_INCREMENT PRIMARY KEY,
-    repo_name VARCHAR(100) NOT NULL,
+    repo_name VARCHAR(150) NOT NULL,
     description TEXT,
     owner_id INT NOT NULL,
     visibility ENUM('public', 'private') DEFAULT 'public',
-    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (owner_id) REFERENCES users(user_id) ON DELETE CASCADE
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_repo_owner
+        FOREIGN KEY (owner_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE
 );
 
--- 4. COMMITS TABLE
-CREATE TABLE IF NOT EXISTS commits (
+CREATE TABLE commits (
     commit_id INT AUTO_INCREMENT PRIMARY KEY,
     repo_id INT NOT NULL,
-    commit_message VARCHAR(500) NOT NULL,
-    author_id INT NOT NULL,
-    commit_type ENUM('feature', 'bugfix', 'documentation', 'other') DEFAULT 'other',
-    files_changed TEXT,
-    commit_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (repo_id) REFERENCES repositories(repo_id) ON DELETE CASCADE,
-    FOREIGN KEY (author_id) REFERENCES users(user_id) ON DELETE CASCADE
+    user_id INT NOT NULL,
+    commit_message VARCHAR(255) NOT NULL,
+    commit_hash VARCHAR(40),
+    committed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_commit_repo
+        FOREIGN KEY (repo_id)
+        REFERENCES repositories(repo_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_commit_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE
 );
 
--- 5. ISSUES TABLE
-CREATE TABLE IF NOT EXISTS issues (
+CREATE TABLE issues (
     issue_id INT AUTO_INCREMENT PRIMARY KEY,
     repo_id INT NOT NULL,
-    issue_title VARCHAR(200) NOT NULL,
+    user_id INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
     description TEXT,
-    created_by INT NOT NULL,
-    status ENUM('open', 'closed', 'in_progress') DEFAULT 'open',
-    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (repo_id) REFERENCES repositories(repo_id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by) REFERENCES users(user_id) ON DELETE CASCADE
+    status ENUM('open', 'in_progress', 'closed') DEFAULT 'open',
+    priority ENUM('low', 'medium', 'high') DEFAULT 'medium',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_issue_repo
+        FOREIGN KEY (repo_id)
+        REFERENCES repositories(repo_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_issue_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE
 );
 
--- 6. REPO_STARS TABLE
-CREATE TABLE IF NOT EXISTS repo_stars (
+CREATE TABLE repo_stars (
     star_id INT AUTO_INCREMENT PRIMARY KEY,
     repo_id INT NOT NULL,
     user_id INT NOT NULL,
     starred_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (repo_id) REFERENCES repositories(repo_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    UNIQUE KEY unique_star (repo_id, user_id)
+
+    CONSTRAINT fk_star_repo
+        FOREIGN KEY (repo_id)
+        REFERENCES repositories(repo_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_star_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    UNIQUE (repo_id, user_id)
 );
 
--- 7. REPO_VIEWS TABLE
-CREATE TABLE IF NOT EXISTS repo_views (
+CREATE TABLE repo_views (
     view_id INT AUTO_INCREMENT PRIMARY KEY,
     repo_id INT NOT NULL,
-    user_id INT NOT NULL,
+    user_id INT,
     viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (repo_id) REFERENCES repositories(repo_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+
+    CONSTRAINT fk_view_repo
+        FOREIGN KEY (repo_id)
+        REFERENCES repositories(repo_id)
+        ON DELETE CASCADE
 );
 
--- 8. ACTIVITY_LOGS TABLE
-CREATE TABLE IF NOT EXISTS activity_logs (
-    log_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE activity_logs (
+    activity_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    activity_type VARCHAR(50),
-    description VARCHAR(500),
+    repo_id INT,
+    activity_type ENUM(
+        'repo_created',
+        'commit',
+        'issue_opened',
+        'issue_closed',
+        'starred'
+    ) NOT NULL,
+    reference_id INT,
+    activity_message VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+
+    CONSTRAINT fk_activity_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_activity_repo
+        FOREIGN KEY (repo_id)
+        REFERENCES repositories(repo_id)
+        ON DELETE SET NULL
 );
+
+CREATE TABLE feedback (
+    feedback_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    experience VARCHAR(20) NOT NULL,
+    message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+
 

@@ -439,8 +439,10 @@
       </main>
     </div>
 
-    <script>
+<script>
       let popularityChart = null;
+      let activityChart = null;
+      let feedbackChart = null;
 
       // Show report function
       function showReport(id) {
@@ -463,6 +465,8 @@
           loadFeedbackReport();
         } else if (reportType === "popularity") {
           loadPopularityReport();
+        } else if (reportType === "commit") {
+          loadCommitReport();
         }
       }
 
@@ -501,6 +505,62 @@
           });
       }
 
+// Load Commit Report from API
+function loadCommitReport() {
+    console.log("Loading commits...");
+    
+    // Show loading state
+    document.getElementById("totalCommits").textContent = "Loading...";
+    document.getElementById("todayCommits").textContent = "Loading...";
+    document.getElementById("mostActiveUser").textContent = "Loading...";
+    document.getElementById("commitTableBody").innerHTML = '<tr><td colspan="5">Loading commits...</td></tr>';
+    
+    fetch("/api/admin/commits")
+        .then(response => {
+            console.log("Response status:", response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Commit data received:", data);
+            
+            // Update summary cards
+            document.getElementById("totalCommits").textContent = data.total || 0;
+            document.getElementById("todayCommits").textContent = data.today || 0;
+            document.getElementById("mostActiveUser").textContent = data.mostActiveUser || 'N/A';
+            
+            // Update table
+            const tbody = document.getElementById("commitTableBody");
+            
+            if (!data.commits || data.commits.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">No commits found in database</td></tr>';
+            } else {
+                let html = "";
+                data.commits.forEach((commit) => {
+                    html += `
+                        <tr>
+                            <td>${commit.id || ''}</td>
+                            <td>${commit.repo_name || ''}</td>
+                            <td>${commit.message || ''}</td>
+                            <td>${commit.committed_by || ''}</td>
+                            <td>${commit.date || ''}</td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            }
+        })
+        .catch(error => {
+            console.error("Error loading commits:", error);
+            document.getElementById("totalCommits").textContent = "Error";
+            document.getElementById("todayCommits").textContent = "Error";
+            document.getElementById("mostActiveUser").textContent = "Error";
+            document.getElementById("commitTableBody").innerHTML = 
+                '<tr><td colspan="5">Error: ' + error.message + '<br>Check browser console for details</td></tr>';
+        });
+}
       // Load Feedback Report from API
       function loadFeedbackReport() {
         console.log("Loading feedback...");
@@ -702,6 +762,7 @@
       document.addEventListener("DOMContentLoaded", function () {
         loadUserReport();
         loadPopularityReport();
+        loadCommitReport(); // Preload commit data
 
         // Activity Chart
         const actCtx = document

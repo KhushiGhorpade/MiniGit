@@ -601,7 +601,73 @@ def api_admin_feedback():
     except Exception as e:
         print(f"ERROR in feedback API: {str(e)}")
         return jsonify({"error": str(e)}), 500
-
+    
+@app.route("/api/admin/commits")
+def api_admin_commits():
+    # Only allow access if user is logged in AND is admin
+    if not session.get('logged_in') or not session.get('is_admin'):
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    try:
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+        
+        # Get commit stats - using your actual column names
+        cursor.execute("SELECT COUNT(*) as total FROM commits")
+        result = cursor.fetchone()
+        total_commits = result['total'] if result else 0
+        
+        cursor.execute("""
+            SELECT COUNT(*) as today 
+            FROM commits 
+            WHERE DATE(committed_at) = CURDATE()
+        """)
+        result = cursor.fetchone()
+        today_commits = result['today'] if result else 0
+        
+        # Get most active user
+        cursor.execute("""
+            SELECT u.username, COUNT(c.commit_id) as count
+            FROM commits c
+            JOIN users u ON c.user_id = u.user_id
+            GROUP BY u.user_id, u.username
+            ORDER BY count DESC
+            LIMIT 1
+        """)
+        most_active = cursor.fetchone()
+        most_active_user = most_active['username'] if most_active else 'N/A'
+        
+        # Get recent commits - using your actual column names
+        cursor.execute("""
+            SELECT 
+                c.commit_id as id,
+                r.repo_name,
+                c.commit_message as message,
+                u.username as committed_by,
+                DATE_FORMAT(c.committed_at, '%Y-%m-%d %H:%i') as date
+            FROM commits c
+            JOIN repositories r ON c.repo_id = r.repo_id
+            JOIN users u ON c.user_id = u.user_id
+            ORDER BY c.committed_at DESC
+            LIMIT 50
+        """)
+        commits = cursor.fetchall()
+        
+        cursor.close()
+        db.close()
+        
+        return jsonify({
+            "total": total_commits,
+            "today": today_commits,
+            "mostActiveUser": most_active_user,
+            "commits": commits
+        })
+    
+    except Exception as e:
+        print(f"ERROR in commits API: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 # ========================= RUN APP =========================
 if __name__ == "__main__":
     app.run(debug=True)
