@@ -668,6 +668,73 @@ def api_admin_commits():
         import traceback
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/api/admin/issues")
+def api_admin_issues():
+    # Only allow access if user is logged in AND is admin
+    if not session.get('logged_in') or not session.get('is_admin'):
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    try:
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+        
+        # Get issue stats
+        cursor.execute("SELECT COUNT(*) as total FROM issues")
+        result = cursor.fetchone()
+        total_issues = result['total'] if result else 0
+        
+        # Fix: Use your actual status values from the table
+        cursor.execute("""
+            SELECT COUNT(*) as open 
+            FROM issues 
+            WHERE status IN ('open', 'in_progress')
+        """)
+        result = cursor.fetchone()
+        open_issues = result['open'] if result else 0
+        
+        # Fix: Use created_at instead of updated_at
+        cursor.execute("""
+            SELECT COUNT(*) as closed_today 
+            FROM issues 
+            WHERE status = 'closed'
+            AND DATE(created_at) = CURDATE()
+        """)
+        result = cursor.fetchone()
+        closed_today = result['closed_today'] if result else 0
+        
+        # Fix: Use correct column names (user_id instead of created_by)
+        cursor.execute("""
+            SELECT 
+                i.issue_id as id,
+                r.repo_name,
+                i.title as issue_title,
+                u.username as created_by,
+                i.status,
+                DATE_FORMAT(i.created_at, '%Y-%m-%d') as date
+            FROM issues i
+            JOIN repositories r ON i.repo_id = r.repo_id
+            JOIN users u ON i.user_id = u.user_id
+            ORDER BY i.created_at DESC
+            LIMIT 50
+        """)
+        issues = cursor.fetchall()
+        
+        cursor.close()
+        db.close()
+        
+        return jsonify({
+            "total": total_issues,
+            "open": open_issues,
+            "closedToday": closed_today,
+            "issues": issues
+        })
+    
+    except Exception as e:
+        print(f"ERROR in issues API: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 # ========================= RUN APP =========================
 if __name__ == "__main__":
     app.run(debug=True)
