@@ -11,8 +11,9 @@
   <!-- HEADER -->
   <header class="header">
     <div class="brand">
-      <div class="logo"></div>
-      <span>MiniGit</span>
+      <!-- <div class="logo"> -->
+        <img  src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px"></div>
+     
     </div>
 
     <nav class="nav">
@@ -29,6 +30,9 @@
   </header>
   <!-- HERO -->
   <section class="hero">
+    <video autoplay muted loop id="bg-video">
+    <source src="static/images/binary-code-falling.3840x2160.mp4" type="video/mp4">
+</video>
     <div class="hero-content">
       <h1>MiniGit</h1>
       <p>Smart Repository Management System for Teams & Students</p>
@@ -37,8 +41,7 @@
       </a>
     </div>
 
-    <div class="hero-visual">
-      <div class="floating-card"></div>
+      <!-- <img src="{{ url_for('static', filename='/images/blue.png') }}" class="img-logo" alt="MiniGit Logo"> -->
     </div>
   </section>
 
