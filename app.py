@@ -20,7 +20,7 @@ def get_db_connection():
         password="root111",
         database="repo_management"
     )
-
+    
 # ========================= BEFORE LOGIN PAGES =========================
 @app.route("/")
 def home():
@@ -38,7 +38,7 @@ def login():
             session["username"] = username
             session["full_name"] = "Administrator"
             session["is_admin"] = True
-            session["user_id"] = 0
+            session["author_id"] = 0
             flash("Admin login successful!", "success")
             return redirect(url_for("admin"))
 
@@ -56,7 +56,7 @@ def login():
         if user and check_password_hash(user["password"], password):
             # Store ALL user data in session
             session["logged_in"] = True
-            session["user_id"] = user["user_id"]
+            session["author_id"] = user["author_id"]
             session["username"] = user["username"]
             session["full_name"] = user["full_name"]
             session["email"] = user["email"]
@@ -65,8 +65,8 @@ def login():
             # Update last login time
             update_cursor = db.cursor()
             update_cursor.execute(
-                "UPDATE users SET last_login = NOW() WHERE user_id = %s",
-                (user["user_id"],)
+                "UPDATE users SET last_login = NOW() WHERE author_id = %s",
+                (user["author_id"],)
             )
             db.commit()
             update_cursor.close()
@@ -111,11 +111,11 @@ def register():
             db.commit()
             
             # Get the new user's ID
-            user_id = cursor.lastrowid
+            author_id = cursor.lastrowid
             
             # Auto-login the user
             session["logged_in"] = True
-            session["user_id"] = user_id
+            session["author_id"] = author_id
             session["username"] = username
             session["full_name"] = full_name
             session["email"] = email
@@ -620,7 +620,7 @@ def api_admin_commits():
         cursor.execute("""
             SELECT COUNT(*) as today 
             FROM commits 
-            WHERE DATE(committed_at) = CURDATE()
+            WHERE DATE(commit_date) = CURDATE()
         """)
         result = cursor.fetchone()
         today_commits = result['today'] if result else 0
@@ -629,7 +629,7 @@ def api_admin_commits():
         cursor.execute("""
             SELECT u.username, COUNT(c.commit_id) as count
             FROM commits c
-            JOIN users u ON c.user_id = u.user_id
+            JOIN users u ON c.author_id = u.user_id
             GROUP BY u.user_id, u.username
             ORDER BY count DESC
             LIMIT 1
@@ -644,11 +644,11 @@ def api_admin_commits():
                 r.repo_name,
                 c.commit_message as message,
                 u.username as committed_by,
-                DATE_FORMAT(c.committed_at, '%Y-%m-%d %H:%i') as date
+                DATE_FORMAT(c.commit_date, '%Y-%m-%d %H:%i') as date
             FROM commits c
             JOIN repositories r ON c.repo_id = r.repo_id
-            JOIN users u ON c.user_id = u.user_id
-            ORDER BY c.committed_at DESC
+            JOIN users u ON c.author_id = u.user_id
+            ORDER BY c.commit_date DESC
             LIMIT 50
         """)
         commits = cursor.fetchall()
@@ -752,24 +752,24 @@ def api_admin_issues():
             SELECT COUNT(*) as closed_today 
             FROM issues 
             WHERE status = 'closed'
-            AND DATE(created_at) = CURDATE()
+            AND DATE(created_date) = CURDATE()
         """)
         result = cursor.fetchone()
         closed_today = result['closed_today'] if result else 0
         
-        # Fix: Use correct column names (user_id instead of created_by)
+        # Fix: Use correct column names (author_id instead of created_by)
         cursor.execute("""
             SELECT 
                 i.issue_id as id,
                 r.repo_name,
-                i.title as issue_title,
+                i.issue_title,
                 u.username as created_by,
                 i.status,
-                DATE_FORMAT(i.created_at, '%Y-%m-%d') as date
+                DATE_FORMAT(i.created_date, '%Y-%m-%d') as date
             FROM issues i
             JOIN repositories r ON i.repo_id = r.repo_id
-            JOIN users u ON i.user_id = u.user_id
-            ORDER BY i.created_at DESC
+            JOIN users u ON i.created_by = u.user_id
+            ORDER BY i.created_date DESC
             LIMIT 50
         """)
         issues = cursor.fetchall()
