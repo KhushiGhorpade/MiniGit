@@ -127,25 +127,7 @@
                 </thead>
                 <tbody id="repoTableBody">
                   <tr>
-                    <td>1</td>
-                    <td>MiniGit-Core</td>
-                    <td>admin_user</td>
-                    <td>2024-01-16</td>
-                    <td>148</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>UI-Components</td>
-                    <td>dev_rahul</td>
-                    <td>2024-01-18</td>
-                    <td>89</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Mobile-App</td>
-                    <td>test_amit</td>
-                    <td>2024-01-22</td>
-                    <td>62</td>
+                    <td colspan="5">Loading repositories...</td>
                   </tr>
                 </tbody>
               </table>
@@ -191,25 +173,7 @@
                 </thead>
                 <tbody id="commitTableBody">
                   <tr>
-                    <td>101</td>
-                    <td>MiniGit-Core</td>
-                    <td>Fix auth bug</td>
-                    <td>admin_user</td>
-                    <td>2024-01-24</td>
-                  </tr>
-                  <tr>
-                    <td>102</td>
-                    <td>UI-Components</td>
-                    <td>Add new button</td>
-                    <td>dev_rahul</td>
-                    <td>2024-01-24</td>
-                  </tr>
-                  <tr>
-                    <td>103</td>
-                    <td>Mobile-App</td>
-                    <td>Update UI</td>
-                    <td>test_amit</td>
-                    <td>2024-01-23</td>
+                    <td colspan="5">Loading commits...</td>
                   </tr>
                 </tbody>
               </table>
@@ -439,7 +403,7 @@
       </main>
     </div>
 
-<script>
+    <script>
       let popularityChart = null;
       let activityChart = null;
       let feedbackChart = null;
@@ -459,19 +423,21 @@
 
       // Load REAL data from database
       // Load REAL data from database
-function loadReportData(reportType) {
-    if (reportType === "user") {
-        loadUserReport();
-    } else if (reportType === "feedback") {
-        loadFeedbackReport();
-    } else if (reportType === "popularity") {
-        loadPopularityReport();
-    } else if (reportType === "commit") {
-        loadCommitReport();
-    } else if (reportType === "issue") {
-        loadIssueReport();
-    }
-}
+      function loadReportData(reportType) {
+        if (reportType === "user") {
+          loadUserReport();
+        } else if (reportType === "feedback") {
+          loadFeedbackReport();
+        } else if (reportType === "popularity") {
+          loadPopularityReport();
+        } else if (reportType === "commit") {
+          loadCommitReport();
+        } else if (reportType === "issue") {
+          loadIssueReport();
+        } else if (reportType === "repo") {
+          loadRepoReport();
+        }
+      }
 
       // Load User Report from API
       function loadUserReport() {
@@ -508,135 +474,154 @@ function loadReportData(reportType) {
           });
       }
 
-// Load Commit Report from API
-function loadCommitReport() {
-    console.log("Loading commits...");
-    
-    // Show loading state
-    document.getElementById("totalCommits").textContent = "Loading...";
-    document.getElementById("todayCommits").textContent = "Loading...";
-    document.getElementById("mostActiveUser").textContent = "Loading...";
-    document.getElementById("commitTableBody").innerHTML = '<tr><td colspan="5">Loading commits...</td></tr>';
-    
-    fetch("/api/admin/commits")
-        .then(response => {
+      // Load Commit Report from API
+      function loadCommitReport() {
+        console.log("Loading commits...");
+
+        // Show loading state
+        document.getElementById("totalCommits").textContent = "Loading...";
+        document.getElementById("todayCommits").textContent = "Loading...";
+        document.getElementById("mostActiveUser").textContent = "Loading...";
+        document.getElementById("commitTableBody").innerHTML =
+          '<tr><td colspan="5">Loading commits...</td></tr>';
+
+        fetch("/api/admin/commits")
+          .then((response) => {
             console.log("Response status:", response.status);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+              throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
-        })
-        .then(data => {
+          })
+          .then((data) => {
             console.log("Commit data received:", data);
-            
+
             // Update summary cards
-            document.getElementById("totalCommits").textContent = data.total || 0;
-            document.getElementById("todayCommits").textContent = data.today || 0;
-            document.getElementById("mostActiveUser").textContent = data.mostActiveUser || 'N/A';
-            
+            document.getElementById("totalCommits").textContent =
+              data.total || 0;
+            document.getElementById("todayCommits").textContent =
+              data.today || 0;
+            document.getElementById("mostActiveUser").textContent =
+              data.mostActiveUser || "N/A";
+
             // Update table
             const tbody = document.getElementById("commitTableBody");
-            
+
             if (!data.commits || data.commits.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5">No commits found in database</td></tr>';
+              tbody.innerHTML =
+                '<tr><td colspan="5">No commits found in database</td></tr>';
             } else {
-                let html = "";
-                data.commits.forEach((commit) => {
-                    html += `
+              let html = "";
+              data.commits.forEach((commit) => {
+                html += `
                         <tr>
-                            <td>${commit.id || ''}</td>
-                            <td>${commit.repo_name || ''}</td>
-                            <td>${commit.message || ''}</td>
-                            <td>${commit.committed_by || ''}</td>
-                            <td>${commit.date || ''}</td>
+                            <td>${commit.id || ""}</td>
+                            <td>${commit.repo_name || ""}</td>
+                            <td>${commit.message || ""}</td>
+                            <td>${commit.committed_by || ""}</td>
+                            <td>${commit.date || ""}</td>
                         </tr>
                     `;
-                });
-                tbody.innerHTML = html;
+              });
+              tbody.innerHTML = html;
             }
-        })
-        .catch(error => {
+          })
+          .catch((error) => {
             console.error("Error loading commits:", error);
             document.getElementById("totalCommits").textContent = "Error";
             document.getElementById("todayCommits").textContent = "Error";
             document.getElementById("mostActiveUser").textContent = "Error";
-            document.getElementById("commitTableBody").innerHTML = 
-                '<tr><td colspan="5">Error: ' + error.message + '<br>Check browser console for details</td></tr>';
-        });
-}
+            document.getElementById("commitTableBody").innerHTML =
+              '<tr><td colspan="5">Error: ' +
+              error.message +
+              "<br>Check browser console for details</td></tr>";
+          });
+      }
 
-// Load Issue Report from API
-function loadIssueReport() {
-    console.log("Loading issues...");
-    
-    // Show loading state
-    document.getElementById("totalIssues").textContent = "Loading...";
-    document.getElementById("openIssues").textContent = "Loading...";
-    document.getElementById("closedToday").textContent = "Loading...";
-    document.getElementById("issueTableBody").innerHTML = '<tr><td colspan="6">Loading issues...</td></tr>';
-    
-    fetch("/api/admin/issues")
-        .then(response => {
+      // Load Issue Report from API
+      function loadIssueReport() {
+        console.log("Loading issues...");
+
+        // Show loading state
+        document.getElementById("totalIssues").textContent = "Loading...";
+        document.getElementById("openIssues").textContent = "Loading...";
+        document.getElementById("closedToday").textContent = "Loading...";
+        document.getElementById("issueTableBody").innerHTML =
+          '<tr><td colspan="6">Loading issues...</td></tr>';
+
+        fetch("/api/admin/issues")
+          .then((response) => {
             console.log("Response status:", response.status);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+              throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
-        })
-        .then(data => {
+          })
+          .then((data) => {
             console.log("Issue data received:", data);
-            
+
             // Update summary cards
-            document.getElementById("totalIssues").textContent = data.total || 0;
+            document.getElementById("totalIssues").textContent =
+              data.total || 0;
             document.getElementById("openIssues").textContent = data.open || 0;
-            document.getElementById("closedToday").textContent = data.closedToday || 0;
-            
+            document.getElementById("closedToday").textContent =
+              data.closedToday || 0;
+
             // Update table
             const tbody = document.getElementById("issueTableBody");
-            
+
             if (!data.issues || data.issues.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6">No issues found in database</td></tr>';
+              tbody.innerHTML =
+                '<tr><td colspan="6">No issues found in database</td></tr>';
             } else {
-                let html = "";
-                data.issues.forEach((issue) => {
-                    // Determine status class for styling
-                    let statusClass = '';
-                    if (issue.status) {
-                        const statusLower = issue.status.toLowerCase();
-                        if (statusLower === 'open') {
-                            statusClass = 'status';
-                        } else if (statusLower === 'in progress' || statusLower === 'in-progress') {
-                            statusClass = 'status in-progress';
-                        } else if (statusLower === 'closed' || statusLower === 'resolved') {
-                            statusClass = 'status resolved';
-                        }
-                    }
-                    
-                    html += `
+              let html = "";
+              data.issues.forEach((issue) => {
+                // Determine status class for styling
+                let statusClass = "";
+                if (issue.status) {
+                  const statusLower = issue.status.toLowerCase();
+                  if (statusLower === "open") {
+                    statusClass = "status";
+                  } else if (
+                    statusLower === "in progress" ||
+                    statusLower === "in-progress"
+                  ) {
+                    statusClass = "status in-progress";
+                  } else if (
+                    statusLower === "closed" ||
+                    statusLower === "resolved"
+                  ) {
+                    statusClass = "status resolved";
+                  }
+                }
+
+                html += `
                         <tr>
-                            <td>${issue.id || ''}</td>
-                            <td>${issue.repo_name || ''}</td>
-                            <td>${issue.issue_title || ''}</td>
-                            <td>${issue.created_by || ''}</td>
-                            <td><span class="${statusClass}">${issue.status || ''}</span></td>
-                            <td>${issue.date || ''}</td>
+                            <td>${issue.id || ""}</td>
+                            <td>${issue.repo_name || ""}</td>
+                            <td>${issue.issue_title || ""}</td>
+                            <td>${issue.created_by || ""}</td>
+                            <td><span class="${statusClass}">${issue.status || ""}</span></td>
+                            <td>${issue.date || ""}</td>
                         </tr>
                     `;
-                });
-                tbody.innerHTML = html;
+              });
+              tbody.innerHTML = html;
             }
-        })
-        .catch(error => {
+          })
+          .catch((error) => {
             console.error("Error loading issues:", error);
             document.getElementById("totalIssues").textContent = "Error";
             document.getElementById("openIssues").textContent = "Error";
             document.getElementById("closedToday").textContent = "Error";
-            document.getElementById("issueTableBody").innerHTML = 
-                '<tr><td colspan="6">Error: ' + error.message + '<br>Check browser console for details</td></tr>';
-        });
-}
+            document.getElementById("issueTableBody").innerHTML =
+              '<tr><td colspan="6">Error: ' +
+              error.message +
+              "<br>Check browser console for details</td></tr>";
+          });
+      }
 
-// Load Feedback Report from API
+      // Load Feedback Report from API
       function loadFeedbackReport() {
         console.log("Loading feedback...");
 
@@ -833,11 +818,59 @@ function loadIssueReport() {
         });
       }
 
+      function loadRepoReport() {
+        document.getElementById("totalRepos").textContent = "Loading...";
+        document.getElementById("publicRepos").textContent = "Loading...";
+        document.getElementById("mostActiveRepo").textContent = "Loading...";
+        document.getElementById("repoTableBody").innerHTML =
+          '<tr><td colspan="5">Loading repositories...</td></tr>';
+
+        fetch("/api/admin/repositories")
+          .then((response) => {
+            if (!response.ok)
+              throw new Error(`HTTP error! status: ${response.status}`);
+            return response.json();
+          })
+          .then((data) => {
+            document.getElementById("totalRepos").textContent = data.total;
+            document.getElementById("publicRepos").textContent =
+              data.publicCount;
+            document.getElementById("mostActiveRepo").textContent =
+              data.mostActive;
+
+            const tbody = document.getElementById("repoTableBody");
+            if (!data.repos || data.repos.length === 0) {
+              tbody.innerHTML =
+                '<tr><td colspan="5">No repositories found</td></tr>';
+              return;
+            }
+            tbody.innerHTML = data.repos
+              .map(
+                (repo) => `
+                <tr>
+                    <td>${repo.repo_id}</td>
+                    <td>${repo.repo_name}</td>
+                    <td>${repo.owner}</td>
+                    <td>${repo.created_date}</td>
+                    <td>${repo.total_commits}</td>
+                </tr>
+            `,
+              )
+              .join("");
+          })
+          .catch((error) => {
+            console.error("Error loading repositories:", error);
+            document.getElementById("repoTableBody").innerHTML =
+              '<tr><td colspan="5">Error loading repositories</td></tr>';
+          });
+      }
+
       // Initialize on page load
       document.addEventListener("DOMContentLoaded", function () {
         loadUserReport();
         loadPopularityReport();
-        loadCommitReport(); // Preload commit data
+        loadCommitReport();
+        loadRepoReport();
 
         // Activity Chart
         const actCtx = document

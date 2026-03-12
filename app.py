@@ -669,6 +669,60 @@ def api_admin_commits():
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
     
+@app.route("/api/admin/repositories")
+def api_admin_repositories():
+    if not session.get('logged_in') or not session.get('is_admin'):
+        return jsonify({"error": "Unauthorized"}), 401
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+
+    try:
+        cursor.execute("SELECT COUNT(*) as total FROM repositories")
+        total = cursor.fetchone()['total']
+
+        cursor.execute("SELECT COUNT(*) as public_count FROM repositories WHERE visibility = 'public'")
+        public_count = cursor.fetchone()['public_count']
+
+        cursor.execute("""
+            SELECT r.repo_name, COUNT(c.commit_id) as commit_count
+            FROM repositories r
+            LEFT JOIN commits c ON r.repo_id = c.repo_id
+            GROUP BY r.repo_id
+            ORDER BY commit_count DESC
+            LIMIT 1
+        """)
+        most_active = cursor.fetchone()
+
+        cursor.execute("""
+            SELECT
+                r.repo_id,
+                r.repo_name,
+                u.username AS owner,
+                DATE_FORMAT(r.created_date, '%Y-%m-%d') AS created_date,
+                COUNT(c.commit_id) AS total_commits
+            FROM repositories r
+            JOIN users u ON r.owner_id = u.user_id
+            LEFT JOIN commits c ON r.repo_id = c.repo_id
+            GROUP BY r.repo_id
+            ORDER BY r.created_date DESC
+        """)
+        repos = cursor.fetchall()
+
+        cursor.close()
+        db.close()
+
+        return jsonify({
+            "total": total,
+            "publicCount": public_count,
+            "mostActive": most_active['repo_name'] if most_active else "N/A",
+            "repos": repos
+        })
+
+    except Exception as e:
+        print(f"ERROR in repositories API: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+    
 @app.route("/api/admin/issues")
 def api_admin_issues():
     # Only allow access if user is logged in AND is admin
