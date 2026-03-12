@@ -21,7 +21,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background:black; 
+  background:transparent; 
   backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(0,255,255,0.15);
   z-index: 1000;
@@ -45,7 +45,7 @@ body {
   color: rgba(255,255,255,0.8);
   text-decoration: none;
   margin-left: 26px;
-  font-size: 14px;
+  font-size: px;
   letter-spacing: 0.4px;
   transition: 0.3s;
 }
@@ -237,7 +237,12 @@ body {
 }
 
 .stat {
-  background: #0b132b;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 255, 255, 0.12),
+    rgba(0, 0, 0, 0.55)
+  );
+  backdrop-filter: blur(18px);
   padding: 50px;
   border-radius: 20px;
   text-align: center;
