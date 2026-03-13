@@ -10,11 +10,10 @@
 <!-- ================= AUTH NAVBAR ================= -->
 <header class="auth-header">
   <div class="auth-brand">
-    <div class="logo"></div>
-    <span>MiniGit</span>
+    <img  src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px"></div>
   </div>
 
- <nav class="auth-nav">
+  <nav class="auth-nav">
     <a href="/dashboard" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
     <a href="/repositories" class="{% if active_page == 'repositories' %}active{% endif %}">Repositories</a>
     <a href="/activity" class="{% if active_page == 'activity' %}active{% endif %}">Activity</a>
@@ -34,14 +33,15 @@
       <span class="{% if active_page in ['profile', 'my-repos', 'activity'] %}active{% endif %}">Profile ▾</span>
       <div class="dropdown-menu">
         <a href="/profile" class="{% if active_page == 'profile' %}active{% endif %}">View Profile</a>
-        <a href="/my-repos" class="{% if active_page == 'my-repos' %}active{% endif %}">My Repositories</a>
+        <a href="/repositories" class="{% if active_page == 'my-repos' %}active{% endif %}">My Repositories</a>
         <a href="/activity" class="{% if active_page == 'activity' %}active{% endif %}">My Activity</a>
         <a href="/logout" class="logout">Logout</a>
       </div>
     </div>
-</nav>
+  </nav>
 
 </header>
+
 
 <!-- ================= CREATE ISSUE SECTION ================= -->
 <section class="issue-container">

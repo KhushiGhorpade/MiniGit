@@ -148,7 +148,7 @@ body {
 ========================= */
 .services {
   padding: 120px 80px;
-  background: linear-gradient(180deg, #000, #020617);
+  background: linear-gradient(180deg, #000, #000a30);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

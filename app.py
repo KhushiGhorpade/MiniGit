@@ -56,7 +56,7 @@ def login():
         if user and check_password_hash(user["password"], password):
             # Store ALL user data in session
             session["logged_in"] = True
-            session["author_id"] = user["author_id"]
+            session["user_id"] = user["user_id"]
             session["username"] = user["username"]
             session["full_name"] = user["full_name"]
             session["email"] = user["email"]
@@ -65,8 +65,8 @@ def login():
             # Update last login time
             update_cursor = db.cursor()
             update_cursor.execute(
-                "UPDATE users SET last_login = NOW() WHERE author_id = %s",
-                (user["author_id"],)
+                "UPDATE users SET last_login = NOW() WHERE user_id = %s",
+                (user["user_id"],)
             )
             db.commit()
             update_cursor.close()
@@ -111,13 +111,13 @@ def register():
             db.commit()
             
             # Get the new user's ID
-            author_id = cursor.lastrowid
+            user_id = cursor.lastrowid
             
             # Auto-login the user
             session["logged_in"] = True
-            session["author_id"] = author_id
-            session["username"] = username
+            session["user_id"] = user_id
             session["full_name"] = full_name
+            session["username"] = username
             session["email"] = email
             session["is_admin"] = False
             
@@ -187,8 +187,9 @@ def feedback():
 @app.route("/dashboard")
 def dashboard():
     if not session.get('logged_in'):
+        print("Dashboard: Not logged in, redirecting to login")
         return redirect(url_for("login"))
-    
+
     # Get user data from session
     username = session.get('full_name', session.get('username', 'User'))
     
@@ -344,7 +345,7 @@ def get_user_report_data():
     """)
     new_today = cursor.fetchone()['new_today']
     
-    # Get all users - FIXED DATE FORMAT
+    # Get all users
     cursor.execute("""
         SELECT 
             user_id,
@@ -396,7 +397,7 @@ def get_feedback_report_data():
     """)
     action_needed = cursor.fetchone()['action_needed']
     
-    # Get all feedback - FIXED to use feedback_id not id
+    # Get all feedback
     cursor.execute("""
         SELECT 
             feedback_id,
@@ -467,7 +468,7 @@ def api_admin_users():
     """)
     new_today = cursor.fetchone()['new_today']
     
-    # Get all users - FIXED DATE FORMAT
+    # Get all users
     cursor.execute("""
         SELECT 
             user_id as id,
@@ -497,7 +498,6 @@ def api_admin_users():
 
 @app.route("/api/admin/popularity")
 def api_admin_popularity():
-
     # Only allow access if user is logged in AND is admin
     if not session.get('logged_in') or not session.get('is_admin'):
         return jsonify({"error": "Unauthorized"}), 401
@@ -558,7 +558,7 @@ def api_admin_feedback():
         result = cursor.fetchone()
         action_needed = result['action_needed'] if result else 0
         
-        # Get all feedback - FIXED: using feedback_id as id for JavaScript
+        # Get all feedback
         cursor.execute("""
             SELECT 
                 feedback_id as id,
@@ -612,7 +612,7 @@ def api_admin_commits():
         db = get_db_connection()
         cursor = db.cursor(dictionary=True)
         
-        # Get commit stats - using your actual column names
+        # Get commit stats
         cursor.execute("SELECT COUNT(*) as total FROM commits")
         result = cursor.fetchone()
         total_commits = result['total'] if result else 0
@@ -637,7 +637,7 @@ def api_admin_commits():
         most_active = cursor.fetchone()
         most_active_user = most_active['username'] if most_active else 'N/A'
         
-        # Get recent commits - using your actual column names
+        # Get recent commits
         cursor.execute("""
             SELECT 
                 c.commit_id as id,
@@ -738,7 +738,6 @@ def api_admin_issues():
         result = cursor.fetchone()
         total_issues = result['total'] if result else 0
         
-        # Fix: Use your actual status values from the table
         cursor.execute("""
             SELECT COUNT(*) as open 
             FROM issues 
@@ -747,7 +746,6 @@ def api_admin_issues():
         result = cursor.fetchone()
         open_issues = result['open'] if result else 0
         
-        # Fix: Use created_at instead of updated_at
         cursor.execute("""
             SELECT COUNT(*) as closed_today 
             FROM issues 
@@ -757,7 +755,6 @@ def api_admin_issues():
         result = cursor.fetchone()
         closed_today = result['closed_today'] if result else 0
         
-        # Fix: Use correct column names (author_id instead of created_by)
         cursor.execute("""
             SELECT 
                 i.issue_id as id,
@@ -789,6 +786,7 @@ def api_admin_issues():
         import traceback
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+
 # ========================= RUN APP =========================
 if __name__ == "__main__":
     app.run(debug=True)
