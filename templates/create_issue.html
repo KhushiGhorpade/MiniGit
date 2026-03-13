@@ -10,7 +10,7 @@
 <!-- ================= AUTH NAVBAR ================= -->
 <header class="auth-header">
   <div class="auth-brand">
-    <img  src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px"></div>
+    <img src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px">
   </div>
 
   <nav class="auth-nav">
@@ -39,9 +39,7 @@
       </div>
     </div>
   </nav>
-
 </header>
-
 
 <!-- ================= CREATE ISSUE SECTION ================= -->
 <section class="issue-container">
@@ -51,34 +49,57 @@
       Report a bug or suggest an improvement for a repository
     </p>
 
-    <form method="POST">
+    <form method="POST" action="/create-issue">
 
       <div class="form-group">
-        <label>Repository</label>
-        <select required>
-          <option value="">Select repository</option>
-          <option>mini-git</option>
-          <option>demo-project</option>
+        <label>Repository <span style="color: #ff6b6b;">*</span></label>
+        <select name="repo_id" required>
+          <option value="">Select a repository</option>
+          {% for repo in repositories %}
+          <option value="{{ repo.repo_id }}">{{ repo.repo_name }}</option>
+          {% endfor %}
         </select>
       </div>
 
       <div class="form-group">
-        <label>Issue Title</label>
+        <label>Issue Title <span style="color: #ff6b6b;">*</span></label>
         <input
           type="text"
-          placeholder="e.g. Login page not loading"
+          name="issue_title"
+          placeholder="e.g. Login page not loading, Dark mode request, API timeout error"
           required
         >
       </div>
 
       <div class="form-group">
-        <label>Description</label>
+        <label>Description <span style="color: #ff6b6b;">*</span></label>
         <textarea
-          placeholder="Describe the issue in detail..."
+          name="description"
+          placeholder="Describe the issue in detail. Include steps to reproduce, expected behavior, and actual behavior..."
           required
         ></textarea>
+        <small style="color: #88aaaa; display: block; margin-top: 5px;">
+          Be as detailed as possible to help others understand the issue
+        </small>
       </div>
 
+      <div class="form-group">
+        <label>Priority</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="priority" value="low">
+            <span>Low</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="priority" value="medium" checked>
+            <span>Medium</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="priority" value="high">
+            <span>High</span>
+          </label>
+        </div>
+      </div>
 
       <button type="submit" class="create-btn">
         Create Issue

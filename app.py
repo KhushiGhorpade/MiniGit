@@ -184,6 +184,61 @@ def feedback():
     return render_template("feedback.html", active_page="feedback")
 
 # ========================= AFTER LOGIN PAGES =========================
+@app.route("/search")
+def search():
+    if not session.get('logged_in'):
+        return jsonify({"error": "Not logged in"}), 401
+    
+    query = request.args.get('q', '').strip()
+    user_id = session.get('user_id')
+    
+    if not query or len(query) < 2:
+        return jsonify({"results": []})
+    
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    # Search repositories
+    cursor.execute("""
+        SELECT 
+            'repository' as type,
+            repo_name as name,
+            description,
+            repo_id as id,
+            NULL as username,
+            created_date as date
+        FROM repositories
+        WHERE owner_id = %s AND repo_name LIKE %s
+        UNION
+        SELECT 
+            'user' as type,
+            username as name,
+            full_name as description,
+            user_id as id,
+            username,
+            created_at as date
+        FROM users
+        WHERE username LIKE %s OR full_name LIKE %s
+        UNION
+        SELECT 
+            'commit' as type,
+            commit_message as name,
+            repo_name as description,
+            commit_id as id,
+            (SELECT username FROM users WHERE user_id = commits.author_id) as username,
+            commit_date as date
+        FROM commits
+        JOIN repositories ON commits.repo_id = repositories.repo_id
+        WHERE repositories.owner_id = %s AND commit_message LIKE %s
+        LIMIT 10
+    """, (user_id, f'%{query}%', f'%{query}%', f'%{query}%', user_id, f'%{query}%'))
+    
+    results = cursor.fetchall()
+    cursor.close()
+    db.close()
+    
+    return jsonify({"results": results})
+    
 @app.route("/dashboard")
 def dashboard():
     if not session.get('logged_in'):
@@ -192,104 +247,693 @@ def dashboard():
 
     # Get user data from session
     username = session.get('full_name', session.get('username', 'User'))
+    user_id = session.get('user_id')
     
-    # Sample stats (will be replaced with real data later)
-    user_stats = {
-        'total_repos': 3,
-        'total_commits': 35,
-        'open_issues': 2
-    }
+    print(f"=== DASHBOARD DEBUG ===")
+    print(f"Logged in as: {username}")
+    print(f"User ID from session: {user_id}")
     
-    # Sample repositories
-    user_repos = [
-        {'repo_name': 'mini-git-core', 'star_count': 5, 'commit_count': 12, 'created_date': datetime.now()},
-        {'repo_name': 'ui-dashboard', 'star_count': 3, 'commit_count': 8, 'created_date': datetime.now()},
-        {'repo_name': 'auth-service', 'star_count': 2, 'commit_count': 5, 'created_date': datetime.now()}
-    ]
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
     
-    # Sample activity
-    recent_activity = [
-        {'icon': '📝', 'description': 'Committed to mini-git-core', 'time_ago': '2 hours ago'},
-        {'icon': '📁', 'description': 'Created repository ui-dashboard', 'time_ago': '1 day ago'},
-        {'icon': '⭐', 'description': 'Starred repo auth-service', 'time_ago': '3 days ago'}
-    ]
+    # Check what users exist in database
+    cursor.execute("SELECT user_id, username FROM users")
+    users = cursor.fetchall()
+    print("Users in database:")
+    for u in users:
+        print(f"  - {u['username']} (ID: {u['user_id']})")
     
-    # Sample commits
-    recent_commits = [
-        {'commit_message': 'Fixed authentication bug', 'repo_name': 'mini-git-core', 'commit_date': datetime.now()},
-        {'commit_message': 'Updated README', 'repo_name': 'mini-git-core', 'commit_date': datetime.now()}
-    ]
+    # Check repositories for this user
+    cursor.execute("""
+        SELECT * FROM repositories WHERE owner_id = %s
+    """, (user_id,))
+    
+    repos = cursor.fetchall()
+    print(f"Repositories found for user_id {user_id}: {len(repos)}")
+    for r in repos:
+        print(f"  - {r['repo_name']} (ID: {r['repo_id']})")
+    
+    # Get user stats
+    cursor.execute("""
+        SELECT 
+            (SELECT COUNT(*) FROM repositories WHERE owner_id = %s) as total_repos,
+            (SELECT COUNT(*) FROM commits WHERE author_id = %s) as total_commits,
+            (SELECT COUNT(*) FROM issues WHERE created_by = %s AND status != 'closed') as open_issues
+    """, (user_id, user_id, user_id))
+    
+    user_stats = cursor.fetchone()
+    
+    # Get user's latest repositories
+    cursor.execute("""
+        SELECT 
+            repo_name,
+            created_date
+        FROM repositories 
+        WHERE owner_id = %s
+        ORDER BY created_date DESC
+        LIMIT 5
+    """, (user_id,))
+    
+    user_repos = cursor.fetchall()
+    
+    # Get latest commits from user's repositories
+    cursor.execute("""
+        SELECT 
+            c.commit_message,
+            r.repo_name,
+            c.commit_date
+        FROM commits c
+        JOIN repositories r ON c.repo_id = r.repo_id
+        WHERE r.owner_id = %s
+        ORDER BY c.commit_date DESC
+        LIMIT 5
+    """, (user_id,))
+    
+    recent_commits = cursor.fetchall()
+    
+    cursor.close()
+    db.close()
+    
+    print(f"Final stats: repos={user_stats['total_repos']}, commits={user_stats['total_commits']}")
     
     return render_template("dashboard.html", 
                          active_page="dashboard",
                          username=username,
                          user_stats=user_stats,
                          user_repos=user_repos,
-                         recent_activity=recent_activity,
                          recent_commits=recent_commits)
 
 @app.route("/repositories")
 def repos():
     if not session.get('logged_in'):
         return redirect(url_for("login"))
-    return render_template("repositories.html", active_page="repositories")
+    
+    # Get current user's ID
+    user_id = session.get('user_id')
+    
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    # Fetch repositories for the logged-in user
+    cursor.execute("""
+        SELECT 
+            r.repo_id as id,
+            r.repo_name as name,
+            r.description,
+            u.username as owner,
+            r.created_date as created_at
+        FROM repositories r
+        JOIN users u ON r.owner_id = u.user_id
+        WHERE r.owner_id = %s
+        ORDER BY r.created_date DESC
+    """, (user_id,))
+    
+    repositories = cursor.fetchall()
+    cursor.close()
+    db.close()
+    
+    return render_template("repositories.html", 
+                         active_page="repositories",
+                         repositories=repositories)
 
 @app.route("/activity")
 def activity():
     if not session.get('logged_in'):
         return redirect(url_for("login"))
+    
+    user_id = session.get('user_id')
+    username = session.get('username')
+    
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    # Get user stats
+    cursor.execute("""
+        SELECT 
+            (SELECT COUNT(*) FROM repositories WHERE owner_id = %s) as total_repos,
+            (SELECT COUNT(*) FROM commits WHERE author_id = %s) as total_commits,
+            (SELECT COUNT(*) FROM issues WHERE created_by = %s AND status != 'closed') as open_issues
+    """, (user_id, user_id, user_id))
+    
+    stats = cursor.fetchone()
+    
+    # Get last activity time
+    cursor.execute("""
+        SELECT MAX(activity_time) as last_activity FROM (
+            SELECT created_date as activity_time FROM repositories WHERE owner_id = %s
+            UNION ALL
+            SELECT commit_date as activity_time FROM commits WHERE author_id = %s
+            UNION ALL
+            SELECT created_date as activity_time FROM issues WHERE created_by = %s
+        ) as all_activities
+    """, (user_id, user_id, user_id))
+    
+    last_activity = cursor.fetchone()['last_activity']
+    if last_activity:
+        from datetime import datetime
+        time_diff = datetime.now() - last_activity
+        if time_diff.days > 0:
+            last_activity_text = f"{time_diff.days} days ago"
+        elif time_diff.seconds // 3600 > 0:
+            last_activity_text = f"{time_diff.seconds // 3600} hours ago"
+        else:
+            last_activity_text = f"{time_diff.seconds // 60} minutes ago"
+    else:
+        last_activity_text = "No activity"
+    
+    # Get commit data for chart (last 7 days) - FIXED QUERY
+    cursor.execute("""
+        SELECT 
+            DAYNAME(commit_date) as day,
+            COUNT(*) as count,
+            DATE(commit_date) as commit_day
+        FROM commits
+        WHERE author_id = %s
+        AND commit_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        GROUP BY DATE(commit_date), DAYNAME(commit_date)
+        ORDER BY MIN(commit_date)
+    """, (user_id,))
+
+    commits_by_day = cursor.fetchall()
+
+    # Prepare chart data (fill missing days with 0)
+    days_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    chart_data = {day: 0 for day in days_order}
+    for item in commits_by_day:
+        chart_data[item['day']] = item['count']
+    
+    # Get repository activity for bar chart - FIXED QUERY
+    cursor.execute("""
+        SELECT 
+            r.repo_name,
+            COUNT(c.commit_id) as commit_count
+        FROM repositories r
+        LEFT JOIN commits c ON r.repo_id = c.repo_id
+        WHERE r.owner_id = %s
+        GROUP BY r.repo_id, r.repo_name
+        ORDER BY commit_count DESC
+        LIMIT 5
+    """, (user_id,))
+    
+    repo_activity = cursor.fetchall()
+    
+    # Calculate max commits for bar chart percentages
+    max_commits = max([r['commit_count'] for r in repo_activity]) if repo_activity else 1
+    
+    # Get timeline activity (mix of commits, issues, repos)
+    cursor.execute("""
+        (SELECT 
+            'commit' as type,
+            commit_message as description,
+            commit_date as created_at,
+            repo_id,
+            commit_id as item_id
+        FROM commits 
+        WHERE author_id = %s)
+        UNION ALL
+        (SELECT 
+            'issue' as type,
+            issue_title as description,
+            created_date as created_at,
+            repo_id,
+            issue_id as item_id
+        FROM issues 
+        WHERE created_by = %s)
+        UNION ALL
+        (SELECT 
+            'repo' as type,
+            repo_name as description,
+            created_date as created_at,
+            repo_id,
+            repo_id as item_id
+        FROM repositories 
+        WHERE owner_id = %s)
+        ORDER BY created_at DESC
+        LIMIT 10
+    """, (user_id, user_id, user_id))
+    
+    timeline = cursor.fetchall()
+    
+    # Get repo names for timeline items
+    for item in timeline:
+        cursor.execute("SELECT repo_name FROM repositories WHERE repo_id = %s", (item['repo_id'],))
+        repo = cursor.fetchone()
+        item['repo_name'] = repo['repo_name'] if repo else 'Unknown'
         
-    repo_commits = [
-        {"repo": "Repo A", "commits": 12},
-        {"repo": "Repo B", "commits": 8},
-        {"repo": "Repo C", "commits": 15},
-    ]
-
-    repo_issues = [
-        {"repo": "Repo A", "open_issues": 3},
-        {"repo": "Repo B", "open_issues": 5},
-        {"repo": "Repo C", "open_issues": 2},
-    ]
-
-    repo_names = ["Repo A", "Repo B", "Repo C"]
-
+        # Format time
+        from datetime import datetime
+        time_diff = datetime.now() - item['created_at']
+        if time_diff.days > 0:
+            item['time_ago'] = f"{time_diff.days} days ago"
+        elif time_diff.seconds // 3600 > 0:
+            item['time_ago'] = f"{time_diff.seconds // 3600} hours ago"
+        else:
+            item['time_ago'] = f"{time_diff.seconds // 60} minutes ago"
+    
+    # Get repository cards data - FIXED QUERY
+    cursor.execute("""
+        SELECT 
+            r.repo_name,
+            r.repo_id,
+            COUNT(DISTINCT c.commit_id) as commit_count,
+            COUNT(DISTINCT i.issue_id) as issue_count
+        FROM repositories r
+        LEFT JOIN commits c ON r.repo_id = c.repo_id
+        LEFT JOIN issues i ON r.repo_id = i.repo_id
+        WHERE r.owner_id = %s
+        GROUP BY r.repo_id, r.repo_name
+        ORDER BY commit_count DESC
+        LIMIT 3
+    """, (user_id,))
+    
+    repo_cards = cursor.fetchall()
+    
+    # Get recent feed items
+    cursor.execute("""
+        (SELECT 
+            'commit' as type,
+            CONCAT('You committed to ', r.repo_name, ' — "', c.commit_message, '"') as description,
+            c.commit_date as created_at
+        FROM commits c
+        JOIN repositories r ON c.repo_id = r.repo_id
+        WHERE c.author_id = %s
+        LIMIT 3)
+        UNION ALL
+        (SELECT 
+            'repo' as type,
+            CONCAT('You created repository ', r.repo_name) as description,
+            r.created_date as created_at
+        FROM repositories r
+        WHERE r.owner_id = %s
+        LIMIT 3)
+        UNION ALL
+        (SELECT 
+            'issue' as type,
+            CONCAT('You opened issue in ', r.repo_name, ' — "', i.issue_title, '"') as description,
+            i.created_date as created_at
+        FROM issues i
+        JOIN repositories r ON i.repo_id = r.repo_id
+        WHERE i.created_by = %s
+        LIMIT 3)
+        ORDER BY created_at DESC
+        LIMIT 5
+    """, (user_id, user_id, user_id))
+    
+    feed_items = cursor.fetchall()
+    
+    cursor.close()
+    db.close()
+    
     return render_template(
         "activity.html",
-        repo_commits=repo_commits,
-        repo_issues=repo_issues,
-        repo_names=repo_names,
-        active_page="activity"
+        active_page="activity",
+        stats=stats,
+        last_activity_text=last_activity_text,
+        chart_data=chart_data,
+        repo_activity=repo_activity,
+        max_commits=max_commits,
+        timeline=timeline,
+        repo_cards=repo_cards,
+        feed_items=feed_items
     )
 
 @app.route("/profile")
 def profile():
     if not session.get('logged_in'):
         return redirect(url_for("login"))
-    return render_template("profile.html", active_page="profile")
-
+    
+    user_id = session.get('user_id')
+    username = session.get('username')
+    full_name = session.get('full_name', username)
+    email = session.get('email', '')
+    
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    # Get user stats and join date
+    cursor.execute("""
+        SELECT 
+            u.created_at as join_date,
+            (SELECT COUNT(*) FROM repositories WHERE owner_id = u.user_id) as total_repos,
+            (SELECT COUNT(*) FROM commits WHERE author_id = u.user_id) as total_commits,
+            (SELECT COUNT(*) FROM issues WHERE created_by = u.user_id AND status != 'closed') as open_issues
+        FROM users u
+        WHERE u.user_id = %s
+    """, (user_id,))
+    
+    user_data = cursor.fetchone()
+    
+    # Get repositories for the user
+    cursor.execute("""
+        SELECT 
+            repo_name as name,
+            description,
+            visibility,
+            created_date
+        FROM repositories
+        WHERE owner_id = %s
+        ORDER BY created_date DESC
+        LIMIT 3
+    """, (user_id,))
+    
+    repositories = []
+    for repo in cursor.fetchall():
+        # Get commit count for this repo
+        cursor.execute("""
+            SELECT COUNT(*) as count 
+            FROM commits 
+            WHERE repo_id = (SELECT repo_id FROM repositories WHERE repo_name = %s AND owner_id = %s)
+        """, (repo['name'], user_id))
+        commit_count = cursor.fetchone()['count']
+        
+        # Get issue count for this repo
+        cursor.execute("""
+            SELECT COUNT(*) as count 
+            FROM issues 
+            WHERE repo_id = (SELECT repo_id FROM repositories WHERE repo_name = %s AND owner_id = %s)
+        """, (repo['name'], user_id))
+        issue_count = cursor.fetchone()['count']
+        
+        repositories.append({
+            'name': repo['name'],
+            'description': repo['description'] or 'No description provided',
+            'public': repo['visibility'] == 'public',
+            'stats': {
+                'commits': commit_count,
+                'issues': issue_count,
+                'stars': 0
+            },
+            'updated': repo['created_date'].strftime('%b %d, %Y') if repo['created_date'] else 'Recently',
+            'language': 'Python'  # You can make this dynamic later
+        })
+    
+    # Get recent activities
+    cursor.execute("""
+        (SELECT 
+            'commit' as type,
+            CONCAT('Committed to ', r.repo_name) as title,
+            c.commit_message as description,
+            r.repo_name as repo,
+            c.commit_date as created_at
+        FROM commits c
+        JOIN repositories r ON c.repo_id = r.repo_id
+        WHERE c.author_id = %s
+        LIMIT 3)
+        UNION ALL
+        (SELECT 
+            'repo' as type,
+            CONCAT('Created ', repo_name) as title,
+            description,
+            repo_name as repo,
+            created_date as created_at
+        FROM repositories
+        WHERE owner_id = %s
+        LIMIT 3)
+        UNION ALL
+        (SELECT 
+            'issue' as type,
+            CONCAT('Opened issue in ', r.repo_name) as title,
+            i.issue_title as description,
+            r.repo_name as repo,
+            i.created_date as created_at
+        FROM issues i
+        JOIN repositories r ON i.repo_id = r.repo_id
+        WHERE i.created_by = %s
+        LIMIT 3)
+        ORDER BY created_at DESC
+        LIMIT 5
+    """, (user_id, user_id, user_id))
+    
+    recent_activities = []
+    for act in cursor.fetchall():
+        from datetime import datetime
+        time_diff = datetime.now() - act['created_at']
+        if time_diff.days > 0:
+            time_str = f"{time_diff.days} days ago"
+        elif time_diff.seconds // 3600 > 0:
+            time_str = f"{time_diff.seconds // 3600} hours ago"
+        else:
+            time_str = f"{time_diff.seconds // 60} minutes ago"
+        
+        recent_activities.append({
+            'type': act['type'],
+            'title': act['title'],
+            'description': act['description'][:50] + '...' if len(act['description']) > 50 else act['description'],
+            'repo': act['repo'],
+            'time': time_str
+        })
+    
+    cursor.close()
+    db.close()
+    
+    # Format join date
+    join_date = user_data['join_date'].strftime('%B %Y') if user_data and user_data['join_date'] else 'Recently'
+    
+    # Calculate stats
+    total_commits = user_data['total_commits'] if user_data else 0
+    total_repos = user_data['total_repos'] if user_data else 0
+    total_contributions = total_commits + total_repos
+    
+    # Calculate efficiency (example: commits per repo ratio)
+    efficiency = min(100, int((total_commits / (total_repos or 1)) * 20)) if total_repos > 0 else 0
+    
+    # Calculate active days (simplified - you can make this more sophisticated)
+    active_days = min(30, total_commits) if total_commits > 0 else 0
+    
+    return render_template("profile.html",
+                         active_page="profile",
+                         full_name=full_name,
+                         username=username,
+                         join_date=join_date,
+                         total_contributions=total_contributions,
+                         total_repos=total_repos,
+                         total_commits=total_commits,
+                         efficiency=efficiency,
+                         active_days=active_days,
+                         repositories=repositories,
+                         recent_activities=recent_activities)
 @app.route("/my-repos")
 def my_repos():
     if not session.get('logged_in'):
         return redirect(url_for("login"))
-    return render_template("my_repos.html", active_page="my-repos")
+    return redirect(url_for("repos"))  # Redirect to the repositories page
 
-@app.route("/create-repo")
+@app.route("/create-repo", methods=["GET", "POST"])
 def create_repo():
+    # Check if user is logged in
     if not session.get('logged_in'):
+        flash("Please login first", "error")
         return redirect(url_for("login"))
+    
+    if request.method == "POST":
+        # Get form data
+        repo_name = request.form.get("repo_name")
+        description = request.form.get("description")
+        visibility = request.form.get("visibility", "public")  # Default to public
+        init_readme = request.form.get("init_readme") == "yes"
+        
+        # Validate required fields
+        if not repo_name:
+            flash("Repository name is required", "error")
+            return redirect(url_for("create_repo"))
+        
+        # Get owner_id from session
+        owner_id = session.get('user_id')
+        
+        if not owner_id:
+            flash("User session error. Please login again.", "error")
+            return redirect(url_for("login"))
+        
+        db = get_db_connection()
+        cursor = db.cursor()
+        
+        try:
+            # Insert into repositories table
+            cursor.execute("""
+                INSERT INTO repositories (repo_name, description, owner_id, visibility)
+                VALUES (%s, %s, %s, %s)
+            """, (repo_name, description, owner_id, visibility))
+            
+            db.commit()
+            
+            # Get the newly created repo_id
+            repo_id = cursor.lastrowid
+            
+            # If initialize README is checked, create an initial commit
+            if init_readme:
+                # Insert initial commit
+                cursor.execute("""
+                    INSERT INTO commits (repo_id, commit_message, author_id, commit_type, files_changed)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (repo_id, "Initial commit", owner_id, "documentation", "README.md"))
+                
+                db.commit()
+            
+            flash(f"Repository '{repo_name}' created successfully!", "success")
+            return redirect(url_for("repos"))
+            
+        except mysql.connector.Error as e:
+            db.rollback()
+            if "Duplicate" in str(e):
+                flash("A repository with this name already exists", "error")
+            else:
+                flash(f"Error creating repository: {str(e)}", "error")
+            return redirect(url_for("create_repo"))
+            
+        finally:
+            cursor.close()
+            db.close()
+    
+    # GET request - show the form
     return render_template("create_repo.html", active_page="create-repo")
 
 @app.route("/create-issue", methods=["GET", "POST"])
 def create_issue():
     if not session.get('logged_in'):
+        flash("Please login first", "error")
         return redirect(url_for("login"))
-    return render_template("create_issue.html", active_page="create-issue")
+    
+    user_id = session.get('user_id')
+    
+    if request.method == "POST":
+        # Get form data
+        repo_id = request.form.get("repo_id")
+        issue_title = request.form.get("issue_title")
+        description = request.form.get("description")
+        priority = request.form.get("priority", "medium")
+        
+        # Validate required fields
+        if not repo_id:
+            flash("Please select a repository", "error")
+            return redirect(url_for("create_issue"))
+        
+        if not issue_title:
+            flash("Issue title is required", "error")
+            return redirect(url_for("create_issue"))
+        
+        db = get_db_connection()
+        cursor = db.cursor()
+        
+        try:
+            # Insert issue into database
+            cursor.execute("""
+                INSERT INTO issues 
+                (repo_id, issue_title, description, created_by, priority, status) 
+                VALUES (%s, %s, %s, %s, %s, 'open')
+            """, (repo_id, issue_title, description, user_id, priority))
+            
+            db.commit()
+            
+            # Get repository name for success message
+            cursor.execute("SELECT repo_name FROM repositories WHERE repo_id = %s", (repo_id,))
+            repo_name = cursor.fetchone()[0]
+            
+            flash(f"Issue created successfully in {repo_name}!", "success")
+            
+        except Exception as e:
+            db.rollback()
+            flash(f"Error creating issue: {str(e)}", "error")
+        finally:
+            cursor.close()
+            db.close()
+        
+        return redirect(url_for("activity"))
+    
+    # GET request - show the form with repositories
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    # Fetch user's repositories for dropdown
+    cursor.execute("""
+        SELECT repo_id, repo_name 
+        FROM repositories 
+        WHERE owner_id = %s 
+        ORDER BY repo_name
+    """, (user_id,))
+    
+    repositories = cursor.fetchall()
+    cursor.close()
+    db.close()
+    
+    return render_template("create_issue.html", 
+                         active_page="create-issue",
+                         repositories=repositories)
 
 @app.route("/create-commit", methods=["GET", "POST"])
 def create_commit():
     if not session.get('logged_in'):
+        flash("Please login first", "error")
         return redirect(url_for("login"))
-    return render_template("create_commit.html", active_page="create-commit")
+    
+    user_id = session.get('user_id')
+    
+    if request.method == "POST":
+        # Get form data
+        repo_id = request.form.get("repo_id")
+        commit_message = request.form.get("commit_message")
+        files_changed = request.form.get("files_changed")
+        commit_type = request.form.get("commit_type", "other")
+        
+        # Validate required fields
+        if not repo_id:
+            flash("Please select a repository", "error")
+            return redirect(url_for("create_commit"))
+        
+        if not commit_message:
+            flash("Commit message is required", "error")
+            return redirect(url_for("create_commit"))
+        
+        if not files_changed:
+            flash("Please list the files you changed", "error")
+            return redirect(url_for("create_commit"))
+        
+        db = get_db_connection()
+        cursor = db.cursor()
+        
+        try:
+            # Insert commit into database
+            cursor.execute("""
+                INSERT INTO commits 
+                (repo_id, commit_message, author_id, commit_type, files_changed) 
+                VALUES (%s, %s, %s, %s, %s)
+            """, (repo_id, commit_message, user_id, commit_type, files_changed))
+            
+            db.commit()
+            
+            # Get repository name for success message
+            cursor.execute("SELECT repo_name FROM repositories WHERE repo_id = %s", (repo_id,))
+            repo_name = cursor.fetchone()[0]
+            
+            flash(f"Commit created successfully in {repo_name}!", "success")
+            
+        except Exception as e:
+            db.rollback()
+            flash(f"Error creating commit: {str(e)}", "error")
+        finally:
+            cursor.close()
+            db.close()
+        
+        return redirect(url_for("activity"))
+    
+    # GET request - show the form with repositories
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    # Fetch user's repositories for dropdown
+    cursor.execute("""
+        SELECT repo_id, repo_name 
+        FROM repositories 
+        WHERE owner_id = %s 
+        ORDER BY repo_name
+    """, (user_id,))
+    
+    repositories = cursor.fetchall()
+    cursor.close()
+    db.close()
+    
+    return render_template("create_commit.html", 
+                         active_page="create-commit",
+                         repositories=repositories)
 
 @app.route("/logout")
 def logout():

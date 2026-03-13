@@ -10,7 +10,7 @@
 <!-- ================= AUTH NAVBAR ================= -->
 <header class="auth-header">
   <div class="auth-brand">
-    <img  src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px"></div>
+    <img src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px">
   </div>
 
   <nav class="auth-nav">
@@ -39,7 +39,6 @@
       </div>
     </div>
   </nav>
-
 </header>
 
 <!-- ================= CREATE COMMIT SECTION ================= -->
@@ -50,51 +49,59 @@
       Commit your changes to a repository with a meaningful message
     </p>
 
-    <form method="POST">
+    <form method="POST" action="/create-commit">
 
       <div class="form-group">
-        <label>Repository</label>
-        <select required>
-          <option value="">Select repository</option>
-          <option>mini-git</option>
-          <option>demo-project</option>
+        <label>Repository <span style="color: #ff6b6b;">*</span></label>
+        <select name="repo_id" required>
+          <option value="">Select a repository</option>
+          {% for repo in repositories %}
+          <option value="{{ repo.repo_id }}">{{ repo.repo_name }}</option>
+          {% endfor %}
         </select>
       </div>
 
       <div class="form-group">
-        <label>Commit Message</label>
+        <label>Commit Message <span style="color: #ff6b6b;">*</span></label>
         <input
           type="text"
-          placeholder="e.g. Fixed login bug"
+          name="commit_message"
+          placeholder="e.g. Fixed login bug, Added new feature, Updated README"
           required
         >
       </div>
 
       <div class="form-group">
-        <label>Files Changed</label>
+        <label>Files Changed <span style="color: #ff6b6b;">*</span></label>
         <textarea
-          placeholder="List the files you changed or added..."
+          name="files_changed"
+          placeholder="List the files you changed or added (one per line)"
           required
         ></textarea>
+        <small style="color: #88aaaa; display: block; margin-top: 5px;">Example: app.py, templates/index.html, static/css/style.css</small>
       </div>
 
       <div class="form-group">
-  <label>Commit Type (optional)</label>
-  <div class="radio-group">
-    <label class="radio-label">
-      <input type="radio" name="commit_type" value="feature" checked>
-      <span>Feature</span>
-    </label>
-    <label class="radio-label">
-      <input type="radio" name="commit_type" value="bugfix">
-      <span>Bugfix</span>
-    </label>
-    <label class="radio-label">
-      <input type="radio" name="commit_type" value="docs">
-      <span>Documentation</span>
-    </label>
-  </div>
-</div>
+        <label>Commit Type</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="commit_type" value="feature" checked>
+            <span>Feature ✨</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="commit_type" value="bugfix">
+            <span>Bugfix 🐛</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="commit_type" value="documentation">
+            <span>Documentation 📚</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="commit_type" value="other">
+            <span>Other 🔧</span>
+          </label>
+        </div>
+      </div>
 
       <button type="submit" class="create-btn">
         Create Commit

@@ -11,7 +11,7 @@
 <!-- ================= AUTH NAVBAR ================= -->
 <header class="auth-header">
   <div class="auth-brand">
-    <img  src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px"></div>
+    <img src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px">
   </div>
 
   <nav class="auth-nav">
@@ -47,44 +47,27 @@
   <aside class="profile-sidebar">
     <div class="avatar-wrapper">
       <div class="avatar-glow"></div>
-      <div class="avatar">K</div>
+      <div class="avatar">{{ full_name[0] if full_name else 'U' }}</div>
     </div>
 
-    <h2>Kevin Mitnick</h2>
-    <p class="username">@kevinmitnick</p>
+    <h2>{{ full_name }}</h2>
+    <p class="username">@{{ username }}</p>
     
     <div class="profile-stats">
       <div class="stat-item">
-        <span class="stat-number">1,248</span>
-        <span class="stat-label">Contributions</span>
+        <span class="stat-number">{{ total_contributions }}</span>
+        <span class="stat-label">CONTRIBUTIONS</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number">4</span>
-        <span class="stat-label">Repos</span>
+        <span class="stat-number">{{ total_repos }}</span>
+        <span class="stat-label">REPOS</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number">38</span>
-        <span class="stat-label">Commits</span>
+        <span class="stat-number">{{ total_commits }}</span>
+        <span class="stat-label">COMMITS</span>
       </div>
     </div>
 
-    <p class="bio">
-      BCA Student | Web Developer
-      Exploring Cybersecurity ⚡
-    </p>
-
-    <div class="tech-stack">
-      <span class="tech-tag">Python</span>
-      <span class="tech-tag">Flask</span>
-      <span class="tech-tag">MySQL</span>
-      <span class="tech-tag">HTML/CSS</span>
-      <span class="tech-tag">Git</span>
-    </div>
-
-    <div class="join-date">
-      <span class="date-icon">📅</span>
-      Joined {{ join_date }}
-    </div>
   </aside>
 
   <!-- RIGHT PANEL - ENHANCED -->
@@ -101,29 +84,38 @@
         <!-- Activity Ring -->
         <div class="metric-item">
           <div class="ring-container">
-            <div class="progress-ring" style="--progress: 78%">
-              <span>78%</span>
+            <div class="progress-ring" style="--progress: {{ efficiency }}">
+              <span>{{ efficiency }}%</span>
             </div>
             <p>Overall Activity</p>
           </div>
         </div>
 
-        <!-- Contribution Heatmap (Generated with Matplotlib) -->
+        <!-- Contribution Heatmap -->
         <div class="metric-item">
           <h4>Contribution Heatmap</h4>
           <div class="heatmap-container">
-            {% if heatmap_img %}
-              <img src="data:image/png;base64,{{ heatmap_img }}" alt="Contribution Heatmap">
-            {% else %}
-              <div class="heatmap-placeholder">
-                <!-- Fallback CSS heatmap -->
-                <div class="heatmap-grid">
-                  {% for _ in range(7*4) %}
-                  <div class="heat-cell l{{ range(0, 5)|random }}"></div>
-                  {% endfor %}
-                </div>
+            <div class="heatmap-placeholder">
+              <div class="heatmap-grid">
+                {% for i in range(7*4) %}
+                  {% set random_val = range(0, 5)|random %}
+                  <div class="heat-cell l{{ random_val }}" 
+                       title="{% if random_val == 0 %}No activity{% elif random_val == 1 %}Light activity{% elif random_val == 2 %}Moderate activity{% elif random_val == 3 %}High activity{% else %}Very high activity{% endif %}">
+                  </div>
+                {% endfor %}
               </div>
-            {% endif %}
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 11px; color: #88aaaa;">
+              <span>Less</span>
+              <div style="display: flex; gap: 5px;">
+                <span style="display: inline-block; width: 12px; height: 12px; background: rgba(255,255,255,0.05); border-radius: 2px;" title="No activity"></span>
+                <span style="display: inline-block; width: 12px; height: 12px; background: rgba(0,255,240,0.3); border-radius: 2px;" title="Light activity"></span>
+                <span style="display: inline-block; width: 12px; height: 12px; background: rgba(0,255,240,0.5); border-radius: 2px;" title="Moderate activity"></span>
+                <span style="display: inline-block; width: 12px; height: 12px; background: rgba(0,255,240,0.7); border-radius: 2px;" title="High activity"></span>
+                <span style="display: inline-block; width: 12px; height: 12px; background: #00fff0; border-radius: 2px; box-shadow: 0 0 5px #00fff0;" title="Very high activity"></span>
+              </div>
+              <span>More</span>
+            </div>
           </div>
         </div>
 
@@ -132,22 +124,22 @@
           <div class="stat-card">
             <div class="stat-icon">📊</div>
             <div class="stat-content">
-              <span class="stat-value">12</span>
-              <span class="stat-label">Active Days</span>
+              <span class="stat-value">{{ active_days }}</span>
+              <span class="stat-label">ACTIVE DAYS</span>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon">⚡</div>
             <div class="stat-content">
-              <span class="stat-value">38</span>
-              <span class="stat-label">Commits</span>
+              <span class="stat-value">{{ total_commits }}</span>
+              <span class="stat-label">COMMITS</span>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon">🎯</div>
             <div class="stat-content">
-              <span class="stat-value">92%</span>
-              <span class="stat-label">Efficiency</span>
+              <span class="stat-value">{{ efficiency }}%</span>
+              <span class="stat-label">EFFICIENCY</span>
             </div>
           </div>
         </div>
@@ -178,6 +170,13 @@
             {% endif %}
           </div>
         </div>
+        {% else %}
+        <div class="activity-item">
+          <div class="activity-icon">⚡</div>
+          <div class="activity-content">
+            <p>No recent activity</p>
+          </div>
+        </div>
         {% endfor %}
       </div>
     </div>
@@ -186,7 +185,7 @@
     <div class="profile-card">
       <div class="card-header">
         <h3>My Repositories</h3>
-        <a href="/my-repos" class="view-all">View All →</a>
+        <a href="/repositories" class="view-all">View All →</a>
       </div>
 
       <div class="repos-grid">
@@ -214,6 +213,10 @@
             <span class="repo-updated">Updated {{ repo.updated }}</span>
             <span class="repo-language">{{ repo.language }}</span>
           </div>
+        </div>
+        {% else %}
+        <div class="repo-card">
+          <p>No repositories yet</p>
         </div>
         {% endfor %}
       </div>

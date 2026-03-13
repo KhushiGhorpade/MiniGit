@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/activity.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
@@ -14,7 +13,8 @@
 <!-- ================= AUTH NAVBAR ================= -->
 <header class="auth-header">
   <div class="auth-brand">
-    <img  src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px"></div>
+    <div class="logo"></div>
+    <span>MiniGit</span>
   </div>
 
   <nav class="auth-nav">
@@ -43,9 +43,7 @@
       </div>
     </div>
   </nav>
-
 </header>
-
 
 <!-- ================= ACTIVITY CONTAINER ================= -->
 <section class="activity-container">
@@ -59,27 +57,26 @@
     <div class="header-stats">
       <div class="stat-badge">
         <i class="fas fa-fire"></i>
-        <span>5-Day Streak</span>
+        <span>{{ stats.total_commits or 0 }} Total Commits</span>
       </div>
       <div class="stat-badge">
         <i class="fas fa-trophy"></i>
-        <span>Top 10%</span>
+        <span>Active Contributor</span>
       </div>
     </div>
   </div>
 
   <!-- ================= ENHANCED SUMMARY CARDS ================= -->
   <div class="activity-stats">
-
     <div class="stat-card enhanced-card">
       <div class="stat-icon">
         <i class="fas fa-code-branch"></i>
       </div>
       <div class="stat-content">
         <h3>Repositories</h3>
-        <span class="stat-value">12</span>
+        <span class="stat-value">{{ stats.total_repos or 0 }}</span>
         <div class="stat-trend up">
-          <i class="fas fa-arrow-up"></i> 2 new this month
+          <i class="fas fa-arrow-up"></i> Active
         </div>
       </div>
       <div class="card-glow"></div>
@@ -91,9 +88,9 @@
       </div>
       <div class="stat-content">
         <h3>Total Commits</h3>
-        <span class="stat-value">142</span>
+        <span class="stat-value">{{ stats.total_commits or 0 }}</span>
         <div class="stat-trend up">
-          <i class="fas fa-arrow-up"></i> 18 this week
+          <i class="fas fa-arrow-up"></i> Lifetime
         </div>
       </div>
       <div class="card-glow"></div>
@@ -105,9 +102,9 @@
       </div>
       <div class="stat-content">
         <h3>Open Issues</h3>
-        <span class="stat-value">8</span>
+        <span class="stat-value">{{ stats.open_issues or 0 }}</span>
         <div class="stat-trend down">
-          <i class="fas fa-arrow-down"></i> 3 resolved
+          <i class="fas fa-arrow-down"></i> Need attention
         </div>
       </div>
       <div class="card-glow"></div>
@@ -119,14 +116,13 @@
       </div>
       <div class="stat-content">
         <h3>Last Activity</h3>
-        <span class="stat-value">2 hours ago</span>
+        <span class="stat-value">{{ last_activity_text }}</span>
         <div class="stat-trend">
-          <i class="fas fa-check-circle"></i> Active today
+          <i class="fas fa-check-circle"></i> Active
         </div>
       </div>
       <div class="card-glow"></div>
     </div>
-
   </div>
 
   <!-- ================= CHART CONTAINER ================= -->
@@ -138,29 +134,27 @@
         <h2><i class="fas fa-chart-line"></i> Commits Over Time</h2>
         <div class="time-filter">
           <span class="active">Week</span>
-          <span>Month</span>
-          <span>Year</span>
         </div>
       </div>
       <div class="chart-visual">
-        <!-- Visual representation without JS -->
         <div class="chart-graphic">
           <div class="chart-axis-y">
-            <span>20</span>
-            <span>15</span>
-            <span>10</span>
-            <span>5</span>
+            <span>{% if max_commits > 0 %}{{ max_commits }}{% else %}5{% endif %}</span>
+            <span>{% if max_commits > 0 %}{{ (max_commits * 0.75)|int }}{% else %}4{% endif %}</span>
+            <span>{% if max_commits > 0 %}{{ (max_commits * 0.5)|int }}{% else %}3{% endif %}</span>
+            <span>{% if max_commits > 0 %}{{ (max_commits * 0.25)|int }}{% else %}2{% endif %}</span>
             <span>0</span>
           </div>
           <div class="chart-content">
             <div class="chart-bars">
-              <div class="chart-bar" style="height: 65%;" data-value="13"></div>
-              <div class="chart-bar" style="height: 90%;" data-value="18"></div>
-              <div class="chart-bar" style="height: 40%;" data-value="8"></div>
-              <div class="chart-bar" style="height: 100%;" data-value="20"></div>
-              <div class="chart-bar" style="height: 75%;" data-value="15"></div>
-              <div class="chart-bar" style="height: 25%;" data-value="5"></div>
-              <div class="chart-bar" style="height: 85%;" data-value="17"></div>
+              {% set max_chart = max_commits if max_commits > 0 else 5 %}
+              <div class="chart-bar" style="height: {% if chart_data['Monday'] > 0 %}{{ (chart_data['Monday'] / max_chart * 100)|int }}%{% else %}0%{% endif %};" data-value="{{ chart_data['Monday'] }}"></div>
+              <div class="chart-bar" style="height: {% if chart_data['Tuesday'] > 0 %}{{ (chart_data['Tuesday'] / max_chart * 100)|int }}%{% else %}0%{% endif %};" data-value="{{ chart_data['Tuesday'] }}"></div>
+              <div class="chart-bar" style="height: {% if chart_data['Wednesday'] > 0 %}{{ (chart_data['Wednesday'] / max_chart * 100)|int }}%{% else %}0%{% endif %};" data-value="{{ chart_data['Wednesday'] }}"></div>
+              <div class="chart-bar" style="height: {% if chart_data['Thursday'] > 0 %}{{ (chart_data['Thursday'] / max_chart * 100)|int }}%{% else %}0%{% endif %};" data-value="{{ chart_data['Thursday'] }}"></div>
+              <div class="chart-bar" style="height: {% if chart_data['Friday'] > 0 %}{{ (chart_data['Friday'] / max_chart * 100)|int }}%{% else %}0%{% endif %};" data-value="{{ chart_data['Friday'] }}"></div>
+              <div class="chart-bar" style="height: {% if chart_data['Saturday'] > 0 %}{{ (chart_data['Saturday'] / max_chart * 100)|int }}%{% else %}0%{% endif %};" data-value="{{ chart_data['Saturday'] }}"></div>
+              <div class="chart-bar" style="height: {% if chart_data['Sunday'] > 0 %}{{ (chart_data['Sunday'] / max_chart * 100)|int }}%{% else %}0%{% endif %};" data-value="{{ chart_data['Sunday'] }}"></div>
             </div>
             <div class="chart-axis-x">
               <span>Mon</span>
@@ -178,10 +172,6 @@
             <div class="legend-color" style="background: linear-gradient(90deg, #00fff0, #00bcd4);"></div>
             <span>Daily Commits</span>
           </div>
-          <div class="legend-item">
-            <div class="legend-color" style="background: rgba(0, 255, 240, 0.1);"></div>
-            <span>Projected</span>
-          </div>
         </div>
       </div>
     </div>
@@ -192,68 +182,37 @@
         <h2><i class="fas fa-chart-bar"></i> Repository-wise Activity</h2>
         <div class="view-toggle">
           <span class="active">Commits</span>
-          <span>Issues</span>
-          <span>PRs</span>
         </div>
       </div>
       <div class="chart-visual">
         <div class="bar-chart-graphic">
           <div class="bar-chart-bars">
+            {% for repo in repo_activity %}
             <div class="bar-chart-item">
-              <div class="bar-label">web-ui</div>
+              <div class="bar-label">{{ repo.repo_name }}</div>
               <div class="bar-container">
-                <div class="bar-value" style="width: 85%;">
-                  <span class="bar-count">24</span>
+                <div class="bar-value" style="width: {% if max_commits > 0 %}{{ (repo.commit_count / max_commits * 100)|int }}%{% else %}0%{% endif %};">
+                  <span class="bar-count">{{ repo.commit_count }}</span>
                 </div>
               </div>
             </div>
-            <div class="bar-chart-item">
-              <div class="bar-label">api-backend</div>
-              <div class="bar-container">
-                <div class="bar-value" style="width: 65%;">
-                  <span class="bar-count">18</span>
-                </div>
-              </div>
-            </div>
-            <div class="bar-chart-item">
-              <div class="bar-label">mobile-app</div>
-              <div class="bar-container">
-                <div class="bar-value" style="width: 95%;">
-                  <span class="bar-count">32</span>
-                </div>
-              </div>
-            </div>
-            <div class="bar-chart-item">
-              <div class="bar-label">docs</div>
-              <div class="bar-container">
-                <div class="bar-value" style="width: 45%;">
-                  <span class="bar-count">12</span>
-                </div>
-              </div>
-            </div>
-            <div class="bar-chart-item">
-              <div class="bar-label">dev-tools</div>
-              <div class="bar-container">
-                <div class="bar-value" style="width: 55%;">
-                  <span class="bar-count">15</span>
-                </div>
-              </div>
-            </div>
+            {% else %}
+            <p style="color: #888; text-align: center; padding: 20px;">No repository activity yet</p>
+            {% endfor %}
           </div>
         </div>
         <div class="chart-stats">
           <div class="chart-stat">
             <span class="stat-label">Most Active</span>
-            <span class="stat-value">mobile-app</span>
+            <span class="stat-value">{% if repo_activity %}{{ repo_activity[0].repo_name }}{% else %}N/A{% endif %}</span>
           </div>
           <div class="chart-stat">
             <span class="stat-label">Total Commits</span>
-            <span class="stat-value">101</span>
+            <span class="stat-value">{{ stats.total_commits or 0 }}</span>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 
   <!-- ================= ACTIVITY TIMELINE ================= -->
@@ -261,76 +220,35 @@
     <div class="card-header">
       <h2><i class="fas fa-stream"></i> Development Timeline</h2>
       <div class="time-filter">
-        <span class="active">Week</span>
-        <span>Month</span>
-        <span>Year</span>
+        <span class="active">Latest</span>
       </div>
     </div>
     
     <div class="timeline-container">
       <div class="timeline">
+        {% for item in timeline %}
         <div class="timeline-item">
-          <div class="timeline-marker commit">
-            <i class="fas fa-code-commit"></i>
+          <div class="timeline-marker {{ item.type }}">
+            <i class="fas {% if item.type == 'commit' %}fa-code-commit{% elif item.type == 'issue' %}fa-exclamation-circle{% elif item.type == 'repo' %}fa-plus-circle{% endif %}"></i>
           </div>
           <div class="timeline-content">
             <div class="timeline-header">
-              <span class="repo-label">web-ui</span>
-              <span class="time">Today, 10:42 AM</span>
+              <span class="repo-label">{{ item.repo_name }}</span>
+              <span class="time">{{ item.time_ago }}</span>
             </div>
-            <p>Fixed responsive layout issue on dashboard</p>
+            <p>{{ item.description }}</p>
+            {% if item.type == 'commit' %}
             <div class="commit-hash">
-              <i class="fas fa-hashtag"></i> a1b2c3d
+              <i class="fas fa-hashtag"></i> {{ item.item_id }}
             </div>
-          </div>
-        </div>
-        
-        <div class="timeline-item">
-          <div class="timeline-marker issue">
-            <i class="fas fa-exclamation-circle"></i>
-          </div>
-          <div class="timeline-content">
-            <div class="timeline-header">
-              <span class="repo-label">api-backend</span>
-              <span class="time">Yesterday, 3:15 PM</span>
-            </div>
-            <p>Opened issue #42: "Authentication timeout too short"</p>
+            {% elif item.type == 'issue' %}
             <div class="issue-tag open">Open</div>
+            {% endif %}
           </div>
         </div>
-        
-        <div class="timeline-item">
-          <div class="timeline-marker repo">
-            <i class="fas fa-plus-circle"></i>
-          </div>
-          <div class="timeline-content">
-            <div class="timeline-header">
-              <span class="repo-label">new-project</span>
-              <span class="time">2 days ago</span>
-            </div>
-            <p>Created new repository "analytics-dashboard"</p>
-            <div class="repo-stats">
-              <span><i class="fas fa-star"></i> 3</span>
-              <span><i class="fas fa-code-branch"></i> 1</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="timeline-item">
-          <div class="timeline-marker merge">
-            <i class="fas fa-code-merge"></i>
-          </div>
-          <div class="timeline-content">
-            <div class="timeline-header">
-              <span class="repo-label">main-app</span>
-              <span class="time">3 days ago</span>
-            </div>
-            <p>Merged feature branch "dark-mode" into main</p>
-            <div class="merge-info">
-              <i class="fas fa-code-merge"></i> 4 commits merged
-            </div>
-          </div>
-        </div>
+        {% else %}
+        <p style="color: #888; text-align: center; padding: 40px;">No activity yet</p>
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -339,108 +257,38 @@
   <div class="activity-card">
     <div class="card-header">
       <h2><i class="fas fa-project-diagram"></i> Repository Activity</h2>
-      <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+      <a href="/repositories" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
     </div>
     
     <div class="repo-grid">
+      {% for repo in repo_cards %}
       <div class="repo-card">
         <div class="repo-header">
-          <h3><i class="fas fa-book"></i> web-ui</h3>
-          <span class="repo-lang">JavaScript</span>
+          <h3><i class="fas fa-book"></i> {{ repo.repo_name }}</h3>
         </div>
         <div class="repo-stats">
           <div class="repo-stat">
             <i class="fas fa-code-commit"></i>
-            <span>24 commits</span>
+            <span>{{ repo.commit_count or 0 }} commits</span>
           </div>
           <div class="repo-stat">
-            <i class="fas fa-user-friends"></i>
-            <span>3 contributors</span>
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ repo.issue_count or 0 }} issues</span>
           </div>
         </div>
         <div class="repo-metrics">
           <div class="metric">
             <span class="metric-label">Activity</span>
             <div class="metric-bar">
-              <div class="metric-fill" style="width: 85%;"></div>
+              <div class="metric-fill" style="width: {% if max_commits > 0 %}{{ ((repo.commit_count or 0) / max_commits * 100)|int }}%{% else %}0%{% endif %};"></div>
             </div>
-            <span class="metric-value">85%</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Health</span>
-            <div class="metric-bar">
-              <div class="metric-fill" style="width: 92%; background: linear-gradient(90deg, #22c55e, #16a34a);"></div>
-            </div>
-            <span class="metric-value">92%</span>
+            <span class="metric-value">{% if max_commits > 0 %}{{ ((repo.commit_count or 0) / max_commits * 100)|int }}%{% else %}0%{% endif %}</span>
           </div>
         </div>
       </div>
-      
-      <div class="repo-card">
-        <div class="repo-header">
-          <h3><i class="fas fa-book"></i> api-backend</h3>
-          <span class="repo-lang">Python</span>
-        </div>
-        <div class="repo-stats">
-          <div class="repo-stat">
-            <i class="fas fa-code-commit"></i>
-            <span>18 commits</span>
-          </div>
-          <div class="repo-stat">
-            <i class="fas fa-user-friends"></i>
-            <span>2 contributors</span>
-          </div>
-        </div>
-        <div class="repo-metrics">
-          <div class="metric">
-            <span class="metric-label">Activity</span>
-            <div class="metric-bar">
-              <div class="metric-fill" style="width: 65%;"></div>
-            </div>
-            <span class="metric-value">65%</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Health</span>
-            <div class="metric-bar">
-              <div class="metric-fill" style="width: 78%; background: linear-gradient(90deg, #22c55e, #16a34a);"></div>
-            </div>
-            <span class="metric-value">78%</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="repo-card">
-        <div class="repo-header">
-          <h3><i class="fas fa-book"></i> mobile-app</h3>
-          <span class="repo-lang">Dart</span>
-        </div>
-        <div class="repo-stats">
-          <div class="repo-stat">
-            <i class="fas fa-code-commit"></i>
-            <span>32 commits</span>
-          </div>
-          <div class="repo-stat">
-            <i class="fas fa-user-friends"></i>
-            <span>5 contributors</span>
-          </div>
-        </div>
-        <div class="repo-metrics">
-          <div class="metric">
-            <span class="metric-label">Activity</span>
-            <div class="metric-bar">
-              <div class="metric-fill" style="width: 95%;"></div>
-            </div>
-            <span class="metric-value">95%</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Health</span>
-            <div class="metric-bar">
-              <div class="metric-fill" style="width: 88%; background: linear-gradient(90deg, #22c55e, #16a34a);"></div>
-            </div>
-            <span class="metric-value">88%</span>
-          </div>
-        </div>
-      </div>
+      {% else %}
+      <p style="color: #888; text-align: center; padding: 40px;">No repositories yet</p>
+      {% endfor %}
     </div>
   </div>
 
@@ -448,59 +296,22 @@
   <div class="activity-card">
     <div class="card-header">
       <h2><i class="fas fa-history"></i> Recent Activity Feed</h2>
-      <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
     </div>
     
     <div class="activity-feed">
+      {% for item in feed_items %}
       <div class="feed-item">
-        <div class="feed-icon commit">
-          <i class="fas fa-code-commit"></i>
+        <div class="feed-icon {{ item.type }}">
+          <i class="fas {% if item.type == 'commit' %}fa-code-commit{% elif item.type == 'repo' %}fa-plus-circle{% elif item.type == 'issue' %}fa-exclamation-circle{% endif %}"></i>
         </div>
         <div class="feed-content">
-          <p>You committed to <b>web-ui</b> — "Fixed login validation bug"</p>
-          <span class="feed-time">2 hours ago</span>
+          <p>{{ item.description }}</p>
+          <span class="feed-time">{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
         </div>
       </div>
-      
-      <div class="feed-item">
-        <div class="feed-icon repo">
-          <i class="fas fa-plus-circle"></i>
-        </div>
-        <div class="feed-content">
-          <p>You created repository <b>analytics-dashboard</b></p>
-          <span class="feed-time">Yesterday</span>
-        </div>
-      </div>
-      
-      <div class="feed-item">
-        <div class="feed-icon issue">
-          <i class="fas fa-exclamation-circle"></i>
-        </div>
-        <div class="feed-content">
-          <p>You opened issue <b>#42</b> in api-backend — "UI alignment issue on mobile"</p>
-          <span class="feed-time">2 days ago</span>
-        </div>
-      </div>
-      
-      <div class="feed-item">
-        <div class="feed-icon merge">
-          <i class="fas fa-code-merge"></i>
-        </div>
-        <div class="feed-content">
-          <p>You merged pull request <b>#15</b> in mobile-app — "Dark mode implementation"</p>
-          <span class="feed-time">3 days ago</span>
-        </div>
-      </div>
-      
-      <div class="feed-item">
-        <div class="feed-icon star">
-          <i class="fas fa-star"></i>
-        </div>
-        <div class="feed-content">
-          <p>You starred <b>dev-tools</b> repository</p>
-          <span class="feed-time">4 days ago</span>
-        </div>
-      </div>
+      {% else %}
+      <p style="color: #888; text-align: center; padding: 20px;">No recent activity</p>
+      {% endfor %}
     </div>
   </div>
 

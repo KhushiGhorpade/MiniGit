@@ -10,7 +10,7 @@
 <!-- ================= AUTH NAVBAR ================= -->
 <header class="auth-header">
   <div class="auth-brand">
-    <img  src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px"></div>
+    <img src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px">
   </div>
 
   <nav class="auth-nav">
@@ -39,47 +39,179 @@
       </div>
     </div>
   </nav>
-
 </header>
-
 
 <!-- ================= DASHBOARD ================= -->
 <main class="dashboard">
 
-  <!-- LEFT -->
+  <!-- LEFT PANEL - Latest Repos -->
   <aside class="panel left-panel">
-    <h3>Latest Repos</h3>
+    <h3>My Latest Repos</h3>
     <div class="panel-content">
-      <p>repo-alpha</p>
-      <p>minigit-core</p>
-      <p>ui-dashboard</p>
-      <p>auth-service</p>
+      {% if user_repos %}
+        {% for repo in user_repos %}
+          <div class="repo-item">
+            <p class="repo-name">{{ repo.repo_name }}</p>
+            <p class="repo-date">{{ repo.created_date.strftime('%Y-%m-%d') }}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty-message">No repositories yet</p>
+      {% endif %}
     </div>
   </aside>
 
-  <!-- CENTER -->
-  <section class="center-panel">
-    <div class="search-box">
-      <input type="text" placeholder="Search repositories, users, commits...">
-    </div>
+  <!-- CENTER PANEL - Search -->
+  <!-- CENTER PANEL - Search -->
+<section class="center-panel">
+  
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search repositories, users, commits..." autocomplete="off">
+    <div class="search-spinner" id="searchSpinner" style="display: none;">🔍</div>
+  </div>
 
-    <div class="results-box">
-      <p>Search results will appear here</p>
+  <div class="results-box" id="resultsBox">
+    <div class="results-header">
+      <p>Start typing to search...</p>
     </div>
-  </section>
-
-  <!-- RIGHT -->
+    <div class="results-list" id="resultsList">
+      <!-- Search results will appear here -->
+    </div>
+  </div>
+</section>
+  <!-- RIGHT PANEL - Latest Commits -->
   <aside class="panel right-panel">
-    <h3>Latest Commits</h3>
+    <h3>My Latest Commits</h3>
     <div class="panel-content">
-      <p>Fix auth bug</p>
-      <p>Update README</p>
-      <p>Refactor dashboard UI</p>
-      <p>Optimize queries</p>
+      {% if recent_commits %}
+        {% for commit in recent_commits %}
+          <div class="commit-item">
+            <p class="commit-message">{{ commit.commit_message }}</p>
+            <p class="commit-meta">{{ commit.repo_name }} • {{ commit.commit_date.strftime('%Y-%m-%d') }}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty-message">No commits yet</p>
+      {% endif %}
     </div>
   </aside>
 
 </main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const resultsList = document.getElementById('resultsList');
+    const resultsHeader = document.querySelector('.results-header p');
+    const searchSpinner = document.getElementById('searchSpinner');
+    
+    let searchTimeout;
 
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        // Clear previous timeout
+        clearTimeout(searchTimeout);
+        
+        if (query.length < 2) {
+            resultsList.innerHTML = '';
+            resultsHeader.textContent = 'Type at least 2 characters to search...';
+            return;
+        }
+        
+        // Show spinner
+        searchSpinner.style.display = 'inline-block';
+        resultsHeader.textContent = 'Searching...';
+        
+        // Set timeout to avoid too many requests
+        searchTimeout = setTimeout(() => {
+            fetch(`/search?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Hide spinner
+                    searchSpinner.style.display = 'none';
+                    
+                    if (data.results && data.results.length > 0) {
+                        resultsHeader.textContent = `Found ${data.results.length} results:`;
+                        displayResults(data.results);
+                    } else {
+                        resultsHeader.textContent = 'No results found';
+                        resultsList.innerHTML = '';
+                    }
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    searchSpinner.style.display = 'none';
+                    resultsHeader.textContent = 'Error performing search';
+                    resultsList.innerHTML = '';
+                });
+        }, 300); // Wait 300ms after user stops typing
+    });
+    
+    function displayResults(results) {
+        let html = '';
+        
+        results.forEach(item => {
+            const icon = getIconForType(item.type);
+            const date = new Date(item.date).toLocaleDateString();
+            
+            if (item.type === 'repository') {
+                html += `
+                    <div class="search-result-item" onclick="window.location.href='/repositories'">
+                        <div class="result-icon repository">📁</div>
+                        <div class="result-content">
+                            <div class="result-title">${escapeHtml(item.name)}</div>
+                            <div class="result-description">${escapeHtml(item.description || 'No description')}</div>
+                            <div class="result-meta">Repository • Created ${date}</div>
+                        </div>
+                    </div>
+                `;
+            } else if (item.type === 'user') {
+                html += `
+                    <div class="search-result-item" onclick="window.location.href='/profile'">
+                        <div class="result-icon user">👤</div>
+                        <div class="result-content">
+                            <div class="result-title">${escapeHtml(item.name)}</div>
+                            <div class="result-description">${escapeHtml(item.description || '')}</div>
+                            <div class="result-meta">User • Joined ${date}</div>
+                        </div>
+                    </div>
+                `;
+            } else if (item.type === 'commit') {
+                html += `
+                    <div class="search-result-item" onclick="window.location.href='/activity'">
+                        <div class="result-icon commit">📝</div>
+                        <div class="result-content">
+                            <div class="result-title">${escapeHtml(item.name)}</div>
+                            <div class="result-description">In ${escapeHtml(item.description)}</div>
+                            <div class="result-meta">Commit • ${date}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        
+        resultsList.innerHTML = html;
+    }
+    
+    function getIconForType(type) {
+        switch(type) {
+            case 'repository': return '📁';
+            case 'user': return '👤';
+            case 'commit': return '📝';
+            default: return '📌';
+        }
+    }
+    
+    function escapeHtml(unsafe) {
+        if (!unsafe) return '';
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+});
+</script>
 </body>
 </html>

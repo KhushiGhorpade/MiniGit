@@ -189,15 +189,15 @@ body {
 /* ================= ENHANCED STAT CARDS ================= */
 .activity-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 25px;
-  margin-bottom: 50px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
 .enhanced-card {
   background: linear-gradient(145deg, #0b0b0b, #0a1a1a);
-  border-radius: 18px;
-  padding: 25px;
+  border-radius: 16px;
+  padding: 20px;
   box-shadow: 0 10px 30px rgba(0, 255, 240, 0.15);
   border: 1px solid rgba(0, 255, 255, 0.2);
   transition: all 0.4s ease;
@@ -205,11 +205,11 @@ body {
   overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 
 .enhanced-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-5px);
   box-shadow: 0 15px 40px rgba(0, 255, 240, 0.3);
   border-color: rgba(0, 255, 255, 0.5);
 }
@@ -225,14 +225,14 @@ body {
 }
 
 .stat-icon {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   background: rgba(0, 255, 240, 0.1);
-  border-radius: 15px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: #00fff0;
   z-index: 1;
   flex-shrink: 0;
@@ -240,29 +240,33 @@ body {
 
 .stat-content {
   z-index: 1;
+  flex: 1;
 }
 
 .stat-content h3 {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #aaa;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .stat-value {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: bold;
   color: #00fff0;
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   font-family: 'Orbitron', sans-serif;
+  line-height: 1.2;
 }
 
 .stat-trend {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
 
 .stat-trend.up {
@@ -276,55 +280,58 @@ body {
 /* ================= CHARTS CONTAINER ================= */
 .charts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  gap: 30px;
-  margin-bottom: 50px;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 40px;
 }
 
 .chart-card {
   background: linear-gradient(145deg, #0b0b0b, #0a1a1a);
-  border-radius: 20px;
-  padding: 25px;
+  border-radius: 16px;
+  padding: 20px;
   box-shadow: 0 10px 30px rgba(0, 255, 240, 0.15);
   border: 1px solid rgba(0, 255, 255, 0.2);
   transition: transform 0.3s ease;
+  height: fit-content;
+  overflow: hidden;
 }
 
 .chart-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
 }
 
 .chart-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 10px;
 }
 
 .chart-header h2 {
   color: #00fff0;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
+  margin: 0;
 }
 
 .time-filter, .view-toggle {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  padding: 4px;
+  border-radius: 8px;
+  padding: 3px;
 }
 
 .time-filter span, .view-toggle span {
-  padding: 6px 15px;
-  border-radius: 8px;
-  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -334,68 +341,76 @@ body {
   color: #00fff0;
 }
 
-.time-filter span:hover:not(.active), .view-toggle span:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-/* ================= LINE CHART ================= */
+/* ================= LINE CHART - FIXED ================= */
 .chart-visual {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .chart-graphic {
   display: flex;
-  height: 250px;
+  height: 160px;
   position: relative;
+  margin-bottom: 5px;
 }
 
 .chart-axis-y {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px 15px 40px 0;
-  width: 40px;
+  padding: 0 8px 20px 0;
+  width: 30px;
   color: #aaa;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   text-align: right;
+  line-height: 1.2;
 }
 
 .chart-content {
   flex: 1;
   position: relative;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
 }
 
 .chart-bars {
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
-  height: calc(100% - 30px);
+  height: 120px;
+  gap: 2px;
   position: relative;
+  margin-top: 5px;
 }
 
 .chart-bar {
-  width: 30px;
+  width: 100%;
+  max-width: 24px;
   background: linear-gradient(to top, #00fff0, #00bcd4);
-  border-radius: 6px 6px 0 0;
+  border-radius: 3px 3px 0 0;
   position: relative;
   transition: all 0.3s ease;
+  height: 0%;
+  min-height: 2px;
+  max-height: 110px;
+  align-self: flex-end;
 }
 
 .chart-bar::before {
   content: attr(data-value);
   position: absolute;
-  top: -25px;
+  top: -18px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   color: #00fff0;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.65rem;
   font-weight: bold;
   opacity: 0;
   transition: opacity 0.3s ease;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
 }
 
 .chart-bar:hover::before {
@@ -404,8 +419,7 @@ body {
 
 .chart-bar:hover {
   background: linear-gradient(to top, #00fff0, cyan);
-  box-shadow: 0 0 15px rgba(0, 255, 240, 0.5);
-  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 255, 240, 0.5);
 }
 
 .chart-axis-x {
@@ -419,62 +433,55 @@ body {
 
 .chart-axis-x span {
   color: #aaa;
-  font-size: 0.85rem;
-  width: 30px;
+  font-size: 0.7rem;
   text-align: center;
+  flex: 1;
 }
 
 .chart-legend {
   display: flex;
-  gap: 20px;
-  margin-top: 20px;
-  padding-top: 15px;
+  gap: 15px;
+  margin-top: 10px;
+  padding-top: 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-  color: #ddd;
-}
-
-.legend-color {
-  width: 20px;
-  height: 8px;
-  border-radius: 4px;
-}
-
-/* ================= BAR CHART ================= */
+/* ================= BAR CHART - FIXED ================= */
 .bar-chart-graphic {
-  padding: 10px 0;
+  padding: 0;
+  max-height: 220px;
+  overflow-y: auto;
 }
 
 .bar-chart-bars {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
 }
 
 .bar-chart-item {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 8px;
+  min-height: 28px;
 }
 
 .bar-label {
-  width: 120px;
+  width: 90px;
   color: #ddd;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 
 .bar-container {
   flex: 1;
-  height: 30px;
+  height: 20px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 6px;
+  border-radius: 3px;
   overflow: hidden;
   position: relative;
 }
@@ -482,44 +489,31 @@ body {
 .bar-value {
   height: 100%;
   background: linear-gradient(90deg, #00fff0, #00bcd4);
-  border-radius: 6px;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 10px;
+  padding-right: 6px;
   transition: width 0.5s ease-out;
   position: relative;
-}
-
-.bar-value::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  min-width: 25px;
+  max-width: 100%;
 }
 
 .bar-count {
   color: #000;
   font-weight: bold;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   position: relative;
   z-index: 1;
+  white-space: nowrap;
 }
 
 .chart-stats {
   display: flex;
   justify-content: space-between;
-  margin-top: 25px;
-  padding-top: 15px;
+  margin-top: 15px;
+  padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -527,66 +521,108 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
 }
 
 .stat-label {
   color: #aaa;
-  font-size: 0.85rem;
-  margin-bottom: 5px;
+  font-size: 0.75rem;
+  margin-bottom: 3px;
 }
 
 .stat-value {
   color: #00fff0;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
   font-family: 'Orbitron', sans-serif;
 }
 
-/* ================= TIMELINE ================= */
-.visual-timeline {
-  padding: 30px;
+/* ================= ACTIVITY CARD ================= */
+.activity-card {
+  background: linear-gradient(145deg, #0b0b0b, #0a1a1a);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0, 255, 240, 0.15);
+  border: 1px solid rgba(0, 255, 255, 0.2);
   margin-bottom: 30px;
 }
 
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.card-header h2 {
+  color: #00fff0;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
+  margin: 0;
+}
+
+.view-all {
+  color: #00fff0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  background: rgba(0, 255, 240, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.view-all:hover {
+  gap: 8px;
+  background: rgba(0, 255, 240, 0.2);
+}
+
+/* ================= TIMELINE ================= */
 .timeline-container {
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 .timeline {
   position: relative;
+  padding-left: 35px;
 }
 
 .timeline::before {
   content: '';
   position: absolute;
-  left: 25px;
-  top: 0;
-  bottom: 0;
+  left: 20px;
+  top: 5px;
+  bottom: 5px;
   width: 2px;
-  background: linear-gradient(to bottom, rgba(0, 255, 240, 0.5), transparent);
+  background: linear-gradient(to bottom, rgba(0, 255, 240, 0.3), transparent);
 }
 
 .timeline-item {
   display: flex;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   position: relative;
 }
 
 .timeline-marker {
-  width: 50px;
-  height: 50px;
+  position: absolute;
+  left: -35px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   z-index: 1;
-  flex-shrink: 0;
   transition: all 0.3s ease;
-}
-
-.timeline-marker:hover {
-  transform: scale(1.1);
 }
 
 .timeline-marker.commit {
@@ -607,60 +643,49 @@ body {
   border: 2px solid rgba(147, 51, 234, 0.5);
 }
 
-.timeline-marker.merge {
-  background: rgba(34, 197, 94, 0.15);
-  color: #22c55e;
-  border: 2px solid rgba(34, 197, 94, 0.5);
-}
-
 .timeline-content {
   flex: 1;
-  padding-left: 25px;
+  padding-left: 15px;
 }
 
 .timeline-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .repo-label {
   background: rgba(0, 255, 240, 0.1);
   color: #00fff0;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  padding: 3px 10px;
+  border-radius: 16px;
+  font-size: 0.8rem;
   font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.repo-label:hover {
-  background: rgba(0, 255, 240, 0.2);
-  transform: translateY(-2px);
 }
 
 .time {
   color: #aaa;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .timeline-content p {
-  margin: 5px 0 10px;
+  margin: 5px 0 8px;
   color: #ddd;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
-.commit-hash, .issue-tag, .merge-info, .repo-stats {
+.commit-hash, .issue-tag {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  margin-top: 5px;
-  transition: all 0.3s ease;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-top: 3px;
 }
 
 .commit-hash {
@@ -668,84 +693,44 @@ body {
   color: #00fff0;
 }
 
-.commit-hash:hover {
-  background: rgba(0, 255, 240, 0.2);
-}
-
-.issue-tag {
+.issue-tag.open {
   background: rgba(255, 107, 107, 0.1);
   color: #ff6b6b;
-}
-
-.issue-tag:hover {
-  background: rgba(255, 107, 107, 0.2);
-}
-
-.merge-info {
-  background: rgba(34, 197, 94, 0.1);
-  color: #22c55e;
-}
-
-.merge-info:hover {
-  background: rgba(34, 197, 94, 0.2);
-}
-
-.repo-stats {
-  background: rgba(147, 51, 234, 0.1);
-  color: #9333ea;
-}
-
-.repo-stats:hover {
-  background: rgba(147, 51, 234, 0.2);
-}
-
-.repo-stats span {
-  margin-right: 10px;
 }
 
 /* ================= REPOSITORY GRID ================= */
 .repo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .repo-card {
   background: rgba(0, 0, 0, 0.3);
-  border-radius: 15px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 18px;
   border: 1px solid rgba(0, 255, 255, 0.1);
   transition: all 0.3s ease;
 }
 
 .repo-card:hover {
   border-color: rgba(0, 255, 255, 0.4);
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 255, 240, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 255, 240, 0.15);
 }
 
 .repo-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .repo-header h3 {
-  color: #fff;
+  color: #00fff0;
   font-size: 1.1rem;
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.repo-lang {
-  background: rgba(0, 255, 240, 0.1);
-  color: #00fff0;
-  padding: 3px 10px;
-  border-radius: 15px;
-  font-size: 0.8rem;
+  margin: 0;
 }
 
 .repo-stats {
@@ -757,119 +742,81 @@ body {
 .repo-stat {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   color: #aaa;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .repo-stat i {
   color: #00fff0;
-}
-
-.repo-metrics {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  font-size: 0.9rem;
 }
 
 .metric {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .metric-label {
-  width: 60px;
+  width: 55px;
   color: #aaa;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .metric-bar {
   flex: 1;
-  height: 8px;
+  height: 6px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .metric-fill {
   height: 100%;
-  border-radius: 4px;
+  border-radius: 3px;
   background: linear-gradient(90deg, #00fff0, #00bcd4);
-  transition: width 1s ease-out;
+  transition: width 0.5s ease-out;
 }
 
 .metric-value {
-  width: 40px;
+  width: 35px;
   color: #00fff0;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   text-align: right;
 }
 
 /* ================= ACTIVITY FEED ================= */
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.card-header h2 {
-  color: #00fff0;
-  font-size: 1.4rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 500;
-}
-
-.view-all {
-  color: #00fff0;
-  text-decoration: none;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.3s ease;
-}
-
-.view-all:hover {
-  gap: 8px;
-}
-
 .activity-feed {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
 .feed-item {
   display: flex;
   align-items: flex-start;
-  gap: 15px;
-  padding: 15px;
-  border-radius: 12px;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.02);
   transition: all 0.3s ease;
 }
 
 .feed-item:hover {
   background: rgba(255, 255, 255, 0.05);
-  transform: translateX(5px);
+  transform: translateX(3px);
 }
 
 .feed-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   flex-shrink: 0;
 }
 
@@ -888,44 +835,44 @@ body {
   color: #ff6b6b;
 }
 
-.feed-icon.merge {
-  background: rgba(34, 197, 94, 0.1);
-  color: #22c55e;
-}
-
-.feed-icon.star {
-  background: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
-}
-
 .feed-content {
   flex: 1;
 }
 
 .feed-content p {
-  margin: 0 0 5px;
+  margin: 0 0 4px;
   color: #ddd;
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 
 .feed-time {
   color: #aaa;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
 /* ================= RESPONSIVE DESIGN ================= */
 @media (max-width: 1200px) {
   .activity-container {
-    padding: 40px;
+    padding: 40px 60px;
+  }
+  
+  .activity-stats {
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .charts-container {
     grid-template-columns: 1fr;
   }
+  
+  .repo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
   .activity-container {
-    padding: 20px;
+    padding: 30px 20px;
   }
   
   .auth-header {
@@ -939,7 +886,11 @@ body {
   
   .header-stats {
     width: 100%;
-    justify-content: flex-start;
+  }
+  
+  .activity-stats {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
   
   .repo-grid {
@@ -947,49 +898,44 @@ body {
   }
   
   .timeline::before {
-    left: 20px;
+    left: 15px;
   }
   
   .timeline-marker {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
+    width: 30px;
+    height: 30px;
+    left: -30px;
+    font-size: 0.9rem;
   }
   
   .chart-graphic {
-    flex-direction: column;
-    height: auto;
+    height: 140px;
   }
   
-  .chart-axis-y {
-    flex-direction: row;
-    width: 100%;
-    padding: 0 0 10px 0;
-    justify-content: space-around;
-  }
-  
-  .chart-content {
-    padding-left: 0;
+  .chart-bars {
+    height: 100px;
   }
 }
 
 @media (max-width: 480px) {
   .auth-nav {
-    gap: 15px;
-    font-size: 0.9rem;
+    gap: 12px;
+    font-size: 0.8rem;
   }
   
-  .activity-stats {
-    grid-template-columns: 1fr;
-  }
-  
-  .chart-card {
-    padding: 20px;
+  .stat-badge {
+    padding: 6px 12px;
+    font-size: 0.8rem;
   }
   
   .chart-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+  
+  .bar-label {
+    width: 70px;
+    font-size: 0.8rem;
   }
 }
 
