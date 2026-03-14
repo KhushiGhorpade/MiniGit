@@ -309,3 +309,314 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: cyan;
 }
+
+/* Add these animations to your existing CSS */
+
+/* =========================
+   ENHANCED ANIMATIONS
+========================= */
+
+/* Glowing text effect for hero title */
+@keyframes textGlow {
+  0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 255, 0.3), 0 0 20px rgba(0, 255, 255, 0.2); }
+  50% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.7), 0 0 40px rgba(0, 255, 255, 0.5), 0 0 60px rgba(0, 255, 255, 0.3); }
+}
+
+.hero-content h1 {
+  animation: textGlow 3s ease-in-out infinite;
+}
+
+/* Pulsing border effect for buttons */
+@keyframes pulseBorder {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
+}
+
+.hero-content button {
+  position: relative;
+  overflow: hidden;
+  animation: pulseBorder 2s ease-in-out infinite;
+}
+
+/* Button shine effect */
+.hero-content button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.7s ease;
+}
+
+.hero-content button:hover::before {
+  left: 100%;
+}
+
+/* Floating particles for background */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes floatParticle {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Animated gradient border for service cards */
+.service-card {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 255, 255, 0.12),
+    rgba(0, 0, 0, 0.55)
+  );
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, cyan, transparent, cyan, transparent, cyan);
+  border-radius: 28px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: borderRotate 4s linear infinite;
+}
+
+@keyframes borderRotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+.service-card:hover::before {
+  opacity: 0.5;
+}
+
+/* Stats counter animation */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stat {
+  animation: countUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.stat:nth-child(1) { animation-delay: 0.1s; }
+.stat:nth-child(2) { animation-delay: 0.3s; }
+.stat:nth-child(3) { animation-delay: 0.5s; }
+.stat:nth-child(4) { animation-delay: 0.7s; }
+
+/* Typing effect for subtitle */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.section-subtitle {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 3.5s steps(40, end);
+}
+
+/* Glitch effect for navigation on hover */
+.nav a {
+  position: relative;
+}
+
+.nav a:hover {
+  animation: glitch 0.3s ease-in-out;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading animation for page load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+section {
+  animation: fadeInUp 1s ease-out;
+}
+
+/* Cyberpunk scanlines effect */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 255, 0.03) 0px,
+    rgba(0, 0, 0, 0.5) 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.3;
+  animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100vh); }
+}
+
+/* Neon flicker effect for brand */
+@keyframes neonFlicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow: 
+      0 0 5px cyan,
+      0 0 10px cyan,
+      0 0 20px cyan,
+      0 0 40px cyan;
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+    opacity: 0.8;
+  }
+}
+
+.brand {
+  animation: neonFlicker 3s infinite;
+}
+
+/* Add floating icons animation */
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(5deg); }
+  75% { transform: translateY(10px) rotate(-5deg); }
+}
+
+/* Animated background gradient for stats */
+.stat {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent,
+    rgba(0, 255, 255, 0.1),
+    transparent 30%
+  );
+  animation: rotateGradient 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stat:hover::before {
+  opacity: 1;
+}
+
+@keyframes rotateGradient {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+/* Extra animations for stats */
+.stat {
+    transition: all 0.3s ease;
+}
+
+.stat:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+}
+
+.stat-number {
+    transition: all 0.3s ease;
+}
+
+/* Add this if you want the numbers to pop when they change */
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); color: cyan; }
+    100% { transform: scale(1); }
+}
+
+.stat-number.updated {
+    animation: pop 0.3s ease;
+}
+// Stats Counter Animation
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Function to animate counting
+    function animateCounter(element, target) {
+        let current = 0;
+        const increment = target / 50; // Divide into 50 steps
+        const timer = setInterval(function() {
+            current += increment;
+            
+            if (current >= target) {
+                element.textContent = target + '+';
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current) + '+';
+            }
+        }, 30); // Update every 30 milliseconds
+    }
+
+    // Get all stat elements
+    const stat1 = document.getElementById('stat1');
+    const stat2 = document.getElementById('stat2');
+    const stat3 = document.getElementById('stat3');
+    const stat4 = document.getElementById('stat4');
+    
+    // Get target values from data attributes
+    const target1 = parseInt(stat1.dataset.target);
+    const target2 = parseInt(stat2.dataset.target);
+    const target3 = parseInt(stat3.dataset.target);
+    const target4 = parseInt(stat4.dataset.target);
+    
+    // Start counting when page loads
+    animateCounter(stat1, target1);
+    animateCounter(stat2, target2);
+    animateCounter(stat3, target3);
+    animateCounter(stat4, target4);
+});
