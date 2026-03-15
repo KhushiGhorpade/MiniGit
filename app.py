@@ -198,18 +198,26 @@ def search():
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     
-    # Search repositories
+    # Search repositories - FIXED: Now shows ALL repos and includes owner username
     cursor.execute("""
         SELECT 
             'repository' as type,
-            repo_name as name,
-            description,
-            repo_id as id,
-            NULL as username,
-            created_date as date
-        FROM repositories
-        WHERE owner_id = %s AND repo_name LIKE %s
-        UNION
+            r.repo_name as name,
+            r.description,
+            r.repo_id as id,
+            u.username,  -- This gets the actual owner username
+            r.created_date as date,
+            r.visibility
+        FROM repositories r
+        JOIN users u ON r.owner_id = u.user_id  -- Join with users table
+        WHERE r.repo_name LIKE %s
+        LIMIT 10
+    """, (f'%{query}%',))
+    
+    repo_results = cursor.fetchall()
+    
+    # Search users
+    cursor.execute("""
         SELECT 
             'user' as type,
             username as name,
@@ -219,21 +227,32 @@ def search():
             created_at as date
         FROM users
         WHERE username LIKE %s OR full_name LIKE %s
-        UNION
+        LIMIT 5
+    """, (f'%{query}%', f'%{query}%'))
+    
+    user_results = cursor.fetchall()
+    
+    # Search commits
+    cursor.execute("""
         SELECT 
             'commit' as type,
-            commit_message as name,
-            repo_name as description,
-            commit_id as id,
-            (SELECT username FROM users WHERE user_id = commits.author_id) as username,
-            commit_date as date
-        FROM commits
-        JOIN repositories ON commits.repo_id = repositories.repo_id
-        WHERE repositories.owner_id = %s AND commit_message LIKE %s
+            c.commit_message as name,
+            r.repo_name as description,
+            c.commit_id as id,
+            u.username,
+            c.commit_date as date
+        FROM commits c
+        JOIN repositories r ON c.repo_id = r.repo_id
+        JOIN users u ON c.author_id = u.user_id
+        WHERE c.commit_message LIKE %s
         LIMIT 10
-    """, (user_id, f'%{query}%', f'%{query}%', f'%{query}%', user_id, f'%{query}%'))
+    """, (f'%{query}%',))
     
-    results = cursor.fetchall()
+    commit_results = cursor.fetchall()
+    
+    # Combine all results
+    results = repo_results + user_results + commit_results
+    
     cursor.close()
     db.close()
     
@@ -1085,6 +1104,85 @@ def get_feedback_report_data():
     }
 
 # ========================= ADMIN API ENDPOINTS =========================
+@app.route("/api/admin/activity")
+def api_admin_activity():
+    # Only allow access if user is logged in AND is admin
+    if not session.get('logged_in') or not session.get('is_admin'):
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    try:
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+        
+        # Get user activity stats (repos + commits + issues per user)
+        cursor.execute("""
+            SELECT 
+                u.user_id,
+                u.username,
+                COUNT(DISTINCT r.repo_id) as total_repos,
+                COUNT(DISTINCT c.commit_id) as total_commits,
+                COUNT(DISTINCT i.issue_id) as total_issues,
+                GREATEST(
+                    COALESCE(MAX(r.created_date), '2000-01-01'),
+                    COALESCE(MAX(c.commit_date), '2000-01-01'),
+                    COALESCE(MAX(i.created_date), '2000-01-01')
+                ) as last_activity_date
+            FROM users u
+            LEFT JOIN repositories r ON u.user_id = r.owner_id
+            LEFT JOIN commits c ON u.user_id = c.author_id
+            LEFT JOIN issues i ON u.user_id = i.created_by
+            GROUP BY u.user_id, u.username
+            HAVING total_repos > 0 OR total_commits > 0 OR total_issues > 0
+            ORDER BY total_commits DESC
+            LIMIT 20
+        """)
+        
+        activities = cursor.fetchall()
+        
+        # Format last activity
+        from datetime import datetime, timedelta
+        for act in activities:
+            if act['last_activity_date'] and act['last_activity_date'] != '2000-01-01':
+                today = datetime.now()
+                last_date = act['last_activity_date']
+                
+                if isinstance(last_date, datetime):
+                    time_diff = today - last_date
+                    
+                    if time_diff.days == 0:
+                        act['last_activity'] = 'Today'
+                    elif time_diff.days == 1:
+                        act['last_activity'] = 'Yesterday'
+                    elif time_diff.days < 7:
+                        act['last_activity'] = f"{time_diff.days} days ago"
+                    elif time_diff.days < 30:
+                        weeks = time_diff.days // 7
+                        act['last_activity'] = f"{weeks} week{'s' if weeks > 1 else ''} ago"
+                    else:
+                        months = time_diff.days // 30
+                        act['last_activity'] = f"{months} month{'s' if months > 1 else ''} ago"
+                else:
+                    act['last_activity'] = 'Recently'
+            else:
+                act['last_activity'] = 'No activity'
+        
+        # Get top contributors for chart (top 5)
+        top_contributors = activities[:5]
+        
+        cursor.close()
+        db.close()
+        
+        return jsonify({
+            "activities": activities,
+            "top_contributors": top_contributors
+        })
+    
+    except Exception as e:
+        print(f"ERROR in activity API: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+        
 @app.route("/api/admin/users")
 def api_admin_users():
     # Only allow access if user is logged in AND is admin

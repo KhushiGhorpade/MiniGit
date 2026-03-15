@@ -146,27 +146,27 @@ body {
 /* =========================
    SERVICES
 ========================= */
+/* =========================
+   SERVICES - UPDATED FOR SIDE BY SIDE
+========================= */
 .services {
   padding: 120px 80px;
   background: linear-gradient(180deg, #000, #000a30);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Creates 3 equal columns */
   gap: 32px;
   text-align: center;
 }
 
-.section-title,
-.section-subtitle {
-  width: 100%;
-}
-
 .section-title {
+  grid-column: 1 / -1;  /* Title takes full width */
   font-size: 52px;
   color: cyan;
+  margin-bottom: 0;
 }
 
 .section-subtitle {
+  grid-column: 1 / -1;  /* Subtitle takes full width */
   margin: 14px auto 60px;
   font-size: 18px;
   opacity: 0.75;
@@ -175,7 +175,7 @@ body {
 
 /* SERVICE CARD */
 .service-card {
-  width: calc(50% - 32px);
+  width: 100%;  /* Takes full width of grid cell */
   padding: 55px 45px;
   border-radius: 26px;
   background: linear-gradient(
@@ -189,6 +189,7 @@ body {
   position: relative;
 }
 
+/* Rest of your card styles remain exactly the same */
 .service-card h3 {
   font-size: 22px;
   color: cyan;
@@ -224,6 +225,27 @@ body {
 
 .service-card:hover::after {
   opacity: 1;
+}
+
+/* Responsive for tablets */
+@media (max-width: 1024px) {
+  .services {
+    grid-template-columns: repeat(2, 1fr);  /* 2 columns on tablet */
+    padding: 100px 40px;
+  }
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .services {
+    grid-template-columns: 1fr;  /* 1 column on mobile */
+    padding: 80px 20px;
+    gap: 24px;
+  }
+  
+  .service-card {
+    padding: 40px 30px;
+  }
 }
 
 /* =========================

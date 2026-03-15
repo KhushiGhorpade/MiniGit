@@ -88,7 +88,7 @@
             </div>
           </div>
 
-          <!-- 2. REPOSITORY REPORT (Sample) -->
+          <!-- 2. REPOSITORY REPORT -->
           <div id="repo" class="report">
             <div class="report-header">
               <h2>📚 Repository Report</h2>
@@ -98,17 +98,17 @@
             <div class="summary-cards">
               <div class="card">
                 <h3>Total Repos</h3>
-                <div class="value" id="totalRepos">87</div>
+                <div class="value" id="totalRepos">0</div>
                 <div class="trend neutral">All repositories</div>
               </div>
               <div class="card">
                 <h3>Public Repos</h3>
-                <div class="value" id="publicRepos">65</div>
+                <div class="value" id="publicRepos">0</div>
                 <div class="trend positive">Visible to all</div>
               </div>
               <div class="card">
                 <h3>Most Active</h3>
-                <div class="value" id="mostActiveRepo">MiniGit-Core</div>
+                <div class="value" id="mostActiveRepo">-</div>
                 <div class="trend positive">By commits</div>
               </div>
             </div>
@@ -134,7 +134,7 @@
             </div>
           </div>
 
-          <!-- 3. COMMIT REPORT (Sample) -->
+          <!-- 3. COMMIT REPORT -->
           <div id="commit" class="report">
             <div class="report-header">
               <h2>💾 Commit Report</h2>
@@ -144,17 +144,17 @@
             <div class="summary-cards">
               <div class="card">
                 <h3>Total Commits</h3>
-                <div class="value" id="totalCommits">324</div>
+                <div class="value" id="totalCommits">0</div>
                 <div class="trend neutral">All time</div>
               </div>
               <div class="card">
                 <h3>Today's Commits</h3>
-                <div class="value" id="todayCommits">12</div>
+                <div class="value" id="todayCommits">0</div>
                 <div class="trend positive">Today</div>
               </div>
               <div class="card">
                 <h3>Most Active User</h3>
-                <div class="value" id="mostActiveUser">admin_user</div>
+                <div class="value" id="mostActiveUser">-</div>
                 <div class="trend positive">By commits</div>
               </div>
             </div>
@@ -180,13 +180,12 @@
             </div>
           </div>
 
-          <!-- 4. POPULARITY REPORT (Sample) -->
+          <!-- 4. POPULARITY REPORT -->
           <div id="popularity" class="report">
             <div class="report-header">
               <h2>⭐ Repository Popularity Report</h2>
               <p>
-                Repo ID, Repo Name, Owner, Views, Stars, Contributions, Growth
-                Rate
+                Repo ID, Repo Name, Owner, Views, Stars
               </p>
             </div>
 
@@ -201,7 +200,6 @@
                       <th>Owner</th>
                       <th>⭐ Stars</th>
                       <th>👁️ Views</th>
-                      <th>📈 Growth</th>
                     </tr>
                   </thead>
                   <tbody id="popularityTableBody">
@@ -219,7 +217,7 @@
             </div>
           </div>
 
-          <!-- 5. ISSUE REPORT (Sample) -->
+          <!-- 5. ISSUE REPORT -->
           <div id="issue" class="report">
             <div class="report-header">
               <h2>🐛 Issue Report</h2>
@@ -229,17 +227,17 @@
             <div class="summary-cards">
               <div class="card">
                 <h3>Total Issues</h3>
-                <div class="value" id="totalIssues">56</div>
+                <div class="value" id="totalIssues">0</div>
                 <div class="trend neutral">All time</div>
               </div>
               <div class="card">
                 <h3>Open Issues</h3>
-                <div class="value" id="openIssues">23</div>
+                <div class="value" id="openIssues">0</div>
                 <div class="trend warning">Need attention</div>
               </div>
               <div class="card">
                 <h3>Closed Today</h3>
-                <div class="value" id="closedToday">5</div>
+                <div class="value" id="closedToday">0</div>
                 <div class="trend positive">Today</div>
               </div>
             </div>
@@ -259,41 +257,19 @@
                 </thead>
                 <tbody id="issueTableBody">
                   <tr>
-                    <td>201</td>
-                    <td>MiniGit-Core</td>
-                    <td>Login fails</td>
-                    <td>test_amit</td>
-                    <td><span class="status">Open</span></td>
-                    <td>2024-01-24</td>
-                  </tr>
-                  <tr>
-                    <td>202</td>
-                    <td>UI-Components</td>
-                    <td>Button misaligned</td>
-                    <td>dev_rahul</td>
-                    <td><span class="status in-progress">In Progress</span></td>
-                    <td>2024-01-23</td>
-                  </tr>
-                  <tr>
-                    <td>203</td>
-                    <td>Mobile-App</td>
-                    <td>App crashes</td>
-                    <td>admin_user</td>
-                    <td><span class="status resolved">Closed</span></td>
-                    <td>2024-01-22</td>
+                    <td colspan="6">Loading issues...</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <!-- 6. ACTIVITY REPORT (Sample) -->
+          <!-- 6. ACTIVITY REPORT (NOW WITH REAL DATA) -->
           <div id="activity" class="report">
             <div class="report-header">
               <h2>📊 Activity / Contribution Report</h2>
               <p>
-                Username, Total Repos, Total Commits, Total Issues, Last
-                Activity
+                Username, Total Repos, Total Commits, Total Issues, Last Activity
               </p>
             </div>
 
@@ -312,25 +288,7 @@
                   </thead>
                   <tbody id="activityTableBody">
                     <tr>
-                      <td>admin_user</td>
-                      <td>5</td>
-                      <td>148</td>
-                      <td>12</td>
-                      <td>Today</td>
-                    </tr>
-                    <tr>
-                      <td>dev_rahul</td>
-                      <td>3</td>
-                      <td>89</td>
-                      <td>8</td>
-                      <td>Yesterday</td>
-                    </tr>
-                    <tr>
-                      <td>test_amit</td>
-                      <td>2</td>
-                      <td>62</td>
-                      <td>5</td>
-                      <td>2 days ago</td>
+                      <td colspan="5">Loading activity data...</td>
                     </tr>
                   </tbody>
                 </table>
@@ -348,8 +306,7 @@
             <div class="report-header">
               <h2>💬 Feedback Report</h2>
               <p>
-                User feedback analysis: Categories, Experience Ratings,
-                Sentiments
+                User feedback analysis: Categories, Experience Ratings
               </p>
             </div>
 
@@ -422,7 +379,6 @@
       }
 
       // Load REAL data from database
-      // Load REAL data from database
       function loadReportData(reportType) {
         if (reportType === "user") {
           loadUserReport();
@@ -436,6 +392,8 @@
           loadIssueReport();
         } else if (reportType === "repo") {
           loadRepoReport();
+        } else if (reportType === "activity") {
+          loadActivityReport();
         }
       }
 
@@ -478,7 +436,6 @@
       function loadCommitReport() {
         console.log("Loading commits...");
 
-        // Show loading state
         document.getElementById("totalCommits").textContent = "Loading...";
         document.getElementById("todayCommits").textContent = "Loading...";
         document.getElementById("mostActiveUser").textContent = "Loading...";
@@ -487,16 +444,12 @@
 
         fetch("/api/admin/commits")
           .then((response) => {
-            console.log("Response status:", response.status);
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
           })
           .then((data) => {
-            console.log("Commit data received:", data);
-
-            // Update summary cards
             document.getElementById("totalCommits").textContent =
               data.total || 0;
             document.getElementById("todayCommits").textContent =
@@ -504,7 +457,6 @@
             document.getElementById("mostActiveUser").textContent =
               data.mostActiveUser || "N/A";
 
-            // Update table
             const tbody = document.getElementById("commitTableBody");
 
             if (!data.commits || data.commits.length === 0) {
@@ -514,14 +466,14 @@
               let html = "";
               data.commits.forEach((commit) => {
                 html += `
-                        <tr>
-                            <td>${commit.id || ""}</td>
-                            <td>${commit.repo_name || ""}</td>
-                            <td>${commit.message || ""}</td>
-                            <td>${commit.committed_by || ""}</td>
-                            <td>${commit.date || ""}</td>
-                        </tr>
-                    `;
+                  <tr>
+                    <td>${commit.id || ""}</td>
+                    <td>${commit.repo_name || ""}</td>
+                    <td>${commit.message || ""}</td>
+                    <td>${commit.committed_by || ""}</td>
+                    <td>${commit.date || ""}</td>
+                  </tr>
+                `;
               });
               tbody.innerHTML = html;
             }
@@ -532,9 +484,7 @@
             document.getElementById("todayCommits").textContent = "Error";
             document.getElementById("mostActiveUser").textContent = "Error";
             document.getElementById("commitTableBody").innerHTML =
-              '<tr><td colspan="5">Error: ' +
-              error.message +
-              "<br>Check browser console for details</td></tr>";
+              '<tr><td colspan="5">Error: ' + error.message + "</td></tr>";
           });
       }
 
@@ -542,7 +492,6 @@
       function loadIssueReport() {
         console.log("Loading issues...");
 
-        // Show loading state
         document.getElementById("totalIssues").textContent = "Loading...";
         document.getElementById("openIssues").textContent = "Loading...";
         document.getElementById("closedToday").textContent = "Loading...";
@@ -551,23 +500,18 @@
 
         fetch("/api/admin/issues")
           .then((response) => {
-            console.log("Response status:", response.status);
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
           })
           .then((data) => {
-            console.log("Issue data received:", data);
-
-            // Update summary cards
             document.getElementById("totalIssues").textContent =
               data.total || 0;
             document.getElementById("openIssues").textContent = data.open || 0;
             document.getElementById("closedToday").textContent =
               data.closedToday || 0;
 
-            // Update table
             const tbody = document.getElementById("issueTableBody");
 
             if (!data.issues || data.issues.length === 0) {
@@ -576,7 +520,6 @@
             } else {
               let html = "";
               data.issues.forEach((issue) => {
-                // Determine status class for styling
                 let statusClass = "";
                 if (issue.status) {
                   const statusLower = issue.status.toLowerCase();
@@ -596,15 +539,15 @@
                 }
 
                 html += `
-                        <tr>
-                            <td>${issue.id || ""}</td>
-                            <td>${issue.repo_name || ""}</td>
-                            <td>${issue.issue_title || ""}</td>
-                            <td>${issue.created_by || ""}</td>
-                            <td><span class="${statusClass}">${issue.status || ""}</span></td>
-                            <td>${issue.date || ""}</td>
-                        </tr>
-                    `;
+                  <tr>
+                    <td>${issue.id || ""}</td>
+                    <td>${issue.repo_name || ""}</td>
+                    <td>${issue.issue_title || ""}</td>
+                    <td>${issue.created_by || ""}</td>
+                    <td><span class="${statusClass}">${issue.status || ""}</span></td>
+                    <td>${issue.date || ""}</td>
+                  </tr>
+                `;
               });
               tbody.innerHTML = html;
             }
@@ -615,9 +558,7 @@
             document.getElementById("openIssues").textContent = "Error";
             document.getElementById("closedToday").textContent = "Error";
             document.getElementById("issueTableBody").innerHTML =
-              '<tr><td colspan="6">Error: ' +
-              error.message +
-              "<br>Check browser console for details</td></tr>";
+              '<tr><td colspan="6">Error: ' + error.message + "</td></tr>";
           });
       }
 
@@ -628,8 +569,6 @@
         fetch("/api/admin/feedback")
           .then((response) => response.json())
           .then((data) => {
-            console.log("Feedback data received:", data);
-
             document.getElementById("totalFeedback").textContent =
               data.total || 0;
             document.getElementById("positiveFeedback").textContent =
@@ -653,23 +592,23 @@
                   : "";
 
                 html += `
-            <tr>
-              <td>${fb.id || ""}</td>
-              <td>${fb.name || ""}</td>
-              <td>${fb.category || ""}</td>
-              <td>
-                <span class="experience ${expClass}">
-                  ${fb.experience || ""}
-                </span>
-              </td>
-              <td>${fb.date || ""}</td>
-              <td>
-                <span class="status ${statusClass}">
-                  ${fb.status || ""}
-                </span>
-              </td>
-            </tr>
-          `;
+                  <tr>
+                    <td>${fb.id || ""}</td>
+                    <td>${fb.name || ""}</td>
+                    <td>${fb.category || ""}</td>
+                    <td>
+                      <span class="experience ${expClass}">
+                        ${fb.experience || ""}
+                      </span>
+                    </td>
+                    <td>${fb.date || ""}</td>
+                    <td>
+                      <span class="status ${statusClass}">
+                        ${fb.status || ""}
+                      </span>
+                    </td>
+                  </tr>
+                `;
               });
               tbody.innerHTML = html;
             }
@@ -687,11 +626,130 @@
           });
       }
 
+      // NEW: Load Activity Report from API
+      function loadActivityReport() {
+        console.log("Loading activity report...");
+        
+        document.getElementById("activityTableBody").innerHTML = 
+          '<tr><td colspan="5">Loading activity data...</td></tr>';
+        
+        if (activityChart) {
+          activityChart.destroy();
+          activityChart = null;
+        }
+        
+        fetch("/api/admin/activity")
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log("Activity data received:", data);
+            
+            const tbody = document.getElementById("activityTableBody");
+            
+            if (!data.activities || data.activities.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="5">No activity data found</td></tr>';
+              return;
+            }
+            
+            let html = "";
+            data.activities.forEach(user => {
+              let activityClass = "status ";
+              if (user.last_activity === 'Today' || user.last_activity === 'Yesterday') {
+                activityClass += "active";
+              } else if (user.last_activity.includes('days ago') && parseInt(user.last_activity) < 7) {
+                activityClass += "active";
+              } else if (user.last_activity.includes('week')) {
+                activityClass += "idle";
+              } else {
+                activityClass += "inactive";
+              }
+              
+              html += `
+                <tr>
+                  <td>${user.username || 'Unknown'}</td>
+                  <td>${user.total_repos || 0}</td>
+                  <td>${user.total_commits || 0}</td>
+                  <td>${user.total_issues || 0}</td>
+                  <td><span class="${activityClass}">${user.last_activity || 'Never'}</span></td>
+                </tr>
+              `;
+            });
+            tbody.innerHTML = html;
+            
+            // Update chart with top contributors
+            if (data.top_contributors && data.top_contributors.length > 0) {
+              updateActivityChart(data.top_contributors);
+            }
+          })
+          .catch(error => {
+            console.error("Error loading activity:", error);
+            document.getElementById("activityTableBody").innerHTML = 
+              '<tr><td colspan="5">Error loading activity: ' + error.message + '</td></tr>';
+          });
+      }
+
+      // Update activity chart
+      function updateActivityChart(contributors) {
+        const ctx = document.getElementById("activityChart").getContext("2d");
+        
+        if (activityChart) {
+          activityChart.destroy();
+        }
+        
+        const labels = contributors.map(c => c.username);
+        const commitData = contributors.map(c => c.total_commits);
+        
+        activityChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: labels,
+            datasets: [{
+              data: commitData,
+              backgroundColor: [
+                "#22f5ff",
+                "#0ea5e9",
+                "#8b5cf6",
+                "#10b981",
+                "#f59e0b"
+              ],
+              borderWidth: 1,
+              borderColor: "#021c1a",
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: {
+                  color: "#94a3b8",
+                  font: { size: 11 },
+                  boxWidth: 12,
+                  padding: 15
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return `${context.label}: ${context.raw} commits`;
+                  }
+                }
+              }
+            },
+            cutout: "50%",
+          },
+        });
+      }
+
       // Function to update feedback chart
       function updateFeedbackChart(categories) {
         const fbCtx = document.getElementById("feedbackChart").getContext("2d");
 
-        // Safely destroy existing chart
         if (
           window.feedbackChart &&
           typeof window.feedbackChart.destroy === "function"
@@ -699,7 +757,6 @@
           window.feedbackChart.destroy();
         }
 
-        // Create new chart
         window.feedbackChart = new Chart(fbCtx, {
           type: "pie",
           data: {
@@ -749,7 +806,7 @@
 
             if (!data || data.length === 0) {
               tableBody.innerHTML =
-                '<tr><td colspan="6">No repositories found</td></tr>';
+                '<tr><td colspan="5">No repositories found</td></tr>';
               return;
             }
 
@@ -758,19 +815,18 @@
 
             data.forEach((repo, index) => {
               const row = `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${repo.repo_name}</td>
-            <td>${repo.owner}</td>
-            <td>${repo.stars}</td>
-            <td>${repo.views}</td>
-            <td>${repo.popularity_score || ""}</td>
-          </tr>
-        `;
+                <tr>
+                  <td>${index + 1}</td>
+                  <td>${repo.repo_name}</td>
+                  <td>${repo.owner}</td>
+                  <td>${repo.stars || 0}</td>
+                  <td>${repo.views || 0}</td>
+                </tr>
+              `;
               tableBody.innerHTML += row;
 
               labels.push(repo.repo_name);
-              starData.push(repo.stars);
+              starData.push(repo.stars || 0);
             });
 
             updatePopularityChart(labels, starData);
@@ -778,7 +834,7 @@
           .catch((error) => {
             console.error("Error loading popularity:", error);
             document.getElementById("popularityTableBody").innerHTML =
-              '<tr><td colspan="6">Error loading data</td></tr>';
+              '<tr><td colspan="5">Error loading data</td></tr>';
           });
       }
 
@@ -847,14 +903,14 @@
             tbody.innerHTML = data.repos
               .map(
                 (repo) => `
-                <tr>
+                  <tr>
                     <td>${repo.repo_id}</td>
                     <td>${repo.repo_name}</td>
                     <td>${repo.owner}</td>
                     <td>${repo.created_date}</td>
                     <td>${repo.total_commits}</td>
-                </tr>
-            `,
+                  </tr>
+                `,
               )
               .join("");
           })
@@ -871,33 +927,9 @@
         loadPopularityReport();
         loadCommitReport();
         loadRepoReport();
-
-        // Activity Chart
-        const actCtx = document
-          .getElementById("activityChart")
-          .getContext("2d");
-        new Chart(actCtx, {
-          type: "doughnut",
-          data: {
-            labels: ["admin_user", "dev_rahul", "test_amit", "designer_priya"],
-            datasets: [
-              {
-                data: [148, 89, 62, 45],
-                backgroundColor: ["#22f5ff", "#0ea5e9", "#8b5cf6", "#10b981"],
-                borderWidth: 1,
-                borderColor: "#021c1a",
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { position: "bottom", labels: { color: "#94a3b8" } },
-            },
-            cutout: "50%",
-          },
-        });
+        loadFeedbackReport();
+        loadIssueReport();
+        loadActivityReport(); // This now loads REAL data
       });
     </script>
 

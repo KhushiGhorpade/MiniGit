@@ -42,11 +42,34 @@
 </header>
 
 <!-- ================= DASHBOARD ================= -->
+<!-- ================= DASHBOARD ================= -->
 <main class="dashboard">
+
+  <!-- WELCOME BANNER - NEW -->
+  <div class="welcome-banner">
+    <div class="welcome-text">
+  <h1>Welcome back, <span class="username-glow">{{ username }} !</span> <span class="neon-icon wave-icon"></span></h1>
+  <p class="welcome-subtitle">Here's what's happening with your repositories today</p>
+</div>
+    <div class="quick-stats">
+      <div class="stat-chip">
+        <span class="stat-label">Total Repos</span>
+        <span class="stat-value">{{ user_stats.total_repos }}</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Total Commits</span>
+        <span class="stat-value">{{ user_stats.total_commits }}</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Open Issues</span>
+        <span class="stat-value">{{ user_stats.open_issues }}</span>
+      </div>
+    </div>
+  </div>
 
   <!-- LEFT PANEL - Latest Repos -->
   <aside class="panel left-panel">
-    <h3>My Latest Repos</h3>
+    <h3><span class="neon-icon repo-icon"></span> My Latest Repos</h3>
     <div class="panel-content">
       {% if user_repos %}
         {% for repo in user_repos %}
@@ -62,26 +85,27 @@
   </aside>
 
   <!-- CENTER PANEL - Search -->
-  <!-- CENTER PANEL - Search -->
 <section class="center-panel">
   
   <div class="search-box">
     <input type="text" id="searchInput" placeholder="Search repositories, users, commits..." autocomplete="off">
-    <div class="search-spinner" id="searchSpinner" style="display: none;">🔍</div>
+    <div class="search-spinner" id="searchSpinner" style="display: none;"></div>
   </div>
 
-  <div class="results-box" id="resultsBox">
+  <div class="results-container" id="resultsContainer" style="display: none;">
     <div class="results-header">
-      <p>Start typing to search...</p>
+      <span class="results-count" id="resultsCount">0 results found</span>
+      <button class="close-results" onclick="closeSearch()">✕</button>
     </div>
     <div class="results-list" id="resultsList">
       <!-- Search results will appear here -->
     </div>
   </div>
 </section>
+
   <!-- RIGHT PANEL - Latest Commits -->
   <aside class="panel right-panel">
-    <h3>My Latest Commits</h3>
+    <h3><span class="neon-icon commit-icon"></span> My Latest Commits</h3>
     <div class="panel-content">
       {% if recent_commits %}
         {% for commit in recent_commits %}
@@ -97,14 +121,23 @@
   </aside>
 
 </main>
+
+</main>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
+    const resultsContainer = document.getElementById('resultsContainer');
     const resultsList = document.getElementById('resultsList');
-    const resultsHeader = document.querySelector('.results-header p');
+    const resultsCount = document.getElementById('resultsCount');
     const searchSpinner = document.getElementById('searchSpinner');
     
     let searchTimeout;
+
+    // Close search function
+    window.closeSearch = function() {
+        resultsContainer.style.display = 'none';
+        searchInput.value = '';
+    };
 
     searchInput.addEventListener('input', function() {
         const query = this.value.trim();
@@ -113,14 +146,12 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(searchTimeout);
         
         if (query.length < 2) {
-            resultsList.innerHTML = '';
-            resultsHeader.textContent = 'Type at least 2 characters to search...';
+            resultsContainer.style.display = 'none';
             return;
         }
         
         // Show spinner
         searchSpinner.style.display = 'inline-block';
-        resultsHeader.textContent = 'Searching...';
         
         // Set timeout to avoid too many requests
         searchTimeout = setTimeout(() => {
@@ -131,59 +162,85 @@ document.addEventListener('DOMContentLoaded', function() {
                     searchSpinner.style.display = 'none';
                     
                     if (data.results && data.results.length > 0) {
-                        resultsHeader.textContent = `Found ${data.results.length} results:`;
+                        resultsCount.textContent = `Found ${data.results.length} result${data.results.length > 1 ? 's' : ''}`;
                         displayResults(data.results);
+                        resultsContainer.style.display = 'block';
                     } else {
-                        resultsHeader.textContent = 'No results found';
-                        resultsList.innerHTML = '';
+                        resultsCount.textContent = 'No results found';
+                        displayNoResults();
+                        resultsContainer.style.display = 'block';
                     }
                 })
                 .catch(error => {
                     console.error('Search error:', error);
                     searchSpinner.style.display = 'none';
-                    resultsHeader.textContent = 'Error performing search';
-                    resultsList.innerHTML = '';
+                    resultsCount.textContent = 'Error performing search';
+                    displayError();
+                    resultsContainer.style.display = 'block';
                 });
-        }, 300); // Wait 300ms after user stops typing
+        }, 300);
     });
     
     function displayResults(results) {
         let html = '';
         
-        results.forEach(item => {
+        results.forEach((item, index) => {
             const icon = getIconForType(item.type);
-            const date = new Date(item.date).toLocaleDateString();
+            const date = new Date(item.date).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+            
+            // Add animation delay based on index
+            const delay = index * 0.05;
             
             if (item.type === 'repository') {
                 html += `
-                    <div class="search-result-item" onclick="window.location.href='/repositories'">
-                        <div class="result-icon repository">📁</div>
+                    <div class="search-result-item" onclick="window.location.href='/repositories'" style="animation-delay: ${delay}s">
+                        <div class="result-icon repository"></div>
                         <div class="result-content">
-                            <div class="result-title">${escapeHtml(item.name)}</div>
-                            <div class="result-description">${escapeHtml(item.description || 'No description')}</div>
-                            <div class="result-meta">Repository • Created ${date}</div>
+                            <div class="result-title">
+                                ${escapeHtml(item.name)}
+                                <span class="repo-owner">by ${escapeHtml(item.username || 'unknown')}</span>
+                            </div>
+                            <div class="result-description">${escapeHtml(item.description) || 'No description provided'}</div>
+                            <div class="result-meta">
+                                <span> Created ${date}</span>
+                                <span> ${item.visibility || 'private'}</span>
+                            </div>
+                        </div>
+                        <div class="result-stars">
+                            <span class="star-icon">★</span>
+                            <span>${item.stars || 0}</span>
                         </div>
                     </div>
                 `;
             } else if (item.type === 'user') {
                 html += `
-                    <div class="search-result-item" onclick="window.location.href='/profile'">
-                        <div class="result-icon user">👤</div>
+                    <div class="search-result-item" onclick="window.location.href='/profile'" style="animation-delay: ${delay}s">
+                        <div class="result-icon user"></div>
                         <div class="result-content">
                             <div class="result-title">${escapeHtml(item.name)}</div>
-                            <div class="result-description">${escapeHtml(item.description || '')}</div>
-                            <div class="result-meta">User • Joined ${date}</div>
+                            <div class="result-description">${escapeHtml(item.description) || ''}</div>
+                            <div class="result-meta">
+                                <span>Joined ${date}</span>
+                                <span>@${escapeHtml(item.username)}</span>
+                            </div>
                         </div>
                     </div>
                 `;
             } else if (item.type === 'commit') {
                 html += `
-                    <div class="search-result-item" onclick="window.location.href='/activity'">
-                        <div class="result-icon commit">📝</div>
+                    <div class="search-result-item" onclick="window.location.href='/activity'" style="animation-delay: ${delay}s">
+                        <div class="result-icon commit"></div>
                         <div class="result-content">
                             <div class="result-title">${escapeHtml(item.name)}</div>
-                            <div class="result-description">In ${escapeHtml(item.description)}</div>
-                            <div class="result-meta">Commit • ${date}</div>
+                            <div class="result-description">in <span style="color: cyan;">${escapeHtml(item.description)}</span></div>
+                            <div class="result-meta">
+                                <span> ${date}</span>
+                                <span> by ${escapeHtml(item.username)}</span>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -193,12 +250,32 @@ document.addEventListener('DOMContentLoaded', function() {
         resultsList.innerHTML = html;
     }
     
+    function displayNoResults() {
+        resultsList.innerHTML = `
+            <div class="no-results">
+                <div class="icon"></div>
+                <p>No results found</p>
+                <p class="suggestion">Try different keywords</p>
+            </div>
+        `;
+    }
+    
+    function displayError() {
+        resultsList.innerHTML = `
+            <div class="no-results">
+                <div class="icon"></div>
+                <p>Something went wrong</p>
+                <p class="suggestion">Please try again</p>
+            </div>
+        `;
+    }
+    
     function getIconForType(type) {
         switch(type) {
-            case 'repository': return '📁';
-            case 'user': return '👤';
-            case 'commit': return '📝';
-            default: return '📌';
+            case 'repository': return '';
+            case 'user': return '';
+            case 'commit': return '';
+            default: return '';
         }
     }
     
@@ -211,6 +288,13 @@ document.addEventListener('DOMContentLoaded', function() {
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
+
+    // Close search when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.center-panel')) {
+            resultsContainer.style.display = 'none';
+        }
+    });
 });
 </script>
 </body>
