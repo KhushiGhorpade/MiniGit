@@ -17,16 +17,26 @@
         <div class="menu">
           <h3>Reports</h3>
           <button class="active" onclick="showReport('user')">
-            📋 User Report
+            <span class="menu-icon user-icon"></span> User Report
           </button>
-          <button onclick="showReport('repo')">📚 Repository Report</button>
-          <button onclick="showReport('commit')">💾 Commit Report</button>
+          <button onclick="showReport('repo')">
+            <span class="menu-icon repo-icon"></span> Repository Report
+          </button>
+          <button onclick="showReport('commit')">
+            <span class="menu-icon commit-icon"></span> Commit Report
+          </button>
           <button onclick="showReport('popularity')">
-            ⭐ Popularity Report
+            <span class="menu-icon popularity-icon"></span> Popularity Report
           </button>
-          <button onclick="showReport('issue')">🐛 Issue Report</button>
-          <button onclick="showReport('activity')">📊 Activity Report</button>
-          <button onclick="showReport('feedback')">💬 Feedback Report</button>
+          <button onclick="showReport('issue')">
+            <span class="menu-icon issue-icon"></span> Issue Report
+          </button>
+          <button onclick="showReport('activity')">
+            <span class="menu-icon activity-icon"></span> Activity Report
+          </button>
+          <button onclick="showReport('feedback')">
+            <span class="menu-icon feedback-icon"></span> Feedback Report
+          </button>
         </div>
       </aside>
 
@@ -36,7 +46,7 @@
         <header class="header">
           <h1>MiniGit Admin Dashboard</h1>
           <a href="/logout" class="logout-btn">
-            <span class="logout-icon">🚪</span> Logout
+            <span class="logout-icon"></span> Logout
           </a>
         </header>
 
@@ -45,7 +55,9 @@
           <!-- 1. USER REPORT -->
           <div id="user" class="report show">
             <div class="report-header">
-              <h2>📋 User Report</h2>
+              <h2>
+                <span class="header-icon user-header-icon"></span> User Report
+              </h2>
               <p>User ID, Username, Email, Registration Date, Status</p>
             </div>
 
@@ -68,7 +80,7 @@
             </div>
 
             <div class="table-container full-width">
-              <h3><span class="table-icon">👥</span> User Details</h3>
+              <h3><span class="table-icon users-icon"></span> User Details</h3>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -91,7 +103,9 @@
           <!-- 2. REPOSITORY REPORT -->
           <div id="repo" class="report">
             <div class="report-header">
-              <h2>📚 Repository Report</h2>
+              <h2>
+                <span class="header-icon repo-header-icon"></span> Repository Report
+              </h2>
               <p>Repo ID, Repo Name, Owner, Created Date, Total Commits</p>
             </div>
 
@@ -114,7 +128,7 @@
             </div>
 
             <div class="table-container full-width">
-              <h3><span class="table-icon">📁</span> Repository Details</h3>
+              <h3><span class="table-icon repos-icon"></span> Repository Details</h3>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -137,7 +151,9 @@
           <!-- 3. COMMIT REPORT -->
           <div id="commit" class="report">
             <div class="report-header">
-              <h2>💾 Commit Report</h2>
+              <h2>
+                <span class="header-icon commit-header-icon"></span> Commit Report
+              </h2>
               <p>Commit ID, Repo Name, Commit Message, Committed By, Date</p>
             </div>
 
@@ -160,7 +176,7 @@
             </div>
 
             <div class="table-container full-width">
-              <h3><span class="table-icon">📝</span> Recent Commits</h3>
+              <h3><span class="table-icon commits-icon"></span> Recent Commits</h3>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -180,38 +196,39 @@
             </div>
           </div>
 
-          <!-- 4. POPULARITY REPORT -->
+          <!-- 4. POPULARITY REPORT - STARS COLUMN REMOVED -->
           <div id="popularity" class="report">
             <div class="report-header">
-              <h2>⭐ Repository Popularity Report</h2>
+              <h2>
+                <span class="header-icon popularity-header-icon"></span> Repository Popularity Report
+              </h2>
               <p>
-                Repo ID, Repo Name, Owner, Views, Stars
+                Rank, Repo Name, Owner, Views
               </p>
             </div>
 
             <div class="hybrid-section">
               <div class="table-container">
-                <h3><span class="table-icon">📊</span> Popularity Ranking</h3>
+                <h3><span class="table-icon ranking-icon"></span> Popularity Ranking</h3>
                 <table class="data-table">
                   <thead>
                     <tr>
                       <th>Rank</th>
                       <th>Repo Name</th>
                       <th>Owner</th>
-                      <th>⭐ Stars</th>
-                      <th>👁️ Views</th>
+                      <th>Views</th>
                     </tr>
                   </thead>
                   <tbody id="popularityTableBody">
                     <tr>
-                      <td colspan="5">Loading Repos...</td>
+                      <td colspan="4">Loading Repos...</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
               <div class="chart-container small-chart">
-                <h3><span class="chart-icon">📈</span> Top 5 Repositories</h3>
+                <h3><span class="chart-icon trends-icon"></span> Top 5 Repositories</h3>
                 <canvas id="popularityChart" width="300" height="150"></canvas>
               </div>
             </div>
@@ -220,7 +237,9 @@
           <!-- 5. ISSUE REPORT -->
           <div id="issue" class="report">
             <div class="report-header">
-              <h2>🐛 Issue Report</h2>
+              <h2>
+                <span class="header-icon issue-header-icon"></span> Issue Report
+              </h2>
               <p>Issue ID, Repo Name, Issue Title, Created By, Status, Date</p>
             </div>
 
@@ -243,7 +262,7 @@
             </div>
 
             <div class="table-container full-width">
-              <h3><span class="table-icon">⚠️</span> Issue Details</h3>
+              <h3><span class="table-icon issues-icon"></span> Issue Details</h3>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -264,10 +283,12 @@
             </div>
           </div>
 
-          <!-- 6. ACTIVITY REPORT (NOW WITH REAL DATA) -->
+          <!-- 6. ACTIVITY REPORT -->
           <div id="activity" class="report">
             <div class="report-header">
-              <h2>📊 Activity / Contribution Report</h2>
+              <h2>
+                <span class="header-icon activity-header-icon"></span> Activity / Contribution Report
+              </h2>
               <p>
                 Username, Total Repos, Total Commits, Total Issues, Last Activity
               </p>
@@ -275,7 +296,7 @@
 
             <div class="hybrid-section">
               <div class="table-container">
-                <h3><span class="table-icon">👤</span> User Contributions</h3>
+                <h3><span class="table-icon contributions-icon"></span> User Contributions</h3>
                 <table class="data-table">
                   <thead>
                     <tr>
@@ -295,7 +316,7 @@
               </div>
 
               <div class="chart-container small-chart">
-                <h3><span class="chart-icon">📈</span> Top Contributors</h3>
+                <h3><span class="chart-icon contributors-chart-icon"></span> Top Contributors</h3>
                 <canvas id="activityChart" width="300" height="150"></canvas>
               </div>
             </div>
@@ -304,7 +325,9 @@
           <!-- 7. FEEDBACK REPORT -->
           <div id="feedback" class="report">
             <div class="report-header">
-              <h2>💬 Feedback Report</h2>
+              <h2>
+                <span class="header-icon feedback-header-icon"></span> Feedback Report
+              </h2>
               <p>
                 User feedback analysis: Categories, Experience Ratings
               </p>
@@ -330,7 +353,7 @@
 
             <div class="hybrid-section">
               <div class="table-container">
-                <h3><span class="table-icon">📋</span> Recent Feedback</h3>
+                <h3><span class="table-icon feedback-list-icon"></span> Recent Feedback</h3>
                 <table class="data-table">
                   <thead>
                     <tr>
@@ -351,7 +374,7 @@
               </div>
 
               <div class="chart-container small-chart">
-                <h3><span class="chart-icon">📊</span> Feedback by Category</h3>
+                <h3><span class="chart-icon categories-icon"></span> Feedback by Category</h3>
                 <canvas id="feedbackChart" width="300" height="150"></canvas>
               </div>
             </div>
@@ -360,6 +383,7 @@
       </main>
     </div>
 
+    <!-- ALL JAVASCRIPT REMAINS EXACTLY THE SAME -->
     <script>
       let popularityChart = null;
       let activityChart = null;
@@ -626,7 +650,7 @@
           });
       }
 
-      // NEW: Load Activity Report from API
+      // Load Activity Report from API
       function loadActivityReport() {
         console.log("Loading activity report...");
         
@@ -796,7 +820,7 @@
         });
       }
 
-      //Load popularity report from API
+      //Load popularity report from API - UPDATED to remove stars
       function loadPopularityReport() {
         fetch("/api/admin/popularity")
           .then((response) => response.json())
@@ -806,12 +830,12 @@
 
             if (!data || data.length === 0) {
               tableBody.innerHTML =
-                '<tr><td colspan="5">No repositories found</td></tr>';
+                '<tr><td colspan="4">No repositories found</td></tr>';
               return;
             }
 
             const labels = [];
-            const starData = [];
+            const viewsData = [];
 
             data.forEach((repo, index) => {
               const row = `
@@ -819,25 +843,25 @@
                   <td>${index + 1}</td>
                   <td>${repo.repo_name}</td>
                   <td>${repo.owner}</td>
-                  <td>${repo.stars || 0}</td>
                   <td>${repo.views || 0}</td>
                 </tr>
               `;
               tableBody.innerHTML += row;
 
               labels.push(repo.repo_name);
-              starData.push(repo.stars || 0);
+              viewsData.push(repo.views || 0);
             });
 
-            updatePopularityChart(labels, starData);
+            updatePopularityChart(labels, viewsData);
           })
           .catch((error) => {
             console.error("Error loading popularity:", error);
             document.getElementById("popularityTableBody").innerHTML =
-              '<tr><td colspan="5">Error loading data</td></tr>';
+              '<tr><td colspan="4">Error loading data</td></tr>';
           });
       }
 
+      // Update popularity chart - NOW USING VIEWS INSTEAD OF STARS
       function updatePopularityChart(labels, dataValues) {
         const ctx = document.getElementById("popularityChart").getContext("2d");
 
@@ -851,7 +875,7 @@
             labels: labels,
             datasets: [
               {
-                label: "Stars",
+                label: "Views",
                 data: dataValues,
                 backgroundColor: "rgba(34, 245, 255, 0.7)",
                 borderColor: "#22f5ff",
@@ -868,6 +892,10 @@
             scales: {
               y: {
                 beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Number of Views'
+                }
               },
             },
           },
@@ -929,43 +957,8 @@
         loadRepoReport();
         loadFeedbackReport();
         loadIssueReport();
-        loadActivityReport(); // This now loads REAL data
+        loadActivityReport();
       });
     </script>
-
-    <style>
-      .experience {
-        padding: 3px 8px;
-        border-radius: 10px;
-        font-size: 11px;
-        font-weight: 500;
-        display: inline-block;
-      }
-
-      .experience.excellent {
-        background: rgba(16, 185, 129, 0.2);
-        color: #10b981;
-      }
-
-      .experience.good {
-        background: rgba(34, 245, 255, 0.2);
-        color: #22f5ff;
-      }
-
-      .experience.average {
-        background: rgba(245, 158, 11, 0.2);
-        color: #f59e0b;
-      }
-
-      .experience.poor,
-      .experience.very-poor {
-        background: rgba(239, 68, 68, 0.2);
-        color: #ef4444;
-      }
-
-      #feedbackChart {
-        margin-top: 10px;
-      }
-    </style>
   </body>
 </html>

@@ -45,21 +45,315 @@
 
     <!-- ================= REPOSITORIES CONTENT ================= -->
     <main class="repositories-main">
-      <h1>My Repositories</h1>
+      <div class="repositories-header">
+        <h1>My Repositories</h1>
+        <a href="/create-repo" class="new-repo-btn">
+          <span class="btn-icon"></span>
+          New Repository
+        </a>
+      </div>
       
-      <div class="repository-list">
+      <div class="repository-grid">
         {% for repo in repositories %}
-        <div class="repository-card">
-          <h3><a href="/repositories/{{ repo.id }}" style="color: cyan; text-decoration: none;">{{ repo.name }}</a></h3>
-          <p>{{ repo.description or "No description provided" }}</p>
-          <p style="color: #888; font-size: 12px; margin-top: 8px;">
-            Created by {{ repo.owner }} on {{ repo.created_at.strftime('%Y-%m-%d') }}
-          </p>
+        <div class="repository-card" data-repo-id="{{ repo.id }}" data-repo-name="{{ repo.name }}" data-visibility="{{ repo.visibility or 'private' }}">
+          <div class="card-header">
+            <div class="repo-title">
+              <span class="repo-icon"></span>
+              <h3><a href="/repositories/{{ repo.id }}">{{ repo.name }}</a></h3>
+            </div>
+            <div class="card-actions">
+              <div class="repo-dropdown">
+                <button class="dropdown-trigger" onclick="toggleDropdown(this)">
+                  <span class="dots-icon"></span>
+                </button>
+                <div class="dropdown-menu repo-menu">
+                  <a href="#" onclick="editRepo({{ repo.id }})">
+                    <span class="edit-icon"></span>
+                    Edit Name
+                  </a>
+                  <a href="#" onclick="toggleVisibility({{ repo.id }})">
+                    <span class="visibility-icon"></span>
+                    <span class="visibility-text">Make {{ 'Private' if repo.visibility == 'public' else 'Public' }}</span>
+                  </a>
+                  <a href="#" onclick="deleteRepo({{ repo.id }})" class="delete-option">
+                    <span class="delete-icon"></span>
+                    Delete Repository
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="repo-description">{{ repo.description or "No description provided" }}</p>
+          <div class="card-footer">
+            <span class="repo-meta">
+              <span class="owner-icon"></span>
+              {{ repo.owner }}
+            </span>
+            <span class="repo-meta">
+              <span class="calendar-icon"></span>
+              {{ repo.created_at.strftime('%Y-%m-%d') }}
+            </span>
+            <span class="repo-visibility">
+              <span class="visibility-badge {{ repo.visibility or 'private' }}">{{ repo.visibility or 'private' }}</span>
+            </span>
+          </div>
         </div>
         {% else %}
-        <p style="color: #888; text-align: center; padding: 40px;">No repositories found. Create your first repository!</p>
+        <div class="empty-state">
+          <span class="empty-icon"></span>
+          <p>No repositories found</p>
+          <p class="empty-sub">Create your first repository to get started!</p>
+          <a href="/create-repo" class="create-first-btn">Create Repository</a>
+        </div>
         {% endfor %}
       </div>
     </main>
+
+    <!-- Edit Repository Modal -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Edit Repository Name</h3>
+          <button class="close-modal" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="newRepoName" placeholder="Enter new repository name">
+        </div>
+        <div class="modal-footer">
+          <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+          <button class="modal-btn save" onclick="saveRepoName()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Toggle dropdown menu
+      function toggleDropdown(button) {
+        const dropdown = button.nextElementSibling;
+        dropdown.classList.toggle('show');
+        
+        // Close other dropdowns
+        document.querySelectorAll('.repo-menu.show').forEach(menu => {
+          if (menu !== dropdown) menu.classList.remove('show');
+        });
+      }
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!event.target.closest('.repo-dropdown')) {
+          document.querySelectorAll('.repo-menu.show').forEach(menu => {
+            menu.classList.remove('show');
+          });
+        }
+      });
+
+      // Edit repository
+      function editRepo(repoId) {
+        const modal = document.getElementById('editModal');
+        modal.style.display = 'flex';
+        modal.dataset.repoId = repoId;
+        
+        // Get current repo name
+        const repoCard = document.querySelector(`.repository-card[data-repo-id="${repoId}"]`);
+        const currentName = repoCard.querySelector('h3 a').textContent;
+        document.getElementById('newRepoName').value = currentName;
+      }
+
+      // Save repository name
+      function saveRepoName() {
+        const modal = document.getElementById('editModal');
+        const repoId = modal.dataset.repoId;
+        const newName = document.getElementById('newRepoName').value.trim();
+        
+        if (!newName) {
+          alert('Repository name cannot be empty');
+          return;
+        }
+        
+        // Show loading state
+        const saveBtn = document.querySelector('.modal-btn.save');
+        const originalText = saveBtn.textContent;
+        saveBtn.textContent = 'Saving...';
+        saveBtn.disabled = true;
+        
+        fetch(`/api/repo/${repoId}/edit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: newName })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Update the repo name in the card
+            const repoCard = document.querySelector(`.repository-card[data-repo-id="${repoId}"]`);
+            repoCard.querySelector('h3 a').textContent = newName;
+            repoCard.dataset.repoName = newName;
+            
+            closeModal();
+            showNotification('Repository name updated successfully!', 'success');
+          } else {
+            alert('Error: ' + (data.error || 'Could not update repository name'));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Failed to update repository name');
+        })
+        .finally(() => {
+          saveBtn.textContent = originalText;
+          saveBtn.disabled = false;
+        });
+      }
+
+      // Toggle visibility
+      function toggleVisibility(repoId) {
+        const repoCard = document.querySelector(`.repository-card[data-repo-id="${repoId}"]`);
+        const currentVisibility = repoCard.dataset.visibility;
+        const newVisibility = currentVisibility === 'public' ? 'private' : 'public';
+        
+        fetch(`/api/repo/${repoId}/visibility`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ visibility: newVisibility })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Update visibility in card
+            repoCard.dataset.visibility = newVisibility;
+            
+            // Update badge
+            const badge = repoCard.querySelector('.visibility-badge');
+            badge.className = `visibility-badge ${newVisibility}`;
+            badge.textContent = newVisibility;
+            
+            // Update dropdown option text
+            const visibilityLink = repoCard.querySelector('.visibility-text');
+            visibilityLink.textContent = `Make ${newVisibility === 'public' ? 'Private' : 'Public'}`;
+            
+            showNotification(`Repository is now ${newVisibility}`, 'success');
+          } else {
+            alert('Error: ' + (data.error || 'Could not change visibility'));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Failed to change visibility');
+        });
+      }
+
+      // Delete repository
+      function deleteRepo(repoId) {
+        if (confirm('⚠️ Are you sure you want to delete this repository?\n\nThis action cannot be undone. All commits and issues will be permanently deleted.')) {
+          const repoCard = document.querySelector(`.repository-card[data-repo-id="${repoId}"]`);
+          
+          // Show deleting state
+          repoCard.style.opacity = '0.5';
+          
+          fetch(`/api/repo/${repoId}/delete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Remove the card with animation
+              repoCard.style.transition = 'all 0.3s ease';
+              repoCard.style.transform = 'scale(0.8)';
+              repoCard.style.opacity = '0';
+              
+              setTimeout(() => {
+                repoCard.remove();
+                
+                // Show empty state if no repos left
+                if (document.querySelectorAll('.repository-card').length === 0) {
+                  location.reload(); // Reload to show empty state
+                } else {
+                  showNotification('Repository deleted successfully', 'success');
+                }
+              }, 300);
+            } else {
+              repoCard.style.opacity = '1';
+              alert('Error: ' + (data.error || 'Could not delete repository'));
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            repoCard.style.opacity = '1';
+            alert('Failed to delete repository');
+          });
+        }
+      }
+
+      // Close modal
+      function closeModal() {
+        document.getElementById('editModal').style.display = 'none';
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+        const modal = document.getElementById('editModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      // Show notification
+      function showNotification(message, type) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+          position: fixed;
+          top: 80px;
+          right: 20px;
+          background: ${type === 'success' ? 'rgba(0, 255, 255, 0.2)' : 'rgba(255, 0, 0, 0.2)'};
+          border: 1px solid ${type === 'success' ? 'cyan' : '#ff6b6b'};
+          color: ${type === 'success' ? 'cyan' : '#ff6b6b'};
+          padding: 12px 24px;
+          border-radius: 8px;
+          z-index: 3000;
+          animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+          notification.style.animation = 'slideOut 0.3s ease';
+          setTimeout(() => {
+            notification.remove();
+          }, 300);
+        }, 3000);
+      }
+
+      // Add animation styles if not present
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideIn {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        @keyframes slideOut {
+          from {
+            transform: translateX(0);
+            opacity: 1;
+          }
+          to {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    </script>
   </body>
 </html>

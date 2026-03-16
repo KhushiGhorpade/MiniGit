@@ -19,15 +19,12 @@ body {
   width: 100%;
   height: 72px;
   padding: 0 60px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-
   z-index: 1000;
 }
 
@@ -35,14 +32,6 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.logo {
-  width: 34px;
-  height: 34px;
-  background: cyan;
-  border-radius: 10px;
-  box-shadow: 0 0 18px cyan;
 }
 
 .auth-nav {
@@ -89,13 +78,10 @@ body {
   top: 140%;
   right: 0;
   min-width: 180px;
-
   background: #0b0f0f;
   border-radius: 10px;
   padding: 6px 0;
-
   box-shadow: 0 12px 30px rgba(0, 255, 255, 0.18);
-
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
@@ -132,118 +118,524 @@ body {
   min-height: calc(100vh - 72px);
 }
 
-.repositories-main h1 {
+.repositories-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 30px;
+}
+
+.repositories-header h1 {
   color: cyan;
   text-shadow: 0 0 10px cyan;
   font-size: 28px;
 }
 
-.repository-list {
+/* New Repository Button */
+.new-repo-btn {
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid cyan;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: cyan;
+  text-decoration: none;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
 }
 
+.new-repo-btn:hover {
+  background: cyan;
+  color: black;
+  box-shadow: 0 0 20px cyan;
+  transform: translateY(-2px);
+}
+
+.btn-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='cyan' stroke-width='2'%3E%3Cpath d='M12 5v14M5 12h14' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.new-repo-btn:hover .btn-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M12 5v14M5 12h14' /%3E%3C/svg%3E");
+}
+
+/* Repository Grid - 2 columns */
+.repository-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Repository Card */
 .repository-card {
-  background: #0a0d0d;
+  background: rgba(10, 13, 13, 0.8);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 255, 255, 0.2);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 255, 255, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.repository-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, cyan, transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.repository-card:hover::before {
+  transform: translateX(100%);
 }
 
 .repository-card:hover {
   transform: translateY(-4px);
+  border-color: cyan;
   box-shadow: 0 12px 30px rgba(0, 255, 255, 0.2);
-  border-color: rgba(0, 255, 255, 0.4);
 }
 
-.repository-card h3 {
-  margin-bottom: 10px;
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
-.repository-card h3 a {
+.repo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.repo-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='cyan' stroke-width='1.8'%3E%3Cpath d='M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2Z' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 0 5px cyan);
+}
+
+.repo-title h3 a {
   color: cyan;
   text-decoration: none;
   font-size: 18px;
-  text-shadow: 0 0 6px cyan;
+  text-shadow: 0 0 5px cyan;
 }
 
-.repository-card h3 a:hover {
+.repo-title h3 a:hover {
   text-decoration: underline;
 }
 
-.repository-card p {
-  color: #cccccc;
-  font-size: 14px;
-  line-height: 1.5;
-}
-/* Stats Cards */
-.stats-cards {
+.card-actions {
   display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
+  align-items: center;
+  gap: 8px;
 }
 
-.stat-card {
-  flex: 1;
-  background: #0a0d0d;
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
+/* Repository Dropdown */
+.repo-dropdown {
+  position: relative;
+}
+
+.dropdown-trigger {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 255, 255, 0.2);
-  border-color: rgba(0, 255, 255, 0.4);
+.dropdown-trigger:hover {
+  border-color: cyan;
+  background: rgba(0, 255, 255, 0.1);
 }
 
-.stat-value {
-  display: block;
-  font-size: 32px;
-  font-weight: bold;
-  color: cyan;
-  text-shadow: 0 0 10px cyan;
-  margin-bottom: 8px;
+.dots-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='cyan' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='1' fill='cyan' /%3E%3Ccircle cx='12' cy='5' r='1' fill='cyan' /%3E%3Ccircle cx='12' cy='19' r='1' fill='cyan' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.stat-label {
-  color: #888;
+.repo-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 5px;
+  min-width: 200px;
+  background: #0b0f0f;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 5px 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.repo-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.repo-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  color: #e6ffff;
+  text-decoration: none;
   font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Repository and Commit Items */
-.repo-item, .commit-item {
-  padding: 12px;
-  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
   transition: all 0.2s ease;
 }
 
-.repo-item:hover, .commit-item:hover {
-  background: rgba(0, 255, 255, 0.05);
+.repo-menu a:hover {
+  background: rgba(0, 255, 255, 0.1);
 }
 
-.repo-name, .commit-message {
-  color: #fff;
-  font-weight: 500;
-  margin-bottom: 4px;
+.repo-menu a.delete-option:hover {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
 }
 
-.repo-date, .commit-meta {
+/* Dropdown Icons */
+.edit-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='cyan' stroke-width='1.8'%3E%3Cpath d='M17 3l4 4-7 7H10v-4l7-7z' /%3E%3Cpath d='M4 20h16' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.visibility-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='cyan' stroke-width='1.8'%3E%3Ccircle cx='12' cy='12' r='3' /%3E%3Cpath d='M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7z' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.delete-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#ff6b6b' stroke-width='1.8'%3E%3Cpath d='M4 7h16M10 11v6M14 11v6M5 7l1 14h12l1-14H5z' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.repo-description {
+  color: #cccccc;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  padding-right: 20px;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.repo-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   color: #888;
   font-size: 12px;
 }
 
-.empty-message {
-  color: #888;
+.owner-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='cyan' stroke-width='1.8'%3E%3Ccircle cx='12' cy='8' r='4' /%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.calendar-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='cyan' stroke-width='1.8'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2' /%3E%3Cline x1='16' y1='2' x2='16' y2='6' /%3E%3Cline x1='8' y1='2' x2='8' y2='6' /%3E%3Cline x1='3' y1='10' x2='21' y2='10' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.repo-visibility {
+  margin-left: auto;
+}
+
+.visibility-badge {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.visibility-badge.public {
+  background: rgba(0, 255, 255, 0.2);
+  color: cyan;
+  border: 1px solid cyan;
+}
+
+.visibility-badge.private {
+  background: rgba(255, 255, 0, 0.2);
+  color: #ffd700;
+  border: 1px solid #ffd700;
+}
+
+/* Empty State */
+.empty-state {
+  grid-column: 1 / -1;
   text-align: center;
+  padding: 60px;
+  background: rgba(0, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px dashed rgba(0, 255, 255, 0.3);
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  display: inline-block;
+  margin-bottom: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='cyan' stroke-width='1.5'%3E%3Cpath d='M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2Z' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  color: #888;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.empty-sub {
+  font-size: 14px !important;
+  color: #666 !important;
+}
+
+.create-first-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: cyan;
+  color: black;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.create-first-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px cyan;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #0b0f0f;
+  border: 1px solid cyan;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.modal-header h3 {
+  color: cyan;
+}
+
+.close-modal {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  color: cyan;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+  background: cyan;
+  color: black;
+}
+
+.modal-body {
   padding: 20px;
-  font-style: italic;
+}
+
+.modal-body input {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+}
+
+.modal-body input:focus {
+  outline: none;
+  border-color: cyan;
+  box-shadow: 0 0 10px cyan;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px 20px;
+  border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.modal-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.modal-btn.cancel {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.modal-btn.cancel:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-btn.save {
+  background: cyan;
+  border: none;
+  color: black;
+  font-weight: bold;
+}
+
+.modal-btn.save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px cyan;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, cyan, #00bcd4);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: cyan;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .repository-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .repositories-main {
+    padding: 100px 20px 40px;
+  }
+  
+  .repositories-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .card-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
