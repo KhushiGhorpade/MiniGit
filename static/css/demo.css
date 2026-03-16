@@ -301,3 +301,179 @@ body {
 .footer a:hover {
   color: cyan;
 }
+/* Icon Styles - Blue Neon Outline */
+.flow-step .icon {
+  width: 48px;
+  height: 48px;
+  display: block;
+  margin: 0 auto 12px auto;
+  background: transparent;
+  border: 2px solid #00ffff;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #00ffff, inset 0 0 10px #00ffff33;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.flow-step:hover .icon {
+  box-shadow: 0 0 30px #00ffff, inset 0 0 15px #00ffff66;
+  transform: scale(1.1);
+  border-width: 3px;
+}
+
+/* Dashboard Icon - Grid Style */
+.dashboard-icon::before,
+.dashboard-icon::after {
+  content: '';
+  position: absolute;
+  background: #00ffff;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.dashboard-icon::before {
+  width: 20px;
+  height: 20px;
+  top: 8px;
+  left: 8px;
+  box-shadow: 12px 0 0 #00ffff, 0 12px 0 #00ffff, 12px 12px 0 #00ffff;
+}
+
+/* Repository Icon - Folder Style */
+.repo-icon::before {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 24px;
+  background: transparent;
+  border: 2px solid #00ffff;
+  border-radius: 6px 6px 0 0;
+  top: 10px;
+  left: 7px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.repo-icon::after {
+  content: '';
+  position: absolute;
+  width: 34px;
+  height: 20px;
+  background: transparent;
+  border: 2px solid #00ffff;
+  border-radius: 0 4px 4px 4px;
+  top: 20px;
+  left: 5px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+/* Commit Icon - Circle with Arrow */
+.commit-icon::before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  top: 10px;
+  left: 10px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.commit-icon::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 8px solid #00ffff;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  top: 19px;
+  left: 30px;
+  filter: drop-shadow(0 0 5px #00ffff);
+}
+
+/* Activity Icon - Bar Chart */
+.activity-icon::before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  background: #00ffff;
+  bottom: 10px;
+  left: 14px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.activity-icon::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 28px;
+  background: #00ffff;
+  bottom: 10px;
+  left: 22px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.activity-icon span {
+  position: absolute;
+  width: 4px;
+  height: 12px;
+  background: #00ffff;
+  bottom: 10px;
+  left: 30px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+/* Add this extra bar for the activity icon */
+.activity-icon::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 28px;
+  background: #00ffff;
+  bottom: 10px;
+  left: 22px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.activity-icon .bar {
+  position: absolute;
+  width: 4px;
+  height: 18px;
+  background: #00ffff;
+  bottom: 10px;
+  left: 30px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+/* Profile Icon - Person Silhouette */
+.profile-icon::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  top: 8px;
+  left: 12px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.profile-icon::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 16px;
+  border: 2px solid #00ffff;
+  border-radius: 50% 50% 0 0;
+  top: 26px;
+  left: 8px;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+/* Update HTML for activity icon to include the extra bar */
+/* Add this inside the activity-icon div in HTML:
+   <span class="bar"></span>
+*/
+
+/* For the activity icon, you'll need to modify the HTML slightly */

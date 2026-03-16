@@ -181,74 +181,74 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300);
     });
     
-    function displayResults(results) {
-        let html = '';
-        
-        results.forEach((item, index) => {
-            const icon = getIconForType(item.type);
-            const date = new Date(item.date).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-            });
-            
-            // Add animation delay based on index
-            const delay = index * 0.05;
-            
-            if (item.type === 'repository') {
-                html += `
-                    <div class="search-result-item" onclick="window.location.href='/repositories'" style="animation-delay: ${delay}s">
-                        <div class="result-icon repository"></div>
-                        <div class="result-content">
-                            <div class="result-title">
-                                ${escapeHtml(item.name)}
-                                <span class="repo-owner">by ${escapeHtml(item.username || 'unknown')}</span>
-                            </div>
-                            <div class="result-description">${escapeHtml(item.description) || 'No description provided'}</div>
-                            <div class="result-meta">
-                                <span> Created ${date}</span>
-                                <span> ${item.visibility || 'private'}</span>
-                            </div>
-                        </div>
-                        <div class="result-stars">
-                            <span class="star-icon">★</span>
-                            <span>${item.stars || 0}</span>
-                        </div>
-                    </div>
-                `;
-            } else if (item.type === 'user') {
-                html += `
-                    <div class="search-result-item" onclick="window.location.href='/profile'" style="animation-delay: ${delay}s">
-                        <div class="result-icon user"></div>
-                        <div class="result-content">
-                            <div class="result-title">${escapeHtml(item.name)}</div>
-                            <div class="result-description">${escapeHtml(item.description) || ''}</div>
-                            <div class="result-meta">
-                                <span>Joined ${date}</span>
-                                <span>@${escapeHtml(item.username)}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (item.type === 'commit') {
-                html += `
-                    <div class="search-result-item" onclick="window.location.href='/activity'" style="animation-delay: ${delay}s">
-                        <div class="result-icon commit"></div>
-                        <div class="result-content">
-                            <div class="result-title">${escapeHtml(item.name)}</div>
-                            <div class="result-description">in <span style="color: cyan;">${escapeHtml(item.description)}</span></div>
-                            <div class="result-meta">
-                                <span> ${date}</span>
-                                <span> by ${escapeHtml(item.username)}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
+function displayResults(results) {
+    let html = '';
+    
+    results.forEach((item, index) => {
+        const date = new Date(item.date).toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
         });
         
-        resultsList.innerHTML = html;
-    }
+        const delay = index * 0.05;
+        
+        if (item.type === 'repository') {
+            html += `
+                <div class="search-result-item" onclick="window.location.href='/repositories'" style="animation-delay: ${delay}s">
+                    <div class="result-icon repository"></div>
+                    <div class="result-content">
+                        <div class="result-title">
+                            ${escapeHtml(item.name)}
+                            <span class="repo-owner">by ${escapeHtml(item.username || 'unknown')}</span>
+                        </div>
+                        <div class="result-description">${escapeHtml(item.description) || 'No description provided'}</div>
+                        <div class="result-meta">
+                            <span class="meta-icon calendar-icon"></span>
+                            <span>${date}</span>
+                            <span class="meta-icon visibility-icon"></span>
+                            <span>${item.visibility || 'private'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (item.type === 'user') {
+            html += `
+                <div class="search-result-item" onclick="window.location.href='/profile'" style="animation-delay: ${delay}s">
+                    <div class="result-icon user"></div>
+                    <div class="result-content">
+                        <div class="result-title">${escapeHtml(item.name)}</div>
+                        <div class="result-description">${escapeHtml(item.description) || ''}</div>
+                        <div class="result-meta">
+                            <span class="meta-icon calendar-icon"></span>
+                            <span>Joined ${date}</span>
+                            <span class="meta-icon user-icon-small"></span>
+                            <span>@${escapeHtml(item.username)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (item.type === 'commit') {
+            html += `
+                <div class="search-result-item" onclick="window.location.href='/activity'" style="animation-delay: ${delay}s">
+                    <div class="result-icon commit"></div>
+                    <div class="result-content">
+                        <div class="result-title">${escapeHtml(item.name)}</div>
+                        <div class="result-description">in <span style="color: cyan;">${escapeHtml(item.description)}</span></div>
+                        <div class="result-meta">
+                            <span class="meta-icon calendar-icon"></span>
+                            <span>${date}</span>
+                            <span class="meta-icon user-icon-small"></span>
+                            <span>${escapeHtml(item.username)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    });
+    
+    resultsList.innerHTML = html;
+}
     
     function displayNoResults() {
         resultsList.innerHTML = `

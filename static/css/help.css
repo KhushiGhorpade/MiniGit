@@ -243,3 +243,174 @@ body {
 .forgot-faq .answer {
   text-align: center;
 }
+/* FAQ Icon Styles - Blue Neon Outline */
+.faq-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+  background: transparent;
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00ffff, inset 0 0 5px #00ffff33;
+  position: relative;
+  margin-right: 12px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.faq-item:hover .faq-icon {
+  box-shadow: 0 0 20px #00ffff, inset 0 0 10px #00ffff66;
+  transform: scale(1.1);
+}
+
+/* Question Mark Icon */
+.question-icon::before {
+  content: '?';
+  position: absolute;
+  color: #00ffff;
+  font-size: 18px;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 8px #00ffff;
+}
+
+/* Lock Icon */
+.lock-icon::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 10px;
+  border: 2px solid #00ffff;
+  border-radius: 4px 4px 0 0;
+  top: 4px;
+  left: 6px;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.lock-icon::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 10px;
+  border: 2px solid #00ffff;
+  border-radius: 0 0 4px 4px;
+  top: 10px;
+  left: 4px;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+/* Folder Icon */
+.folder-icon::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 12px;
+  background: transparent;
+  border: 2px solid #00ffff;
+  border-radius: 4px 4px 0 0;
+  top: 5px;
+  left: 3px;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.folder-icon::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 12px;
+  background: transparent;
+  border: 2px solid #00ffff;
+  border-radius: 0 4px 4px 4px;
+  top: 11px;
+  left: 2px;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+/* Commit Icon (Circle) */
+.commit-icon::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  top: 5px;
+  left: 5px;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.commit-icon::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 6px solid #00ffff;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  top: 10px;
+  left: 16px;
+  filter: drop-shadow(0 0 4px #00ffff);
+}
+
+/* Warning Icon (Exclamation) */
+.warning-icon::before {
+  content: '!';
+  position: absolute;
+  color: #00ffff;
+  font-size: 20px;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 8px #00ffff;
+}
+
+.warning-icon {
+  border-radius: 50%;
+}
+
+/* Adjust label layout for icons */
+.faq-item label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 26px;
+  cursor: pointer;
+  font-size: 18px;
+  color: cyan;
+}
+
+/* Forgot password specific centering */
+.forgot-faq label {
+  justify-content: center;
+  text-align: center;
+}
+
+.forgot-faq .faq-icon {
+  margin-right: 4px;
+}
+
+/* Arrow styling */
+.arrow {
+  font-size: 22px;
+  transition: transform 0.35s ease;
+  opacity: 0.8;
+  margin-left: auto;
+}
+
+.faq-item input:checked + label .arrow {
+  transform: rotate(180deg);
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .faq-item label {
+    flex-wrap: wrap;
+  }
+  
+  .faq-icon {
+    margin-bottom: 4px;
+  }
+}
