@@ -11,7 +11,7 @@
   <!-- HEADER -->
   <header class="header">
     <div class="brand">
-        <img  src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px"></div>
+        <img  src="{{ url_for('static', filename='/images/blue.png') }}" width="150px" height="150px">
     </div>
 
     <nav class="nav">
@@ -26,20 +26,18 @@
     <a href="{{ url_for('login') }}" class="login">Login</a>
 
   </header>
+  
   <!-- HERO -->
   <section class="hero">
     <video autoplay muted loop id="bg-video">
-    <source src="static/images/binary-code-falling.3840x2160.mp4" type="video/mp4">
-</video>
+      <source src="static/images/binary-code-falling.3840x2160.mp4" type="video/mp4">
+    </video>
     <div class="hero-content">
       <h1>MiniGit</h1>
       <p>Smart Repository Management System for Teams & Students</p>
       <a href="{{ url_for('register') }}">
         <button>Get Started</button>
       </a>
-    </div>
-
-      <!-- <img src="{{ url_for('static', filename='/images/blue.png') }}" class="img-logo" alt="MiniGit Logo"> -->
     </div>
   </section>
 
@@ -96,28 +94,26 @@
   </section>
 
   <!-- STATS -->
-<!-- STATS -->
-<!-- STATS -->
-<section class="stats">
-  <div class="stat">
-    <h2 class="stat-number" id="stat1" data-target="128">0+</h2>
-    <p>Repositories</p>
-  </div>
-  <div class="stat">
-    <h2 class="stat-number" id="stat2" data-target="4860">0+</h2>
-    <p>Commits</p>
-  </div>
-  <div class="stat">
-    <h2 class="stat-number" id="stat3" data-target="342">0+</h2>
-    <p>Active Users</p>
-  </div>
-  <div class="stat">
-    <h2 class="stat-number" id="stat4" data-target="91">0+</h2>
-    <p>Projects Managed</p>
-  </div>
-</section>
+  <section class="stats">
+    <div class="stat">
+      <h2 class="stat-number" id="stat1" data-target="{{ total_repos }}">0+</h2>
+      <p>Repositories</p>
+    </div>
+    <div class="stat">
+      <h2 class="stat-number" id="stat2" data-target="{{ total_commits }}">0+</h2>
+      <p>Commits</p>
+    </div>
+    <div class="stat">
+      <h2 class="stat-number" id="stat3" data-target="{{ active_users }}">0+</h2>
+      <p>Active Users</p>
+    </div>
+    <div class="stat">
+      <h2 class="stat-number" id="stat4" data-target="{{ total_feedback }}">0+</h2>
+      <p>Feedback Received</p>
+    </div>
+  </section>
 
- <!-- FOOTER -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div>
       <h3>MiniGit</h3>
@@ -143,7 +139,62 @@
       <p>support@minigit.dev</p>
     </div>
   </footer>
-  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
-</body>
 
+  <!-- STATS COUNTER SCRIPT -->
+  <script>
+    // Stats Counter Animation
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // Function to animate counting
+        function animateCounter(element, target) {
+            let current = 0;
+            // If target is 0, just display 0
+            if (target === 0) {
+                element.textContent = '0+';
+                return;
+            }
+            
+            const increment = Math.ceil(target / 50); // Divide into 50 steps
+            const timer = setInterval(function() {
+                current += increment;
+                
+                if (current >= target) {
+                    element.textContent = target + '+';
+                    clearInterval(timer);
+                } else {
+                    element.textContent = current + '+';
+                }
+            }, 30);
+        }
+
+        // Get all stat elements
+        const stat1 = document.getElementById('stat1');
+        const stat2 = document.getElementById('stat2');
+        const stat3 = document.getElementById('stat3');
+        const stat4 = document.getElementById('stat4');
+        
+        // Get target values from data attributes
+        const target1 = parseInt(stat1.dataset.target) || 0;
+        const target2 = parseInt(stat2.dataset.target) || 0;
+        const target3 = parseInt(stat3.dataset.target) || 0;
+        const target4 = parseInt(stat4.dataset.target) || 0;
+        
+        // Start counting when page loads
+        animateCounter(stat1, target1);
+        animateCounter(stat2, target2);
+        animateCounter(stat3, target3);
+        animateCounter(stat4, target4);
+        
+        // Add pop animation when numbers update
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(stat => {
+            stat.classList.add('updated');
+            setTimeout(() => {
+                stat.classList.remove('updated');
+            }, 300);
+        });
+    });
+  </script>
+
+</body>
 </html>

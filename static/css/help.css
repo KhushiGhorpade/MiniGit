@@ -6,9 +6,34 @@
 }
 
 body {
-  background: #000;
+  background: radial-gradient(circle at 0% 0%, #002b2b 0%, #000000 70%),
+              radial-gradient(circle at 100% 100%, #003333 0%, #000000 70%);
   color: #fff;
   overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Subtle floating particles */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.03) 0%, transparent 30%),
+    radial-gradient(circle at 80% 70%, rgba(0, 255, 255, 0.02) 0%, transparent 35%),
+    radial-gradient(circle at 40% 50%, rgba(0, 200, 255, 0.02) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+  animation: subtleFloat 20s ease-in-out infinite alternate;
+}
+
+@keyframes subtleFloat {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0.5; transform: scale(1.05); }
 }
 
 /* ================= HEADER ================= */
@@ -21,10 +46,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(0,255,255,0.15);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
   z-index: 1000;
+  box-shadow: 0 5px 30px rgba(0, 255, 255, 0.15);
 }
 
 .brand {
@@ -36,23 +62,48 @@ body {
 .logo {
   width: 34px;
   height: 34px;
-  background: linear-gradient(135deg, cyan, #00aaff);
+  background: linear-gradient(135deg, cyan, #00b8b8);
   border-radius: 10px;
-  box-shadow: 0 0 20px #00ffff88;
+  box-shadow: 0 0 20px cyan, 0 0 40px rgba(0, 255, 255, 0.3);
+  animation: logoPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { box-shadow: 0 0 20px cyan, 0 0 40px rgba(0, 255, 255, 0.3); }
+  50% { box-shadow: 0 0 30px cyan, 0 0 60px rgba(0, 255, 255, 0.5); }
 }
 
 .nav a {
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   margin-left: 26px;
   font-size: 14px;
   letter-spacing: 0.4px;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 5px 0;
+}
+
+.nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, cyan, #00ffff);
+  transition: width 0.3s ease;
+}
+
+.nav a:hover::after,
+.nav a.active::after {
+  width: 100%;
 }
 
 .nav a:hover,
 .nav a.active {
   color: cyan;
+  text-shadow: 0 0 10px cyan;
 }
 
 .login {
@@ -62,102 +113,115 @@ body {
   border-radius: 20px;
   text-decoration: none;
   font-weight: bold;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
-/* HERO */
+
+.login::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.login:hover::before {
+  left: 100%;
+}
+
+.login:hover {
+  background: cyan;
+  box-shadow: 0 0 30px cyan;
+  transform: translateY(-2px);
+}
+
+/* ================= HELP HERO ================= */
 .help-hero {
   padding: 160px 80px 80px;
   text-align: center;
-  background: radial-gradient(circle at top, #00ffff33, #000);
+  position: relative;
+  z-index: 1;
 }
 
 .help-hero h1 {
   font-size: 60px;
   color: cyan;
+  text-shadow: 0 0 20px cyan, 0 0 40px rgba(0, 255, 255, 0.3);
+  animation: heroGlow 3s ease-in-out infinite;
+}
+
+@keyframes heroGlow {
+  0%, 100% { text-shadow: 0 0 20px cyan, 0 0 40px rgba(0, 255, 255, 0.3); }
+  50% { text-shadow: 0 0 30px cyan, 0 0 60px rgba(0, 255, 255, 0.5); }
 }
 
 .help-hero p {
   margin-top: 14px;
   font-size: 18px;
-  opacity: 0.8;
-}
-
-/* CONTENT */
-.help-content {
-  padding: 80px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
-}
-
-.help-card {
-  background: rgba(0, 255, 255, 0.08);
-  backdrop-filter: blur(15px);
-  padding: 40px;
-  border-radius: 22px;
-  transition: 0.3s;
-}
-
-.help-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 0 30px #00ffff66;
-}
-
-.help-card h3 {
-  color: cyan;
-  margin-bottom: 12px;
-}
-
-.help-card p {
   opacity: 0.85;
-  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* FOOTER */
-.footer {
-  background: #020617;
-  padding: 90px 80px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
-}
-
-.footer a {
-  display: block;
-  margin-top: 8px;
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.8);
-}
-/* Custom Scrollbar (subtle & professional) */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #020617;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, cyan, #00bcd4);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: cyan;
-}
-/* FAQ GRID */
+/* ================= HELP CONTENT ================= */
 .help-content {
   padding: 80px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 30px;
+  position: relative;
+  z-index: 1;
+  align-items: start;
 }
 
-/* FAQ ITEM */
+/* ================= FAQ ITEM ================= */
 .faq-item {
-  background: rgba(0, 255, 255, 0.08);
+  background: rgba(10, 30, 30, 0.7);
+  backdrop-filter: blur(15px);
   border-radius: 18px;
   overflow: hidden;
-  transition: 0.3s;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+
+/* Glowing border effect on hover */
+.faq-item::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, cyan, #00ffff, #00cccc, cyan);
+  background-size: 400% 400%;
+  border-radius: 20px;
+  opacity: 0;
+  z-index: -1;
+  animation: borderRotate 6s linear infinite;
+  transition: opacity 0.3s ease;
+}
+
+.faq-item:hover::before {
+  opacity: 0.5;
+}
+
+@keyframes borderRotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.faq-item:hover {
+  transform: translateY(-5px);
+  border-color: cyan;
+  box-shadow: 0 0 35px rgba(0, 255, 255, 0.4);
 }
 
 /* Hide checkbox */
@@ -168,18 +232,18 @@ body {
 /* Question */
 .faq-item label {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 8px;
   padding: 24px 26px;
   cursor: pointer;
   font-size: 18px;
   color: cyan;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-/* Plus icon */
-.faq-item label span {
-  font-size: 22px;
-  transition: transform 0.3s;
+.faq-item:hover label {
+  text-shadow: 0 0 10px cyan;
 }
 
 /* Answer */
@@ -190,196 +254,34 @@ body {
   font-size: 15px;
   line-height: 1.6;
   opacity: 0;
-  transition: all 0.4s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #e0fefe;
 }
 
 /* Expand */
-.faq-item input:checked + label span {
-  transform: rotate(45deg);
-}
-
 .faq-item input:checked ~ .answer {
-  max-height: 200px;
+  max-height: 300px;
   padding: 0 26px 26px;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
-/* Hover glow */
-.faq-item:hover {
-  box-shadow: 0 0 25px #00ffff55;
-}
-.faq-item label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24px 26px;
-  cursor: pointer;
-  font-size: 18px;
-  color: cyan;
-}
-
+/* Arrow styling */
 .arrow {
   font-size: 22px;
   transition: transform 0.35s ease;
   opacity: 0.8;
+  margin-left: auto;
+  color: cyan;
+  filter: drop-shadow(0 0 5px cyan);
 }
+
 .faq-item input:checked + label .arrow {
   transform: rotate(180deg);
 }
+
 /* Make last FAQ full width if odd count */
 .faq-item:last-child {
   grid-column: span 2;
-}
-.help-content {
-  align-items: start;
-}
-/* Center the Forgot Password FAQ */
-.forgot-faq label {
-  justify-content: center;
-  gap: 14px;
-  text-align: center;
-}
-
-.forgot-faq .answer {
-  text-align: center;
-}
-/* FAQ Icon Styles - Blue Neon Outline */
-.faq-icon {
-  width: 28px;
-  height: 28px;
-  display: inline-block;
-  background: transparent;
-  border: 2px solid #00ffff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #00ffff, inset 0 0 5px #00ffff33;
-  position: relative;
-  margin-right: 12px;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-.faq-item:hover .faq-icon {
-  box-shadow: 0 0 20px #00ffff, inset 0 0 10px #00ffff66;
-  transform: scale(1.1);
-}
-
-/* Question Mark Icon */
-.question-icon::before {
-  content: '?';
-  position: absolute;
-  color: #00ffff;
-  font-size: 18px;
-  font-weight: bold;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-shadow: 0 0 8px #00ffff;
-}
-
-/* Lock Icon */
-.lock-icon::before {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 10px;
-  border: 2px solid #00ffff;
-  border-radius: 4px 4px 0 0;
-  top: 4px;
-  left: 6px;
-  box-shadow: 0 0 8px #00ffff;
-}
-
-.lock-icon::after {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 10px;
-  border: 2px solid #00ffff;
-  border-radius: 0 0 4px 4px;
-  top: 10px;
-  left: 4px;
-  box-shadow: 0 0 8px #00ffff;
-}
-
-/* Folder Icon */
-.folder-icon::before {
-  content: '';
-  position: absolute;
-  width: 18px;
-  height: 12px;
-  background: transparent;
-  border: 2px solid #00ffff;
-  border-radius: 4px 4px 0 0;
-  top: 5px;
-  left: 3px;
-  box-shadow: 0 0 8px #00ffff;
-}
-
-.folder-icon::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 12px;
-  background: transparent;
-  border: 2px solid #00ffff;
-  border-radius: 0 4px 4px 4px;
-  top: 11px;
-  left: 2px;
-  box-shadow: 0 0 8px #00ffff;
-}
-
-/* Commit Icon (Circle) */
-.commit-icon::before {
-  content: '';
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border: 2px solid #00ffff;
-  border-radius: 50%;
-  top: 5px;
-  left: 5px;
-  box-shadow: 0 0 8px #00ffff;
-}
-
-.commit-icon::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-left: 6px solid #00ffff;
-  border-top: 4px solid transparent;
-  border-bottom: 4px solid transparent;
-  top: 10px;
-  left: 16px;
-  filter: drop-shadow(0 0 4px #00ffff);
-}
-
-/* Warning Icon (Exclamation) */
-.warning-icon::before {
-  content: '!';
-  position: absolute;
-  color: #00ffff;
-  font-size: 20px;
-  font-weight: bold;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-shadow: 0 0 8px #00ffff;
-}
-
-.warning-icon {
-  border-radius: 50%;
-}
-
-/* Adjust label layout for icons */
-.faq-item label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 24px 26px;
-  cursor: pointer;
-  font-size: 18px;
-  color: cyan;
 }
 
 /* Forgot password specific centering */
@@ -392,25 +294,281 @@ body {
   margin-right: 4px;
 }
 
-/* Arrow styling */
-.arrow {
+.forgot-faq .answer {
+  text-align: center;
+}
+
+/* ================= FAQ ICON STYLES - BLUE NEON OUTLINE ================= */
+.faq-icon {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  background: transparent;
+  border: 2px solid cyan;
+  border-radius: 8px;
+  box-shadow: 0 0 15px cyan, inset 0 0 8px rgba(0, 255, 255, 0.3);
+  position: relative;
+  margin-right: 12px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.faq-item:hover .faq-icon {
+  box-shadow: 0 0 25px cyan, inset 0 0 12px rgba(0, 255, 255, 0.5);
+  transform: scale(1.1);
+  border-width: 3px;
+}
+
+/* Question Mark Icon */
+.question-icon::before {
+  content: '?';
+  position: absolute;
+  color: cyan;
+  font-size: 20px;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 10px cyan;
+}
+
+/* Lock Icon */
+.lock-icon::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 12px;
+  border: 2px solid cyan;
+  border-radius: 4px 4px 0 0;
+  top: 4px;
+  left: 7px;
+  box-shadow: 0 0 10px cyan;
+}
+
+.lock-icon::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 12px;
+  border: 2px solid cyan;
+  border-radius: 0 0 4px 4px;
+  top: 12px;
+  left: 5px;
+  box-shadow: 0 0 10px cyan;
+}
+
+/* Folder Icon */
+.folder-icon::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 14px;
+  background: transparent;
+  border: 2px solid cyan;
+  border-radius: 4px 4px 0 0;
+  top: 5px;
+  left: 4px;
+  box-shadow: 0 0 10px cyan;
+}
+
+.folder-icon::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 14px;
+  background: transparent;
+  border: 2px solid cyan;
+  border-radius: 0 4px 4px 4px;
+  top: 13px;
+  left: 3px;
+  box-shadow: 0 0 10px cyan;
+}
+
+/* Commit Icon (Circle) */
+.commit-icon::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid cyan;
+  border-radius: 50%;
+  top: 6px;
+  left: 6px;
+  box-shadow: 0 0 10px cyan;
+}
+
+.commit-icon::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 7px solid cyan;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  top: 11px;
+  left: 18px;
+  filter: drop-shadow(0 0 6px cyan);
+}
+
+/* Warning Icon (Exclamation) */
+.warning-icon::before {
+  content: '!';
+  position: absolute;
+  color: cyan;
   font-size: 22px;
-  transition: transform 0.35s ease;
-  opacity: 0.8;
-  margin-left: auto;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 10px cyan;
 }
 
-.faq-item input:checked + label .arrow {
-  transform: rotate(180deg);
+.warning-icon {
+  border-radius: 50%;
 }
 
-/* Responsive adjustment */
+/* ================= FOOTER ================= */
+.footer {
+  background: #020617;
+  padding: 90px 80px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.footer a {
+  display: block;
+  margin-top: 8px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.footer a:hover {
+  color: cyan;
+  transform: translateX(5px);
+  text-shadow: 0 0 10px cyan;
+}
+
+/* ================= CUSTOM SCROLLBAR ================= */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, cyan, #00bcd4, #008b9c);
+  border-radius: 10px;
+  border: 2px solid #020617;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00ffff, #00ffff);
+  box-shadow: 0 0 15px cyan;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1200px) {
+  .footer {
+    padding: 70px 50px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .help-hero h1 {
+    font-size: 48px;
+  }
+  
+  .help-content {
+    padding: 60px 40px;
+  }
+}
+
 @media (max-width: 768px) {
+  .header {
+    padding: 0 28px;
+  }
+  
+  .nav a {
+    margin-left: 15px;
+    font-size: 13px;
+  }
+  
+  .login {
+    padding: 6px 16px;
+  }
+  
+  .help-hero {
+    padding: 140px 20px 60px;
+  }
+  
+  .help-hero h1 {
+    font-size: 40px;
+  }
+  
+  .help-hero p {
+    font-size: 16px;
+    padding: 0 20px;
+  }
+  
+  .help-content {
+    padding: 40px 20px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .faq-item:last-child {
+    grid-column: span 1;
+  }
+  
   .faq-item label {
+    padding: 20px;
+    font-size: 16px;
     flex-wrap: wrap;
   }
   
   .faq-icon {
     margin-bottom: 4px;
+  }
+  
+  .answer {
+    font-size: 14px;
+  }
+  
+  .footer {
+    padding: 50px 30px;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .nav a {
+    margin-left: 0;
+  }
+  
+  .help-hero h1 {
+    font-size: 32px;
+  }
+  
+  .faq-item label {
+    padding: 18px 15px;
+    font-size: 15px;
+  }
+  
+  .faq-icon {
+    width: 28px;
+    height: 28px;
   }
 }

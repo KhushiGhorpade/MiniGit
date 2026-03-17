@@ -21,10 +21,76 @@ def get_db_connection():
         database="repo_management"
     )
     
+# Add this near the top after database connection function
+def init_database():
+    try:
+        db = get_db_connection()
+        cursor = db.cursor()
+        
+        # Check if repo_views table exists
+        cursor.execute("SHOW TABLES LIKE 'repo_views'")
+        if not cursor.fetchone():
+            cursor.execute("""
+                CREATE TABLE repo_views (
+                    view_id INT AUTO_INCREMENT PRIMARY KEY,
+                    repo_id INT NOT NULL,
+                    user_id INT NULL,
+                    viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (repo_id) REFERENCES repositories(repo_id) ON DELETE CASCADE,
+                    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
+                )
+            """)
+            db.commit()
+            print("✓ repo_views table created")
+        
+        cursor.close()
+        db.close()
+    except Exception as e:
+        print(f"Database init error: {e}")
+
+# Call it when app starts
+init_database()    
 # ========================= BEFORE LOGIN PAGES =========================
 @app.route("/")
 def home():
-    return render_template("index.html", active_page="home")
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    # Get total repositories
+    cursor.execute("SELECT COUNT(*) as total FROM repositories")
+    total_repos = cursor.fetchone()['total'] or 0
+    
+    # Get total commits
+    cursor.execute("SELECT COUNT(*) as total FROM commits")
+    total_commits = cursor.fetchone()['total'] or 0
+    
+    # Get active users (users who have logged in within last 30 days or have activity)
+    cursor.execute("""
+        SELECT COUNT(DISTINCT u.user_id) as total 
+        FROM users u
+        LEFT JOIN commits c ON u.user_id = c.author_id
+        LEFT JOIN repositories r ON u.user_id = r.owner_id
+        LEFT JOIN issues i ON u.user_id = i.created_by
+        WHERE u.last_login >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+           OR c.commit_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+           OR r.created_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+           OR i.created_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+    """)
+    active_users = cursor.fetchone()['total'] or 0
+    
+    # Get total feedback submissions instead of "Projects Managed"
+    cursor.execute("SELECT COUNT(*) as total FROM feedback")
+    total_feedback = cursor.fetchone()['total'] or 0
+    
+    cursor.close()
+    db.close()
+    
+    return render_template("index.html", 
+                         active_page="home",
+                         total_repos=total_repos,
+                         total_commits=total_commits,
+                         active_users=active_users,
+                         total_feedback=total_feedback)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

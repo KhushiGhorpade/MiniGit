@@ -642,3 +642,60 @@ document.addEventListener('DOMContentLoaded', function() {
     animateCounter(stat3, target3);
     animateCounter(stat4, target4);
 });
+/* ================= ADD THESE TO YOUR EXISTING HOME.CSS ================= */
+
+/* Underline animation for nav links */
+.nav a {
+  position: relative;
+}
+
+.nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, cyan, #00ffff);
+  transition: width 0.3s ease;
+}
+
+.nav a:hover::after,
+.nav a.active::after {
+  width: 100%;
+}
+
+/* Glitch effect on nav hover */
+.nav a:hover {
+  animation: glitch 0.3s ease-in-out;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+/* Logo pulse animation */
+.logo {
+  animation: logoPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { box-shadow: 0 0 20px cyan, 0 0 40px rgba(0, 255, 255, 0.3); }
+  50% { box-shadow: 0 0 30px cyan, 0 0 60px rgba(0, 255, 255, 0.5); }
+}
+
+/* Improved footer hover animations */
+.footer a {
+  transition: all 0.3s ease;
+}
+
+.footer a:hover {
+  color: cyan;
+  transform: translateX(5px);
+  text-shadow: 0 0 10px cyan;
+}
