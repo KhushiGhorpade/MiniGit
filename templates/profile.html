@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Profile | MiniGit</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
-
 <body>
 
 <!-- ================= AUTH NAVBAR ================= -->
@@ -122,21 +122,21 @@
         <!-- Stats Cards -->
         <div class="metric-item stats-cards">
           <div class="stat-card">
-            <div class="stat-icon">📊</div>
+            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
             <div class="stat-content">
               <span class="stat-value">{{ active_days }}</span>
               <span class="stat-label">ACTIVE DAYS</span>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-icon">⚡</div>
+            <div class="stat-icon"><i class="fas fa-code-branch"></i></div>
             <div class="stat-content">
               <span class="stat-value">{{ total_commits }}</span>
               <span class="stat-label">COMMITS</span>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-icon">🎯</div>
+            <div class="stat-icon"><i class="fas fa-bolt"></i></div>
             <div class="stat-content">
               <span class="stat-value">{{ efficiency }}%</span>
               <span class="stat-label">EFFICIENCY</span>
@@ -153,11 +153,17 @@
         {% for activity in recent_activities %}
         <div class="activity-item">
           <div class="activity-icon {{ activity.type }}">
-            {% if activity.type == 'commit' %}📝
-            {% elif activity.type == 'repo' %}📁
-            {% elif activity.type == 'issue' %}⚠️
-            {% elif activity.type == 'merge' %}🔄
-            {% else %}⚡{% endif %}
+            {% if activity.type == 'commit' %}
+              <i class="fas fa-code-commit"></i>
+            {% elif activity.type == 'repo' %}
+              <i class="fas fa-book"></i>
+            {% elif activity.type == 'issue' %}
+              <i class="fas fa-exclamation-circle"></i>
+            {% elif activity.type == 'merge' %}
+              <i class="fas fa-code-branch"></i>
+            {% else %}
+              <i class="fas fa-bolt"></i>
+            {% endif %}
           </div>
           <div class="activity-content">
             <div class="activity-header">
@@ -172,7 +178,7 @@
         </div>
         {% else %}
         <div class="activity-item">
-          <div class="activity-icon">⚡</div>
+          <div class="activity-icon"><i class="fas fa-bolt"></i></div>
           <div class="activity-content">
             <p>No recent activity</p>
           </div>
@@ -200,14 +206,14 @@
           <p class="repo-desc">{{ repo.description }}</p>
           <div class="repo-stats">
             <span class="repo-stat">
-              <span class="stat-icon">📊</span> {{ repo.stats.commits }} commits
+              <i class="fas fa-code-commit"></i> {{ repo.stats.commits }} commits
             </span>
             <span class="repo-stat">
-              <span class="stat-icon">⚠️</span> {{ repo.stats.issues }} issues
+              <i class="fas fa-exclamation-circle"></i> {{ repo.stats.issues }} issues
             </span>
             <span class="repo-stat">
-              <span class="stat-icon">⭐</span> {{ repo.stats.stars }} stars
-            </span>
+  <i class="fas fa-eye"></i> {{ repo.stats.views }} views
+</span>
           </div>
           <div class="repo-footer">
             <span class="repo-updated">Updated {{ repo.updated }}</span>

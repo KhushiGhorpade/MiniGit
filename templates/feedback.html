@@ -33,7 +33,10 @@
 
   <!-- HERO -->
   <section class="feedback-hero">
-    <h1>Product Feedback 📝</h1>
+    <div class="hero-icon">
+      <span class="hero-feedback-icon"></span>
+    </div>
+    <h1>Product Feedback</h1>
     <p>Help improve MiniGit by reporting issues or suggesting improvements</p>
   </section>
 
@@ -43,10 +46,16 @@
 
       <h2>Submit Feedback</h2>
 
-      <label>Your Name</label>
+      <label>
+        <span class="form-icon user-icon"></span>
+        Your Name
+      </label>
       <input type="text" name="name" placeholder="Enter your name" required>
 
-      <label>Feedback Category</label>
+      <label>
+        <span class="form-icon category-icon"></span>
+        Feedback Category
+      </label>
       <select name="category" required>
         <option value="">-- Select Category --</option>
         <option>Bug / Issue</option>
@@ -56,26 +65,34 @@
         <option>Documentation / Help</option>
       </select>
 
-      <label>Experience Level</label>
-<div class="experience-buttons">
-  <input type="radio" id="poor" name="experience" value="Poor" required>
-  <label for="poor">Poor</label>
+      <label>
+        <span class="form-icon experience-icon"></span>
+        Experience Level
+      </label>
+      <div class="experience-buttons">
+        <input type="radio" id="poor" name="experience" value="Poor" required>
+        <label for="poor">Poor</label>
 
-  <input type="radio" id="fair" name="experience" value="Fair">
-  <label for="fair">Fair</label>
+        <input type="radio" id="fair" name="experience" value="Fair">
+        <label for="fair">Fair</label>
 
-  <input type="radio" id="good" name="experience" value="Good">
-  <label for="good">Good</label>
+        <input type="radio" id="good" name="experience" value="Good">
+        <label for="good">Good</label>
 
-  <input type="radio" id="excellent" name="experience" value="Excellent">
-  <label for="excellent">Excellent</label>
-</div>
+        <input type="radio" id="excellent" name="experience" value="Excellent">
+        <label for="excellent">Excellent</label>
+      </div>
 
-
-      <label>Your Message</label>
+      <label>
+        <span class="form-icon message-icon"></span>
+        Your Message
+      </label>
       <textarea name="message" rows="4" placeholder="Describe your feedback..." required></textarea>
 
-      <button type="submit">Submit Feedback</button>
+      <button type="submit">
+        <span class="btn-icon"></span>
+        Submit Feedback
+      </button>
 
     </form>
   </section>

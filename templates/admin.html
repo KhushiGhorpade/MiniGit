@@ -17,16 +17,26 @@
         <div class="menu">
           <h3>Reports</h3>
           <button class="active" onclick="showReport('user')">
-            📋 User Report
+            <span class="menu-icon user-icon"></span> User Report
           </button>
-          <button onclick="showReport('repo')">📚 Repository Report</button>
-          <button onclick="showReport('commit')">💾 Commit Report</button>
+          <button onclick="showReport('repo')">
+            <span class="menu-icon repo-icon"></span> Repository Report
+          </button>
+          <button onclick="showReport('commit')">
+            <span class="menu-icon commit-icon"></span> Commit Report
+          </button>
           <button onclick="showReport('popularity')">
-            ⭐ Popularity Report
+            <span class="menu-icon popularity-icon"></span> Popularity Report
           </button>
-          <button onclick="showReport('issue')">🐛 Issue Report</button>
-          <button onclick="showReport('activity')">📊 Activity Report</button>
-          <button onclick="showReport('feedback')">💬 Feedback Report</button>
+          <button onclick="showReport('issue')">
+            <span class="menu-icon issue-icon"></span> Issue Report
+          </button>
+          <button onclick="showReport('activity')">
+            <span class="menu-icon activity-icon"></span> Activity Report
+          </button>
+          <button onclick="showReport('feedback')">
+            <span class="menu-icon feedback-icon"></span> Feedback Report
+          </button>
         </div>
       </aside>
 
@@ -36,7 +46,7 @@
         <header class="header">
           <h1>MiniGit Admin Dashboard</h1>
           <a href="/logout" class="logout-btn">
-            <span class="logout-icon">🚪</span> Logout
+            <span class="logout-icon"></span> Logout
           </a>
         </header>
 
@@ -45,7 +55,9 @@
           <!-- 1. USER REPORT -->
           <div id="user" class="report show">
             <div class="report-header">
-              <h2>📋 User Report</h2>
+              <h2>
+                <span class="header-icon user-header-icon"></span> User Report
+              </h2>
               <p>User ID, Username, Email, Registration Date, Status</p>
             </div>
 
@@ -68,7 +80,7 @@
             </div>
 
             <div class="table-container full-width">
-              <h3><span class="table-icon">👥</span> User Details</h3>
+              <h3><span class="table-icon users-icon"></span> User Details</h3>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -91,7 +103,9 @@
           <!-- 2. REPOSITORY REPORT -->
           <div id="repo" class="report">
             <div class="report-header">
-              <h2>📚 Repository Report</h2>
+              <h2>
+                <span class="header-icon repo-header-icon"></span> Repository Report
+              </h2>
               <p>Repo ID, Repo Name, Owner, Created Date, Total Commits</p>
             </div>
 
@@ -114,7 +128,7 @@
             </div>
 
             <div class="table-container full-width">
-              <h3><span class="table-icon">📁</span> Repository Details</h3>
+              <h3><span class="table-icon repos-icon"></span> Repository Details</h3>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -137,7 +151,9 @@
           <!-- 3. COMMIT REPORT -->
           <div id="commit" class="report">
             <div class="report-header">
-              <h2>💾 Commit Report</h2>
+              <h2>
+                <span class="header-icon commit-header-icon"></span> Commit Report
+              </h2>
               <p>Commit ID, Repo Name, Commit Message, Committed By, Date</p>
             </div>
 
@@ -160,7 +176,7 @@
             </div>
 
             <div class="table-container full-width">
-              <h3><span class="table-icon">📝</span> Recent Commits</h3>
+              <h3><span class="table-icon commits-icon"></span> Recent Commits</h3>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -180,47 +196,52 @@
             </div>
           </div>
 
-          <!-- 4. POPULARITY REPORT -->
-          <div id="popularity" class="report">
-            <div class="report-header">
-              <h2>⭐ Repository Popularity Report</h2>
-              <p>
-                Repo ID, Repo Name, Owner, Views, Stars
-              </p>
-            </div>
+          <!-- 4. POPULARITY REPORT - STARS COLUMN REMOVED -->
+       <!-- 4. POPULARITY REPORT -->
+<div id="popularity" class="report">
+    <div class="report-header">
+        <h2>
+            <span class="header-icon popularity-header-icon"></span> Repository Popularity Report
+        </h2>
+        <p>
+            Rank, Repo Name, Owner, Views, Commits, Issues
+        </p>
+    </div>
 
-            <div class="hybrid-section">
-              <div class="table-container">
-                <h3><span class="table-icon">📊</span> Popularity Ranking</h3>
-                <table class="data-table">
-                  <thead>
+    <div class="hybrid-section">
+        <div class="table-container">
+            <h3><span class="table-icon ranking-icon"></span> Popularity Ranking</h3>
+            <table class="data-table">
+                <thead>
                     <tr>
-                      <th>Rank</th>
-                      <th>Repo Name</th>
-                      <th>Owner</th>
-                      <th>⭐ Stars</th>
-                      <th>👁️ Views</th>
+                        <th>Rank</th>
+                        <th>Repo Name</th>
+                        <th>Owner</th>
+                        <th>Views</th>
+                        <th>Commits</th>
+                        <th>Issues</th>
                     </tr>
-                  </thead>
-                  <tbody id="popularityTableBody">
+                </thead>
+                <tbody id="popularityTableBody">
                     <tr>
-                      <td colspan="5">Loading Repos...</td>
+                        <td colspan="6">Loading Repos...</td>
                     </tr>
-                  </tbody>
-                </table>
-              </div>
+                </tbody>
+            </table>
+        </div>
 
-              <div class="chart-container small-chart">
-                <h3><span class="chart-icon">📈</span> Top 5 Repositories</h3>
-                <canvas id="popularityChart" width="300" height="150"></canvas>
-              </div>
-            </div>
-          </div>
-
+        <div class="chart-container small-chart">
+            <h3><span class="chart-icon trends-icon"></span> Top 5 by Views</h3>
+            <canvas id="popularityChart" width="300" height="150"></canvas>
+        </div>
+    </div>
+</div>
           <!-- 5. ISSUE REPORT -->
           <div id="issue" class="report">
             <div class="report-header">
-              <h2>🐛 Issue Report</h2>
+              <h2>
+                <span class="header-icon issue-header-icon"></span> Issue Report
+              </h2>
               <p>Issue ID, Repo Name, Issue Title, Created By, Status, Date</p>
             </div>
 
@@ -243,7 +264,7 @@
             </div>
 
             <div class="table-container full-width">
-              <h3><span class="table-icon">⚠️</span> Issue Details</h3>
+              <h3><span class="table-icon issues-icon"></span> Issue Details</h3>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -264,10 +285,12 @@
             </div>
           </div>
 
-          <!-- 6. ACTIVITY REPORT (NOW WITH REAL DATA) -->
+          <!-- 6. ACTIVITY REPORT -->
           <div id="activity" class="report">
             <div class="report-header">
-              <h2>📊 Activity / Contribution Report</h2>
+              <h2>
+                <span class="header-icon activity-header-icon"></span> Activity / Contribution Report
+              </h2>
               <p>
                 Username, Total Repos, Total Commits, Total Issues, Last Activity
               </p>
@@ -275,7 +298,7 @@
 
             <div class="hybrid-section">
               <div class="table-container">
-                <h3><span class="table-icon">👤</span> User Contributions</h3>
+                <h3><span class="table-icon contributions-icon"></span> User Contributions</h3>
                 <table class="data-table">
                   <thead>
                     <tr>
@@ -295,124 +318,133 @@
               </div>
 
               <div class="chart-container small-chart">
-                <h3><span class="chart-icon">📈</span> Top Contributors</h3>
+                <h3><span class="chart-icon contributors-chart-icon"></span> Top Contributors</h3>
                 <canvas id="activityChart" width="300" height="150"></canvas>
               </div>
             </div>
           </div>
 
           <!-- 7. FEEDBACK REPORT -->
-          <div id="feedback" class="report">
-            <div class="report-header">
-              <h2>💬 Feedback Report</h2>
-              <p>
-                User feedback analysis: Categories, Experience Ratings
-              </p>
-            </div>
+      <!-- 7. FEEDBACK REPORT -->
+<div id="feedback" class="report">
+    <div class="report-header">
+        <h2>
+            <span class="header-icon feedback-header-icon"></span> Feedback Report
+        </h2>
+        <p>
+            User feedback analysis: Categories, Experience Ratings
+        </p>
+    </div>
 
-            <div class="summary-cards">
-              <div class="card">
-                <h3>Total Feedback</h3>
-                <div class="value" id="totalFeedback">0</div>
-                <div class="trend neutral">All time</div>
-              </div>
-              <div class="card">
-                <h3>Positive</h3>
-                <div class="value" id="positiveFeedback">0</div>
-                <div class="trend positive">Good experience</div>
-              </div>
-              <div class="card">
-                <h3>Need Action</h3>
-                <div class="value" id="actionNeeded">0</div>
-                <div class="trend warning">Issues reported</div>
-              </div>
-            </div>
+    <div class="summary-cards">
+        <div class="card">
+            <h3>Total Feedback</h3>
+            <div class="value" id="totalFeedback">0</div>
+            <div class="trend neutral">All time</div>
+        </div>
+        <div class="card">
+            <h3>Positive</h3>
+            <div class="value" id="positiveFeedback">0</div>
+            <div class="trend positive">Good experience</div>
+        </div>
+        <div class="card">
+            <h3>Need Action</h3>
+            <div class="value" id="actionNeeded">0</div>
+            <div class="trend warning">Issues reported</div>
+        </div>
+    </div>
 
-            <div class="hybrid-section">
-              <div class="table-container">
-                <h3><span class="table-icon">📋</span> Recent Feedback</h3>
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Feedback ID</th>
-                      <th>Name</th>
-                      <th>Category</th>
-                      <th>Experience</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="feedbackTableBody">
-                    <tr>
-                      <td colspan="6">Loading feedback...</td>
-                    </tr>
-                  </tbody>
+    <div class="hybrid-section">
+        <div class="table-container feedback-table-container">
+            <h3><span class="table-icon feedback-list-icon"></span> Recent Feedback</h3>
+            <div class="table-wrapper with-sticky-header">
+                <table class="data-table feedback-table">
+                    <thead>
+                        <tr>
+                            <th>Feedback ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Experience</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedbackTableBody">
+                        <tr>
+                            <td colspan="6">Loading feedback...</td>
+                        </tr>
+                    </tbody>
                 </table>
-              </div>
-
-              <div class="chart-container small-chart">
-                <h3><span class="chart-icon">📊</span> Feedback by Category</h3>
-                <canvas id="feedbackChart" width="300" height="150"></canvas>
-              </div>
             </div>
-          </div>
+        </div>
+
+        <div class="chart-container small-chart">
+    <h3><span class="chart-icon categories-icon"></span> Feedback by Category</h3>
+    <div class="chart-wrapper">
+        <canvas id="feedbackChart" width="300" height="150"></canvas>
+    </div>
+</div>
+</div>
         </section>
       </main>
     </div>
 
+    
+    <!-- ALL JAVASCRIPT REMAINS EXACTLY THE SAME -->
     <script>
-      let popularityChart = null;
-      let activityChart = null;
-      let feedbackChart = null;
+  // Initialize chart variables
+  let popularityChartInstance = null;
+  let activityChartInstance = null;
+  let feedbackChartInstance = null;
 
-      // Show report function
-      function showReport(id) {
-        document
-          .querySelectorAll(".report")
-          .forEach((r) => r.classList.remove("show"));
-        document
-          .querySelectorAll(".menu button")
-          .forEach((b) => b.classList.remove("active"));
-        document.getElementById(id).classList.add("show");
-        event.target.classList.add("active");
-        loadReportData(id);
-      }
+  // Show report function
+  function showReport(id) {
+    document
+      .querySelectorAll(".report")
+      .forEach((r) => r.classList.remove("show"));
+    document
+      .querySelectorAll(".menu button")
+      .forEach((b) => b.classList.remove("active"));
+    document.getElementById(id).classList.add("show");
+    event.target.classList.add("active");
+    loadReportData(id);
+  }
 
-      // Load REAL data from database
-      function loadReportData(reportType) {
-        if (reportType === "user") {
-          loadUserReport();
-        } else if (reportType === "feedback") {
-          loadFeedbackReport();
-        } else if (reportType === "popularity") {
-          loadPopularityReport();
-        } else if (reportType === "commit") {
-          loadCommitReport();
-        } else if (reportType === "issue") {
-          loadIssueReport();
-        } else if (reportType === "repo") {
-          loadRepoReport();
-        } else if (reportType === "activity") {
-          loadActivityReport();
-        }
-      }
+  // Load REAL data from database
+  function loadReportData(reportType) {
+    if (reportType === "user") {
+      loadUserReport();
+    } else if (reportType === "feedback") {
+      loadFeedbackReport();
+    } else if (reportType === "popularity") {
+      loadPopularityReport();
+    } else if (reportType === "commit") {
+      loadCommitReport();
+    } else if (reportType === "issue") {
+      loadIssueReport();
+    } else if (reportType === "repo") {
+      loadRepoReport();
+    } else if (reportType === "activity") {
+      loadActivityReport();
+    }
+  }
 
-      // Load User Report from API
-      function loadUserReport() {
-        fetch("/api/admin/users")
-          .then((response) => response.json())
-          .then((data) => {
-            document.getElementById("totalUsers").textContent = data.total;
-            document.getElementById("activeUsers").textContent = data.active;
-            document.getElementById("newToday").textContent = data.newToday;
+  // Load User Report from API
+  function loadUserReport() {
+    fetch("/api/admin/users")
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById("totalUsers").textContent = data.total;
+        document.getElementById("activeUsers").textContent = data.active;
+        document.getElementById("newToday").textContent = data.newToday;
 
-            const tbody = document.getElementById("userTableBody");
-            if (data.users.length === 0) {
-              tbody.innerHTML = '<tr><td colspan="5">No users found</td></tr>';
-            } else {
-              tbody.innerHTML = data.users
-                .map(
-                  (user) => `
+        const tbody = document.getElementById("userTableBody");
+        if (data.users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">No users found</td></tr>';
+        } else {
+          tbody.innerHTML = data.users
+            .map(
+              (user) => `
           <tr>
             <td>${user.id}</td>
             <td>${user.username}</td>
@@ -421,551 +453,625 @@
             <td><span class="status ${user.status.toLowerCase()}">${user.status}</span></td>
           </tr>
         `,
-                )
-                .join("");
-            }
-          })
-          .catch((error) => {
-            console.error("Error loading users:", error);
-            document.getElementById("userTableBody").innerHTML =
-              '<tr><td colspan="5">Error loading users</td></tr>';
-          });
-      }
-
-      // Load Commit Report from API
-      function loadCommitReport() {
-        console.log("Loading commits...");
-
-        document.getElementById("totalCommits").textContent = "Loading...";
-        document.getElementById("todayCommits").textContent = "Loading...";
-        document.getElementById("mostActiveUser").textContent = "Loading...";
-        document.getElementById("commitTableBody").innerHTML =
-          '<tr><td colspan="5">Loading commits...</td></tr>';
-
-        fetch("/api/admin/commits")
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((data) => {
-            document.getElementById("totalCommits").textContent =
-              data.total || 0;
-            document.getElementById("todayCommits").textContent =
-              data.today || 0;
-            document.getElementById("mostActiveUser").textContent =
-              data.mostActiveUser || "N/A";
-
-            const tbody = document.getElementById("commitTableBody");
-
-            if (!data.commits || data.commits.length === 0) {
-              tbody.innerHTML =
-                '<tr><td colspan="5">No commits found in database</td></tr>';
-            } else {
-              let html = "";
-              data.commits.forEach((commit) => {
-                html += `
-                  <tr>
-                    <td>${commit.id || ""}</td>
-                    <td>${commit.repo_name || ""}</td>
-                    <td>${commit.message || ""}</td>
-                    <td>${commit.committed_by || ""}</td>
-                    <td>${commit.date || ""}</td>
-                  </tr>
-                `;
-              });
-              tbody.innerHTML = html;
-            }
-          })
-          .catch((error) => {
-            console.error("Error loading commits:", error);
-            document.getElementById("totalCommits").textContent = "Error";
-            document.getElementById("todayCommits").textContent = "Error";
-            document.getElementById("mostActiveUser").textContent = "Error";
-            document.getElementById("commitTableBody").innerHTML =
-              '<tr><td colspan="5">Error: ' + error.message + "</td></tr>";
-          });
-      }
-
-      // Load Issue Report from API
-      function loadIssueReport() {
-        console.log("Loading issues...");
-
-        document.getElementById("totalIssues").textContent = "Loading...";
-        document.getElementById("openIssues").textContent = "Loading...";
-        document.getElementById("closedToday").textContent = "Loading...";
-        document.getElementById("issueTableBody").innerHTML =
-          '<tr><td colspan="6">Loading issues...</td></tr>';
-
-        fetch("/api/admin/issues")
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((data) => {
-            document.getElementById("totalIssues").textContent =
-              data.total || 0;
-            document.getElementById("openIssues").textContent = data.open || 0;
-            document.getElementById("closedToday").textContent =
-              data.closedToday || 0;
-
-            const tbody = document.getElementById("issueTableBody");
-
-            if (!data.issues || data.issues.length === 0) {
-              tbody.innerHTML =
-                '<tr><td colspan="6">No issues found in database</td></tr>';
-            } else {
-              let html = "";
-              data.issues.forEach((issue) => {
-                let statusClass = "";
-                if (issue.status) {
-                  const statusLower = issue.status.toLowerCase();
-                  if (statusLower === "open") {
-                    statusClass = "status";
-                  } else if (
-                    statusLower === "in progress" ||
-                    statusLower === "in-progress"
-                  ) {
-                    statusClass = "status in-progress";
-                  } else if (
-                    statusLower === "closed" ||
-                    statusLower === "resolved"
-                  ) {
-                    statusClass = "status resolved";
-                  }
-                }
-
-                html += `
-                  <tr>
-                    <td>${issue.id || ""}</td>
-                    <td>${issue.repo_name || ""}</td>
-                    <td>${issue.issue_title || ""}</td>
-                    <td>${issue.created_by || ""}</td>
-                    <td><span class="${statusClass}">${issue.status || ""}</span></td>
-                    <td>${issue.date || ""}</td>
-                  </tr>
-                `;
-              });
-              tbody.innerHTML = html;
-            }
-          })
-          .catch((error) => {
-            console.error("Error loading issues:", error);
-            document.getElementById("totalIssues").textContent = "Error";
-            document.getElementById("openIssues").textContent = "Error";
-            document.getElementById("closedToday").textContent = "Error";
-            document.getElementById("issueTableBody").innerHTML =
-              '<tr><td colspan="6">Error: ' + error.message + "</td></tr>";
-          });
-      }
-
-      // Load Feedback Report from API
-      function loadFeedbackReport() {
-        console.log("Loading feedback...");
-
-        fetch("/api/admin/feedback")
-          .then((response) => response.json())
-          .then((data) => {
-            document.getElementById("totalFeedback").textContent =
-              data.total || 0;
-            document.getElementById("positiveFeedback").textContent =
-              data.positive || 0;
-            document.getElementById("actionNeeded").textContent =
-              data.actionNeeded || 0;
-
-            const tbody = document.getElementById("feedbackTableBody");
-
-            if (!data.feedbacks || data.feedbacks.length === 0) {
-              tbody.innerHTML =
-                '<tr><td colspan="6">No feedback found</td></tr>';
-            } else {
-              let html = "";
-              data.feedbacks.forEach((fb) => {
-                let expClass = fb.experience
-                  ? fb.experience.toLowerCase().replace(/ /g, "-")
-                  : "";
-                let statusClass = fb.status
-                  ? fb.status.toLowerCase().replace(/ /g, "-")
-                  : "";
-
-                html += `
-                  <tr>
-                    <td>${fb.id || ""}</td>
-                    <td>${fb.name || ""}</td>
-                    <td>${fb.category || ""}</td>
-                    <td>
-                      <span class="experience ${expClass}">
-                        ${fb.experience || ""}
-                      </span>
-                    </td>
-                    <td>${fb.date || ""}</td>
-                    <td>
-                      <span class="status ${statusClass}">
-                        ${fb.status || ""}
-                      </span>
-                    </td>
-                  </tr>
-                `;
-              });
-              tbody.innerHTML = html;
-            }
-
-            if (data.categories && data.categories.length > 0) {
-              updateFeedbackChart(data.categories);
-            }
-          })
-          .catch((error) => {
-            console.error("Error loading feedback:", error);
-            document.getElementById("feedbackTableBody").innerHTML =
-              '<tr><td colspan="6">Error loading feedback: ' +
-              error.message +
-              "</td></tr>";
-          });
-      }
-
-      // NEW: Load Activity Report from API
-      function loadActivityReport() {
-        console.log("Loading activity report...");
-        
-        document.getElementById("activityTableBody").innerHTML = 
-          '<tr><td colspan="5">Loading activity data...</td></tr>';
-        
-        if (activityChart) {
-          activityChart.destroy();
-          activityChart = null;
+            )
+            .join("");
         }
-        
-        fetch("/api/admin/activity")
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(data => {
-            console.log("Activity data received:", data);
-            
-            const tbody = document.getElementById("activityTableBody");
-            
-            if (!data.activities || data.activities.length === 0) {
-              tbody.innerHTML = '<tr><td colspan="5">No activity data found</td></tr>';
-              return;
-            }
-            
-            let html = "";
-            data.activities.forEach(user => {
-              let activityClass = "status ";
-              if (user.last_activity === 'Today' || user.last_activity === 'Yesterday') {
-                activityClass += "active";
-              } else if (user.last_activity.includes('days ago') && parseInt(user.last_activity) < 7) {
-                activityClass += "active";
-              } else if (user.last_activity.includes('week')) {
-                activityClass += "idle";
-              } else {
-                activityClass += "inactive";
-              }
-              
-              html += `
-                <tr>
-                  <td>${user.username || 'Unknown'}</td>
-                  <td>${user.total_repos || 0}</td>
-                  <td>${user.total_commits || 0}</td>
-                  <td>${user.total_issues || 0}</td>
-                  <td><span class="${activityClass}">${user.last_activity || 'Never'}</span></td>
-                </tr>
-              `;
-            });
-            tbody.innerHTML = html;
-            
-            // Update chart with top contributors
-            if (data.top_contributors && data.top_contributors.length > 0) {
-              updateActivityChart(data.top_contributors);
-            }
-          })
-          .catch(error => {
-            console.error("Error loading activity:", error);
-            document.getElementById("activityTableBody").innerHTML = 
-              '<tr><td colspan="5">Error loading activity: ' + error.message + '</td></tr>';
-          });
-      }
-
-      // Update activity chart
-      function updateActivityChart(contributors) {
-        const ctx = document.getElementById("activityChart").getContext("2d");
-        
-        if (activityChart) {
-          activityChart.destroy();
-        }
-        
-        const labels = contributors.map(c => c.username);
-        const commitData = contributors.map(c => c.total_commits);
-        
-        activityChart = new Chart(ctx, {
-          type: "doughnut",
-          data: {
-            labels: labels,
-            datasets: [{
-              data: commitData,
-              backgroundColor: [
-                "#22f5ff",
-                "#0ea5e9",
-                "#8b5cf6",
-                "#10b981",
-                "#f59e0b"
-              ],
-              borderWidth: 1,
-              borderColor: "#021c1a",
-            }],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: {
-                  color: "#94a3b8",
-                  font: { size: 11 },
-                  boxWidth: 12,
-                  padding: 15
-                },
-              },
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    return `${context.label}: ${context.raw} commits`;
-                  }
-                }
-              }
-            },
-            cutout: "50%",
-          },
-        });
-      }
-
-      // Function to update feedback chart
-      function updateFeedbackChart(categories) {
-        const fbCtx = document.getElementById("feedbackChart").getContext("2d");
-
-        if (
-          window.feedbackChart &&
-          typeof window.feedbackChart.destroy === "function"
-        ) {
-          window.feedbackChart.destroy();
-        }
-
-        window.feedbackChart = new Chart(fbCtx, {
-          type: "pie",
-          data: {
-            labels: categories.map((c) => c.category),
-            datasets: [
-              {
-                data: categories.map((c) => c.count),
-                backgroundColor: [
-                  "#ef4444",
-                  "#22f5ff",
-                  "#8b5cf6",
-                  "#10b981",
-                  "#f59e0b",
-                  "#3b82f6",
-                  "#ec4899",
-                ],
-                borderWidth: 1,
-                borderColor: "#021c1a",
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: "right",
-                labels: {
-                  color: "#94a3b8",
-                  padding: 15,
-                  boxWidth: 12,
-                  font: { size: 11 },
-                },
-              },
-            },
-          },
-        });
-      }
-
-      //Load popularity report from API
-      function loadPopularityReport() {
-        fetch("/api/admin/popularity")
-          .then((response) => response.json())
-          .then((data) => {
-            const tableBody = document.getElementById("popularityTableBody");
-            tableBody.innerHTML = "";
-
-            if (!data || data.length === 0) {
-              tableBody.innerHTML =
-                '<tr><td colspan="5">No repositories found</td></tr>';
-              return;
-            }
-
-            const labels = [];
-            const starData = [];
-
-            data.forEach((repo, index) => {
-              const row = `
-                <tr>
-                  <td>${index + 1}</td>
-                  <td>${repo.repo_name}</td>
-                  <td>${repo.owner}</td>
-                  <td>${repo.stars || 0}</td>
-                  <td>${repo.views || 0}</td>
-                </tr>
-              `;
-              tableBody.innerHTML += row;
-
-              labels.push(repo.repo_name);
-              starData.push(repo.stars || 0);
-            });
-
-            updatePopularityChart(labels, starData);
-          })
-          .catch((error) => {
-            console.error("Error loading popularity:", error);
-            document.getElementById("popularityTableBody").innerHTML =
-              '<tr><td colspan="5">Error loading data</td></tr>';
-          });
-      }
-
-      function updatePopularityChart(labels, dataValues) {
-        const ctx = document.getElementById("popularityChart").getContext("2d");
-
-        if (popularityChart) {
-          popularityChart.destroy();
-        }
-
-        popularityChart = new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: "Stars",
-                data: dataValues,
-                backgroundColor: "rgba(34, 245, 255, 0.7)",
-                borderColor: "#22f5ff",
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false },
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
-
-      function loadRepoReport() {
-        document.getElementById("totalRepos").textContent = "Loading...";
-        document.getElementById("publicRepos").textContent = "Loading...";
-        document.getElementById("mostActiveRepo").textContent = "Loading...";
-        document.getElementById("repoTableBody").innerHTML =
-          '<tr><td colspan="5">Loading repositories...</td></tr>';
-
-        fetch("/api/admin/repositories")
-          .then((response) => {
-            if (!response.ok)
-              throw new Error(`HTTP error! status: ${response.status}`);
-            return response.json();
-          })
-          .then((data) => {
-            document.getElementById("totalRepos").textContent = data.total;
-            document.getElementById("publicRepos").textContent =
-              data.publicCount;
-            document.getElementById("mostActiveRepo").textContent =
-              data.mostActive;
-
-            const tbody = document.getElementById("repoTableBody");
-            if (!data.repos || data.repos.length === 0) {
-              tbody.innerHTML =
-                '<tr><td colspan="5">No repositories found</td></tr>';
-              return;
-            }
-            tbody.innerHTML = data.repos
-              .map(
-                (repo) => `
-                  <tr>
-                    <td>${repo.repo_id}</td>
-                    <td>${repo.repo_name}</td>
-                    <td>${repo.owner}</td>
-                    <td>${repo.created_date}</td>
-                    <td>${repo.total_commits}</td>
-                  </tr>
-                `,
-              )
-              .join("");
-          })
-          .catch((error) => {
-            console.error("Error loading repositories:", error);
-            document.getElementById("repoTableBody").innerHTML =
-              '<tr><td colspan="5">Error loading repositories</td></tr>';
-          });
-      }
-
-      // Initialize on page load
-      document.addEventListener("DOMContentLoaded", function () {
-        loadUserReport();
-        loadPopularityReport();
-        loadCommitReport();
-        loadRepoReport();
-        loadFeedbackReport();
-        loadIssueReport();
-        loadActivityReport(); // This now loads REAL data
+      })
+      .catch((error) => {
+        console.error("Error loading users:", error);
+        document.getElementById("userTableBody").innerHTML =
+          '<tr><td colspan="5">Error loading users</td></tr>';
       });
-    </script>
+  }
 
-    <style>
-      .experience {
-        padding: 3px 8px;
-        border-radius: 10px;
-        font-size: 11px;
-        font-weight: 500;
-        display: inline-block;
-      }
+  // Load Commit Report from API
+  function loadCommitReport() {
+    console.log("Loading commits...");
 
-      .experience.excellent {
-        background: rgba(16, 185, 129, 0.2);
-        color: #10b981;
-      }
+    document.getElementById("totalCommits").textContent = "Loading...";
+    document.getElementById("todayCommits").textContent = "Loading...";
+    document.getElementById("mostActiveUser").textContent = "Loading...";
+    document.getElementById("commitTableBody").innerHTML =
+      '<tr><td colspan="5">Loading commits...</td></tr>';
 
-      .experience.good {
-        background: rgba(34, 245, 255, 0.2);
-        color: #22f5ff;
-      }
+    fetch("/api/admin/commits")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        document.getElementById("totalCommits").textContent =
+          data.total || 0;
+        document.getElementById("todayCommits").textContent =
+          data.today || 0;
+        document.getElementById("mostActiveUser").textContent =
+          data.mostActiveUser || "N/A";
 
-      .experience.average {
-        background: rgba(245, 158, 11, 0.2);
-        color: #f59e0b;
-      }
+        const tbody = document.getElementById("commitTableBody");
 
-      .experience.poor,
-      .experience.very-poor {
-        background: rgba(239, 68, 68, 0.2);
-        color: #ef4444;
-      }
+        if (!data.commits || data.commits.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="5">No commits found in database</td></tr>';
+        } else {
+          let html = "";
+          data.commits.forEach((commit) => {
+            html += `
+              <tr>
+                <td>${commit.id || ""}</td>
+                <td>${commit.repo_name || ""}</td>
+                <td>${commit.message || ""}</td>
+                <td>${commit.committed_by || ""}</td>
+                <td>${commit.date || ""}</td>
+              </tr>
+            `;
+          });
+          tbody.innerHTML = html;
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading commits:", error);
+        document.getElementById("totalCommits").textContent = "Error";
+        document.getElementById("todayCommits").textContent = "Error";
+        document.getElementById("mostActiveUser").textContent = "Error";
+        document.getElementById("commitTableBody").innerHTML =
+          '<tr><td colspan="5">Error: ' + error.message + "</td></tr>";
+      });
+  }
 
-      #feedbackChart {
-        margin-top: 10px;
-      }
-    </style>
+  // Load Issue Report from API
+  function loadIssueReport() {
+    console.log("Loading issues...");
+
+    document.getElementById("totalIssues").textContent = "Loading...";
+    document.getElementById("openIssues").textContent = "Loading...";
+    document.getElementById("closedToday").textContent = "Loading...";
+    document.getElementById("issueTableBody").innerHTML =
+      '<tr><td colspan="6">Loading issues...</td></tr>';
+
+    fetch("/api/admin/issues")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        document.getElementById("totalIssues").textContent =
+          data.total || 0;
+        document.getElementById("openIssues").textContent = data.open || 0;
+        document.getElementById("closedToday").textContent =
+          data.closedToday || 0;
+
+        const tbody = document.getElementById("issueTableBody");
+
+        if (!data.issues || data.issues.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="6">No issues found in database</td></tr>';
+        } else {
+          let html = "";
+          data.issues.forEach((issue) => {
+            let statusClass = "";
+            if (issue.status) {
+              const statusLower = issue.status.toLowerCase();
+              if (statusLower === "open") {
+                statusClass = "status";
+              } else if (
+                statusLower === "in progress" ||
+                statusLower === "in-progress"
+              ) {
+                statusClass = "status in-progress";
+              } else if (
+                statusLower === "closed" ||
+                statusLower === "resolved"
+              ) {
+                statusClass = "status resolved";
+              }
+            }
+
+            html += `
+              <tr>
+                <td>${issue.id || ""}</td>
+                <td>${issue.repo_name || ""}</td>
+                <td>${issue.issue_title || ""}</td>
+                <td>${issue.created_by || ""}</td>
+                <td><span class="${statusClass}">${issue.status || ""}</span></td>
+                <td>${issue.date || ""}</td>
+              </tr>
+            `;
+          });
+          tbody.innerHTML = html;
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading issues:", error);
+        document.getElementById("totalIssues").textContent = "Error";
+        document.getElementById("openIssues").textContent = "Error";
+        document.getElementById("closedToday").textContent = "Error";
+        document.getElementById("issueTableBody").innerHTML =
+          '<tr><td colspan="6">Error: ' + error.message + "</td></tr>";
+      });
+  }
+
+  // Load Feedback Report from API
+  function loadFeedbackReport() {
+    console.log("Loading feedback...");
+
+    fetch("/api/admin/feedback")
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById("totalFeedback").textContent =
+          data.total || 0;
+        document.getElementById("positiveFeedback").textContent =
+          data.positive || 0;
+        document.getElementById("actionNeeded").textContent =
+          data.actionNeeded || 0;
+
+        const tbody = document.getElementById("feedbackTableBody");
+
+        if (!data.feedbacks || data.feedbacks.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="6">No feedback found</td></tr>';
+        } else {
+          let html = "";
+          data.feedbacks.forEach((fb) => {
+            let expClass = fb.experience
+              ? fb.experience.toLowerCase().replace(/ /g, "-")
+              : "";
+            let statusClass = fb.status
+              ? fb.status.toLowerCase().replace(/ /g, "-")
+              : "";
+
+            html += `
+              <tr>
+                <td>${fb.id || ""}</td>
+                <td>${fb.name || ""}</td>
+                <td>${fb.category || ""}</td>
+                <td>
+                  <span class="experience ${expClass}">
+                    ${fb.experience || ""}
+                  </span>
+                </td>
+                <td>${fb.date || ""}</td>
+                <td>
+                  <span class="status ${statusClass}">
+                    ${fb.status || ""}
+                  </span>
+                </td>
+              </tr>
+            `;
+          });
+          tbody.innerHTML = html;
+        }
+
+        if (data.categories && data.categories.length > 0) {
+          updateFeedbackChart(data.categories);
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading feedback:", error);
+        document.getElementById("feedbackTableBody").innerHTML =
+          '<tr><td colspan="6">Error loading feedback: ' +
+          error.message +
+          "</td></tr>";
+      });
+  }
+
+  // Load Activity Report from API
+  function loadActivityReport() {
+    console.log("Loading activity report...");
+    
+    document.getElementById("activityTableBody").innerHTML = 
+      '<tr><td colspan="5">Loading activity data...</td></tr>';
+    
+    if (activityChartInstance) {
+      activityChartInstance.destroy();
+      activityChartInstance = null;
+    }
+    
+    fetch("/api/admin/activity")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Activity data received:", data);
+        
+        const tbody = document.getElementById("activityTableBody");
+        
+        if (!data.activities || data.activities.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">No activity data found</td></tr>';
+          return;
+        }
+        
+        let html = "";
+        data.activities.forEach(user => {
+          let activityClass = "status ";
+          if (user.last_activity === 'Today' || user.last_activity === 'Yesterday') {
+            activityClass += "active";
+          } else if (user.last_activity.includes('days ago') && parseInt(user.last_activity) < 7) {
+            activityClass += "active";
+          } else if (user.last_activity.includes('week')) {
+            activityClass += "idle";
+          } else {
+            activityClass += "inactive";
+          }
+          
+          html += `
+            <tr>
+              <td>${user.username || 'Unknown'}</td>
+              <td>${user.total_repos || 0}</td>
+              <td>${user.total_commits || 0}</td>
+              <td>${user.total_issues || 0}</td>
+              <td><span class="${activityClass}">${user.last_activity || 'Never'}</span></td>
+            </tr>
+          `;
+        });
+        tbody.innerHTML = html;
+        
+        // Update chart with top contributors
+        if (data.top_contributors && data.top_contributors.length > 0) {
+          updateActivityChart(data.top_contributors);
+        }
+      })
+      .catch(error => {
+        console.error("Error loading activity:", error);
+        document.getElementById("activityTableBody").innerHTML = 
+          '<tr><td colspan="5">Error loading activity: ' + error.message + '</td></tr>';
+      });
+  }
+
+  // Update activity chart
+  function updateActivityChart(contributors) {
+    const ctx = document.getElementById("activityChart").getContext("2d");
+    
+    if (activityChartInstance) {
+      activityChartInstance.destroy();
+    }
+    
+    const labels = contributors.map(c => c.username);
+    const commitData = contributors.map(c => c.total_commits);
+    
+    activityChartInstance = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: labels,
+        datasets: [{
+          data: commitData,
+          backgroundColor: [
+            "#22f5ff",
+            "#0ea5e9",
+            "#8b5cf6",
+            "#10b981",
+            "#f59e0b"
+          ],
+          borderWidth: 1,
+          borderColor: "#021c1a",
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: {
+              color: "#94a3b8",
+              font: { size: 11 },
+              boxWidth: 12,
+              padding: 15
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.label}: ${context.raw} commits`;
+              }
+            }
+          }
+        },
+        cutout: "50%",
+      },
+    });
+  }
+
+  // Update feedback chart
+  function updateFeedbackChart(categories) {
+    const fbCtx = document.getElementById("feedbackChart").getContext("2d");
+
+    if (feedbackChartInstance) {
+      feedbackChartInstance.destroy();
+    }
+
+    feedbackChartInstance = new Chart(fbCtx, {
+      type: "pie",
+      data: {
+        labels: categories.map((c) => c.category),
+        datasets: [
+          {
+            data: categories.map((c) => c.count),
+            backgroundColor: [
+              "#ef4444",
+              "#22f5ff",
+              "#8b5cf6",
+              "#10b981",
+              "#f59e0b",
+              "#3b82f6",
+              "#ec4899",
+            ],
+            borderWidth: 1,
+            borderColor: "#021c1a",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "right",
+            labels: {
+              color: "#94a3b8",
+              padding: 15,
+              boxWidth: 12,
+              font: { size: 11 },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // Load popularity report from API - FIXED VERSION
+  function loadPopularityReport() {
+    console.log("Loading popularity report...");
+    
+    // Clear any existing chart instance
+    if (popularityChartInstance) {
+      popularityChartInstance.destroy();
+      popularityChartInstance = null;
+    }
+    
+    const tableBody = document.getElementById("popularityTableBody");
+    tableBody.innerHTML = '<tr><td colspan="6">Loading repositories...</td></tr>';
+    
+    fetch("/api/admin/popularity")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Popularity data received:", data);
+        
+        if (!data || data.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="6">No repositories found</td></tr>';
+          return;
+        }
+        
+        let html = "";
+        const labels = [];
+        const viewsData = [];
+        
+        data.forEach((repo, index) => {
+          const rank = index + 1;
+          const views = repo.views || 0;
+          const commits = repo.commits || 0;
+          const issues = repo.issues || 0;
+          
+          html += `
+            <tr>
+              <td><span class="rank-badge" style="background: ${rank <= 3 ? 'rgba(255, 215, 0, 0.2)' : 'rgba(34, 245, 255, 0.1)'}; border-color: ${rank <= 3 ? '#ffd700' : '#22f5ff'}; color: ${rank <= 3 ? '#ffd700' : '#22f5ff'};">#${rank}</span></td>
+              <td><strong style="color: #fff;">${repo.repo_name}</strong></td>
+              <td style="color: #94a3b8;">${repo.owner}</td>
+              <td><span class="views-count"> ${views}</span></td>
+              <td><span class="commits-count"> ${commits}</span></td>
+              <td><span class="issues-count"> ${issues}</span></td>
+            </tr>
+          `;
+          
+          // For chart (top 5)
+          if (index < 5) {
+            labels.push(repo.repo_name);
+            viewsData.push(views);
+          }
+        });
+        
+        tableBody.innerHTML = html;
+        
+        // Update chart with top 5 repositories
+        updatePopularityChart(labels, viewsData);
+      })
+      .catch((error) => {
+        console.error("Error loading popularity:", error);
+        tableBody.innerHTML = 
+          '<tr><td colspan="6">Error loading data: ' + error.message + '</td></tr>';
+      });
+  }
+
+  // Update popularity chart - FIXED VERSION
+  function updatePopularityChart(labels, dataValues) {
+    const ctx = document.getElementById("popularityChart").getContext("2d");
+
+    // Destroy existing chart if it exists
+    if (popularityChartInstance) {
+      popularityChartInstance.destroy();
+      popularityChartInstance = null;
+    }
+
+    // Only create chart if we have data
+    if (!labels || labels.length === 0 || !dataValues || dataValues.length === 0) {
+      console.log("No data for popularity chart");
+      return;
+    }
+
+    popularityChartInstance = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Repository Views",
+            data: dataValues,
+            backgroundColor: dataValues.map((val, i) => 
+              i === 0 ? "rgba(255, 215, 0, 0.8)" : 
+              i === 1 ? "rgba(192, 192, 192, 0.8)" : 
+              i === 2 ? "rgba(205, 127, 50, 0.8)" : 
+              "rgba(34, 245, 255, 0.7)"
+            ),
+            borderColor: dataValues.map((val, i) => 
+              i === 0 ? "#ffd700" : 
+              i === 1 ? "#c0c0c0" : 
+              i === 2 ? "#cd7f32" : 
+              "#22f5ff"
+            ),
+            borderWidth: 1,
+            borderRadius: 6,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: "#052e2b",
+            titleColor: "#22f5ff",
+            bodyColor: "#e5e7eb",
+            borderColor: "#22f5ff",
+            borderWidth: 1,
+            callbacks: {
+              label: function(context) {
+                return `👁️ ${context.raw} views`;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: "rgba(34, 245, 255, 0.1)",
+            },
+            ticks: {
+              color: "#94a3b8",
+              callback: function(value) {
+                return value.toLocaleString();
+              }
+            },
+            title: {
+              display: true,
+              text: 'Number of Views',
+              color: "#94a3b8"
+            }
+          },
+          x: {
+            ticks: {
+              color: "#94a3b8",
+              maxRotation: 15,
+              minRotation: 15,
+              font: {
+                size: 10
+              }
+            }
+          }
+        },
+      },
+    });
+  }
+
+  // Load Repository Report from API
+  function loadRepoReport() {
+    document.getElementById("totalRepos").textContent = "Loading...";
+    document.getElementById("publicRepos").textContent = "Loading...";
+    document.getElementById("mostActiveRepo").textContent = "Loading...";
+    document.getElementById("repoTableBody").innerHTML =
+      '<tr><td colspan="5">Loading repositories...</td></tr>';
+
+    fetch("/api/admin/repositories")
+      .then((response) => {
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        document.getElementById("totalRepos").textContent = data.total;
+        document.getElementById("publicRepos").textContent =
+          data.publicCount;
+        document.getElementById("mostActiveRepo").textContent =
+          data.mostActive;
+
+        const tbody = document.getElementById("repoTableBody");
+        if (!data.repos || data.repos.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="5">No repositories found</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.repos
+          .map(
+            (repo) => `
+              <tr>
+                <td>${repo.repo_id}</td>
+                <td>${repo.repo_name}</td>
+                <td>${repo.owner}</td>
+                <td>${repo.created_date}</td>
+                <td>${repo.total_commits}</td>
+              </tr>
+            `,
+          )
+          .join("");
+      })
+      .catch((error) => {
+        console.error("Error loading repositories:", error);
+        document.getElementById("repoTableBody").innerHTML =
+          '<tr><td colspan="5">Error loading repositories</td></tr>';
+      });
+  }
+
+  // Initialize on page load
+  document.addEventListener("DOMContentLoaded", function () {
+    loadUserReport();
+    loadPopularityReport();
+    loadCommitReport();
+    loadRepoReport();
+    loadFeedbackReport();
+    loadIssueReport();
+    loadActivityReport();
+  });
+</script>
+// Add scroll shadow detection for feedback table
+function setupFeedbackTableScroll() {
+    const tableWrapper = document.querySelector('.table-wrapper.with-sticky-header');
+    if (tableWrapper) {
+        tableWrapper.addEventListener('scroll', function() {
+            if (this.scrollTop > 5) {
+                this.classList.add('scrolled');
+            } else {
+                this.classList.remove('scrolled');
+            }
+        });
+    }
+}
+
+// Call it when feedback report is loaded
+const originalLoadFeedbackReport = loadFeedbackReport;
+loadFeedbackReport = function() {
+    originalLoadFeedbackReport();
+    // Small delay to ensure DOM is updated
+    setTimeout(setupFeedbackTableScroll, 100);
+};
+
+// Also call on initial load if feedback is visible
+document.addEventListener("DOMContentLoaded", function() {
+    // ... existing code ...
+    if (document.getElementById('feedback').classList.contains('show')) {
+        setTimeout(setupFeedbackTableScroll, 100);
+    }
+});
   </body>
 </html>

@@ -31,6 +31,24 @@ body {
   top: 0;
 }
 
+/* Sidebar scrollbar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(5, 46, 43, 0.5);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0f766e, #22f5ff);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #22f5ff;
+}
+
 .logo {
   color: #22f5ff;
   text-align: center;
@@ -70,6 +88,7 @@ body {
   color: #22f5ff;
   border-color: #22f5ff;
   transform: translateX(5px);
+  box-shadow: 0 0 15px rgba(34, 245, 255, 0.2);
 }
 
 .menu button.active {
@@ -84,6 +103,24 @@ body {
   padding: 25px 35px;
   overflow-y: auto;
   height: 100vh;
+}
+
+/* Main content scrollbar */
+.main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main::-webkit-scrollbar-track {
+  background: rgba(5, 46, 43, 0.3);
+}
+
+.main::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0f766e, #22f5ff);
+  border-radius: 4px;
+}
+
+.main::-webkit-scrollbar-thumb:hover {
+  background: #22f5ff;
 }
 
 /* HEADER */
@@ -275,29 +312,421 @@ body {
 /* =========== HYBRID LAYOUT =========== */
 .hybrid-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.5fr 0.5fr;
   gap: 25px;
   align-items: stretch;
   margin-top: 25px;
 }
 
+/* =========== STICKY HEADERS FOR ALL TABLES =========== */
+
+/* For full-width tables (User, Repository, Commit, Issue) */
 .table-container.full-width {
-  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  height: 420px;
+  overflow-y: auto;
+  position: relative;
+  background: rgba(5, 46, 43, 0.5);
+  border: 1px solid #0f766e;
+  border-radius: 12px;
+  padding: 0; /* Remove padding to let heading stretch full width */
 }
 
-.table-container, .chart-container {
+/* Section heading - STICKY */
+.table-container.full-width h3 {
+  position: sticky;
+  top: 0;
+  z-index: 30; /* Higher than table header */
+  background: rgba(5, 46, 43, 0.98);
+  backdrop-filter: blur(8px);
+  margin: 0;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(15, 118, 110, 0.3);
+  border-radius: 12px 12px 0 0;
+  flex-shrink: 0;
+  color: #22f5ff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(34, 245, 255, 0.2);
+}
+
+/* Table wrapper to handle scrolling */
+.table-container.full-width .table-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+  padding: 0 20px 20px 20px;
+}
+
+/* =========== HYBRID SECTION TABLES (Popularity, Activity) =========== */
+.hybrid-section .table-container {
+  display: flex;
+  flex-direction: column;
+  height: 420px;
+  overflow-y: auto;
+  position: relative;
+  background: rgba(5, 46, 43, 0.5);
+  border: 1px solid #0f766e;
+  border-radius: 12px;
+  padding: 0; /* Remove padding to let heading stretch full width */
+}
+
+/* Section heading - STICKY */
+.hybrid-section .table-container h3 {
+  position: sticky;
+  top: 0;
+  z-index: 30; /* Higher than table header */
+  background: rgba(5, 46, 43, 0.98);
+  backdrop-filter: blur(8px);
+  margin: 0;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(15, 118, 110, 0.3);
+  border-radius: 12px 12px 0 0;
+  flex-shrink: 0;
+  color: #22f5ff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(34, 245, 255, 0.2);
+}
+
+/* Table wrapper for hybrid sections */
+.hybrid-section .table-container .table-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+  padding: 0 20px 20px 20px;
+}
+
+/* =========== FEEDBACK TABLE =========== */
+.feedback-table-container {
+  display: flex;
+  flex-direction: column;
+  height: 420px;
+  overflow: hidden;
+  background: rgba(5, 46, 43, 0.5);
+  border: 1px solid #0f766e;
+  border-radius: 12px;
+  padding: 0;
+  position: relative;
+}
+
+/* Section heading - STICKY */
+.feedback-table-container h3 {
+  position: sticky;
+  top: 0;
+  z-index: 30; /* Higher than table header */
+  background: rgba(5, 46, 43, 0.98);
+  backdrop-filter: blur(8px);
+  margin: 0;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(15, 118, 110, 0.3);
+  border-radius: 12px 12px 0 0;
+  flex-shrink: 0;
+  color: #22f5ff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(34, 245, 255, 0.2);
+}
+
+.table-wrapper.with-sticky-header {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+  height: 100%;
+  padding: 0 20px 20px 20px;
+}
+
+/* =========== STICKY TABLE HEADERS FOR ALL TABLES =========== */
+.data-table,
+.feedback-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(5, 46, 43, 0.3);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+/* Make table headers sticky - THESE ARE THE COLUMN HEADERS */
+.data-table thead,
+.feedback-table thead {
+  position: sticky;
+  top: 50px; /* Position below the section heading (which is 52px approx) */
+  z-index: 20;
+}
+
+.data-table thead tr,
+.feedback-table thead tr {
+  background: linear-gradient(180deg, #052e2b, #021c1a);
+  box-shadow: 0 2px 10px rgba(34, 245, 255, 0.3);
+}
+
+.data-table th,
+.feedback-table th {
+  position: sticky;
+  top: 60px; /* Same as thead to ensure they stick together */
+  background: linear-gradient(180deg, #052e2b, #021c1a);
+  color: #22f5ff;
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #0f766e;
+  white-space: nowrap;
+  z-index: 20;
+}
+
+/* Special padding for feedback table */
+.feedback-table th {
+  padding: 16px 16px;
+}
+
+/* Table body styles */
+.data-table td,
+.feedback-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(15, 118, 110, 0.2);
+  color: #e5e7eb;
+  font-size: 13px;
+  background: rgba(5, 46, 43, 0.3);
+}
+
+.feedback-table td {
+  padding: 14px 16px;
+}
+
+/* Alternate row colors */
+.data-table tbody tr:nth-child(even) td,
+.feedback-table tbody tr:nth-child(even) td {
+  background: rgba(5, 46, 43, 0.5);
+}
+
+.data-table tbody tr:hover td,
+.feedback-table tbody tr:hover td {
+  background: rgba(34, 245, 255, 0.15);
+  transition: background 0.3s ease;
+}
+
+.data-table tbody tr:last-child td,
+.feedback-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* First column padding */
+.data-table td:first-child,
+.data-table th:first-child,
+.feedback-table td:first-child,
+.feedback-table th:first-child {
+  padding-left: 20px;
+}
+
+.data-table td:last-child,
+.data-table th:last-child,
+.feedback-table td:last-child,
+.feedback-table th:last-child {
+  padding-right: 20px;
+}
+
+/* =========== NEON CYBERPUNK SCROLLBAR FOR ALL TABLE CONTAINERS =========== */
+.table-container.full-width .table-wrapper::-webkit-scrollbar,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar,
+.table-wrapper.with-sticky-header::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.table-container.full-width .table-wrapper::-webkit-scrollbar-track,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar-track,
+.table-wrapper.with-sticky-header::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #021c1a, #052e2b);
+  border-radius: 10px;
+  border: 1px solid #0f766e;
+}
+
+.table-container.full-width .table-wrapper::-webkit-scrollbar-thumb,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar-thumb,
+.table-wrapper.with-sticky-header::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #22f5ff, #0a8a8a, #22f5ff);
+  border-radius: 10px;
+  border: 1px solid #00ffff;
+  box-shadow: 0 0 10px #22f5ff, inset 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.table-container.full-width .table-wrapper::-webkit-scrollbar-thumb:hover,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar-thumb:hover,
+.table-wrapper.with-sticky-header::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #00ffff, #22f5ff, #00ffff);
+  box-shadow: 0 0 15px #22f5ff, inset 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.table-container.full-width .table-wrapper::-webkit-scrollbar-corner,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar-corner,
+.table-wrapper.with-sticky-header::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar */
+.table-container.full-width .table-wrapper,
+.hybrid-section .table-container .table-wrapper,
+.table-wrapper.with-sticky-header {
+  scrollbar-width: thin;
+  scrollbar-color: #22f5ff #021c1a;
+}
+/* =========== NEON CYBERPUNK SCROLLBAR FOR ALL TABLE CONTAINERS =========== */
+.table-container.full-width .table-wrapper::-webkit-scrollbar,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar,
+.table-wrapper.with-sticky-header::-webkit-scrollbar,
+/* ADDED: Scrollbar for report area */
+.report-area::-webkit-scrollbar,
+/* ADDED: Scrollbar for main content */
+.main::-webkit-scrollbar,
+/* ADDED: Scrollbar for chart containers */
+.chart-container::-webkit-scrollbar,
+/* ADDED: Scrollbar for popularity chart */
+#popularityChart::-webkit-scrollbar,
+/* ADDED: Scrollbar for activity chart */
+#activityChart::-webkit-scrollbar,
+/* ADDED: Scrollbar for feedback chart */
+#feedbackChart::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.table-container.full-width .table-wrapper::-webkit-scrollbar-track,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar-track,
+.table-wrapper.with-sticky-header::-webkit-scrollbar-track,
+/* ADDED: Track for report area */
+.report-area::-webkit-scrollbar-track,
+/* ADDED: Track for main content */
+.main::-webkit-scrollbar-track,
+/* ADDED: Track for chart containers */
+.chart-container::-webkit-scrollbar-track,
+/* ADDED: Track for popularity chart */
+#popularityChart::-webkit-scrollbar-track,
+/* ADDED: Track for activity chart */
+#activityChart::-webkit-scrollbar-track,
+/* ADDED: Track for feedback chart */
+#feedbackChart::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #021c1a, #052e2b);
+  border-radius: 10px;
+  border: 1px solid #0f766e;
+}
+
+.table-container.full-width .table-wrapper::-webkit-scrollbar-thumb,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar-thumb,
+.table-wrapper.with-sticky-header::-webkit-scrollbar-thumb,
+/* ADDED: Thumb for report area */
+.report-area::-webkit-scrollbar-thumb,
+/* ADDED: Thumb for main content */
+.main::-webkit-scrollbar-thumb,
+/* ADDED: Thumb for chart containers */
+.chart-container::-webkit-scrollbar-thumb,
+/* ADDED: Thumb for popularity chart */
+#popularityChart::-webkit-scrollbar-thumb,
+/* ADDED: Thumb for activity chart */
+#activityChart::-webkit-scrollbar-thumb,
+/* ADDED: Thumb for feedback chart */
+#feedbackChart::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #22f5ff, #0a8a8a, #22f5ff);
+  border-radius: 10px;
+  border: 1px solid #00ffff;
+  box-shadow: 0 0 10px #22f5ff, inset 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.table-container.full-width .table-wrapper::-webkit-scrollbar-thumb:hover,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar-thumb:hover,
+.table-wrapper.with-sticky-header::-webkit-scrollbar-thumb:hover,
+/* ADDED: Hover for report area */
+.report-area::-webkit-scrollbar-thumb:hover,
+/* ADDED: Hover for main content */
+.main::-webkit-scrollbar-thumb:hover,
+/* ADDED: Hover for chart containers */
+.chart-container::-webkit-scrollbar-thumb:hover,
+/* ADDED: Hover for popularity chart */
+#popularityChart::-webkit-scrollbar-thumb:hover,
+/* ADDED: Hover for activity chart */
+#activityChart::-webkit-scrollbar-thumb:hover,
+/* ADDED: Hover for feedback chart */
+#feedbackChart::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #00ffff, #22f5ff, #00ffff);
+  box-shadow: 0 0 15px #22f5ff, inset 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.table-container.full-width .table-wrapper::-webkit-scrollbar-corner,
+.hybrid-section .table-container .table-wrapper::-webkit-scrollbar-corner,
+.table-wrapper.with-sticky-header::-webkit-scrollbar-corner,
+/* ADDED: Corner for report area */
+.report-area::-webkit-scrollbar-corner,
+/* ADDED: Corner for main content */
+.main::-webkit-scrollbar-corner,
+/* ADDED: Corner for chart containers */
+.chart-container::-webkit-scrollbar-corner,
+/* ADDED: Corner for popularity chart */
+#popularityChart::-webkit-scrollbar-corner,
+/* ADDED: Corner for activity chart */
+#activityChart::-webkit-scrollbar-corner,
+/* ADDED: Corner for feedback chart */
+#feedbackChart::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar */
+.table-container.full-width .table-wrapper,
+.hybrid-section .table-container .table-wrapper,
+.table-wrapper.with-sticky-header,
+/* ADDED: Firefox for report area */
+.report-area,
+/* ADDED: Firefox for main content */
+.main,
+/* ADDED: Firefox for chart containers */
+.chart-container,
+/* ADDED: Firefox for popularity chart */
+#popularityChart,
+/* ADDED: Firefox for activity chart */
+#activityChart,
+/* ADDED: Firefox for feedback chart */
+#feedbackChart {
+  scrollbar-width: thin;
+  scrollbar-color: #22f5ff #021c1a;
+}
+
+/* =========== CHART CONTAINERS - PROPERLY ALIGNED =========== */
+.chart-container {
+  height: 420px;
+  display: flex;
+  flex-direction: column;
   background: rgba(5, 46, 43, 0.5);
   border: 1px solid #0f766e;
   border-radius: 12px;
   padding: 20px;
   transition: border-color 0.3s ease;
+  overflow: hidden;
 }
 
-.table-container:hover, .chart-container:hover {
+.chart-container.small-chart {
+  height: 420px;
+}
+
+.chart-container:hover {
   border-color: #22f5ff;
 }
 
-.table-container h3, .chart-container h3 {
+.chart-container h3 {
   color: #22f5ff;
   margin-bottom: 15px;
   font-size: 16px;
@@ -307,80 +736,41 @@ body {
   font-weight: 600;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(15, 118, 110, 0.3);
+  flex-shrink: 0;
 }
 
-/* Make table and chart containers equal height */
-.hybrid-section .table-container,
-.hybrid-section .chart-container {
-  height: 420px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Ensure table takes appropriate space */
-.hybrid-section .table-container {
-  overflow-y: auto;
-}
-
-.hybrid-section .table-container table {
-  width: 100%;
-}
-
-/* =========== CHART CONTAINERS =========== */
-.chart-container {
-  height: 320px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  padding: 15px;
-}
-
-.chart-container.small-chart {
-  height: 320px;
-}
-
-.chart-container canvas {
+/* Chart wrapper - properly centers charts */
+.chart-wrapper {
   flex: 1;
-  width: 100% !important;
-  height: 100% !important;
-  max-height: 220px;
-  margin: 0 auto;
-  display: block;
-}
-
-/* Fix for feedback chart specifically */
-#feedbackChart {
-  max-height: 210px;
-  width: auto !important;
-  margin: 5px auto;
-}
-
-/* Fix for activity chart */
-#activityChart {
-  max-height: 200px;
-  margin: 10px auto;
-}
-
-/* Fix for popularity chart */
-#popularityChart {
-  max-height: 200px;
-  margin: 10px auto;
-}
-
-/* Chart.js Legend Fix */
-.chartjs-legend {
-  position: relative !important;
-  bottom: auto !important;
-  left: auto !important;
-  right: auto !important;
-  margin-top: 15px;
-  padding-top: 10px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Fix for all charts - proper sizing and alignment */
+#feedbackChart,
+#activityChart,
+#popularityChart {
+  max-width: 100%;
+  max-height: 280px;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 auto;
+}
+
+/* Chart.js Legend - properly positioned */
+.chartjs-legend {
+  display: flex !important;
   flex-wrap: wrap;
-  gap: 8px;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 15px;
+  padding-top: 10px;
   border-top: 1px solid rgba(15, 118, 110, 0.3);
+  flex-shrink: 0;
 }
 
 .chartjs-legend li {
@@ -393,427 +783,53 @@ body {
   border: 1px solid #0f766e;
   cursor: default;
   list-style: none;
+  color: #94a3b8;
+  font-size: 11px;
 }
 
 .chartjs-legend li span {
   border-radius: 50%;
   margin-right: 6px;
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   display: inline-block;
 }
-
-.chartjs-legend-text {
-  font-size: 11px !important;
-  color: #94a3b8 !important;
-  margin-left: 5px;
+/* =========== FIX FEEDBACK TABLE GAP - ONLY AFFECTS FEEDBACK =========== */
+.feedback-table thead {
+  top: 0 !important; /* Reset to 0 for feedback only */
 }
 
-/* =========== DATA TABLES =========== */
-.data-table {
+.feedback-table th {
+  top: 0 !important; /* Reset to 0 for feedback only */
+  padding: 14px 16px; /* Keep existing padding */
+}
+
+/* Ensure the table wrapper padding doesn't interfere */
+.table-wrapper.with-sticky-header {
+  padding-top: 0;
+}
+/* =========== MATCH FEEDBACK TABLE SIZE WITH OTHER REPORTS =========== */
+.feedback-table-container {
+  width: 100%; /* Ensure it takes full width */
+}
+
+.feedback-table {
+  width: 100%; /* Ensure table takes full width */
+  table-layout: fixed; /* Helps with consistent column sizing */
+}
+
+/* Make the table wrapper use full width */
+.hybrid-section .feedback-table-container {
+  min-width: 100%; /* Force full width in hybrid section */
+}
+
+/* Adjust the hybrid section for feedback to match */
+#feedback .hybrid-section {
+  grid-template-columns: 1.5fr 0.5fr; /* Keep existing grid */
+}
+
+/* Ensure the feedback table container spans full width of its grid cell */
+#feedback .feedback-table-container {
   width: 100%;
-  border-collapse: collapse;
-  background: rgba(5, 46, 43, 0.3);
-  border-radius: 8px;
-  overflow: hidden;
-  font-size: 13px;
-}
-
-.data-table thead {
-  background: rgba(15, 118, 110, 0.4);
-  position: sticky;
-  top: 0;
-}
-
-.data-table th {
-  color: #22f5ff;
-  padding: 14px 16px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid #0f766e;
-}
-
-.data-table td {
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(15, 118, 110, 0.2);
-  color: #e5e7eb;
-  font-size: 13px;
-}
-
-.data-table tbody tr {
-  transition: all 0.2s ease;
-}
-
-.data-table tbody tr:hover {
-  background: rgba(34, 245, 255, 0.1);
-  transform: translateX(5px);
-}
-
-.data-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* =========== STATUS BADGES =========== */
-.status {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  display: inline-block;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border: 1px solid transparent;
-}
-
-.status.active, .status.Active {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
-  border-color: rgba(16, 185, 129, 0.3);
-}
-
-.status.inactive, .status.Inactive {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-.status.idle {
-  background: rgba(245, 158, 11, 0.2);
-  color: #f59e0b;
-  border-color: rgba(245, 158, 11, 0.3);
-}
-
-.status.resolved {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
-  border-color: rgba(16, 185, 129, 0.3);
-}
-
-.status.in-progress {
-  background: rgba(245, 158, 11, 0.3);
-  color: #f59e0b;
-  border-color: rgba(245, 158, 11, 0.5);
-}
-
-.status.pending {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-/* Experience Ratings */
-.experience {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  display: inline-block;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border: 1px solid transparent;
-}
-
-.experience.excellent {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
-  border-color: rgba(16, 185, 129, 0.3);
-}
-
-.experience.good {
-  background: rgba(34, 245, 255, 0.2);
-  color: #22f5ff;
-  border-color: rgba(34, 245, 255, 0.3);
-}
-
-.experience.average {
-  background: rgba(245, 158, 11, 0.2);
-  color: #f59e0b;
-  border-color: rgba(245, 158, 11, 0.3);
-}
-
-.experience.poor, .experience.very-poor {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-/* =========== ACTION BUTTONS =========== */
-.action-btn {
-  padding: 6px 14px;
-  border: 1px solid #0f766e;
-  background: rgba(34, 245, 255, 0.1);
-  color: #22f5ff;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.action-btn:hover {
-  background: rgba(34, 245, 255, 0.2);
-  border-color: #22f5ff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(34, 245, 255, 0.2);
-}
-
-.action-btn.warning {
-  border-color: #f59e0b;
-  color: #f59e0b;
-  background: rgba(245, 158, 11, 0.1);
-}
-
-.action-btn.danger {
-  border-color: #ef4444;
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
-}
-
-/* =========== ICONS =========== */
-.table-icon,
-.chart-icon,
-.user-badge,
-.repo-icon {
-  font-size: 18px;
-}
-
-/* =========== TREND INDICATORS =========== */
-.positive {
-  color: #10b981;
-  font-weight: 600;
-}
-
-.negative {
-  color: #ef4444;
-  font-weight: 600;
-}
-
-.neutral {
-  color: #f59e0b;
-  font-weight: 600;
-}
-
-/* =========== SCROLLBARS =========== */
-.report-area::-webkit-scrollbar {
-  width: 8px;
-}
-
-.report-area::-webkit-scrollbar-track {
-  background: rgba(5, 46, 43, 0.3);
-  border-radius: 4px;
-}
-
-.report-area::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #0f766e, #22f5ff);
-  border-radius: 4px;
-}
-
-.report-area::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #22f5ff, #0fd8e1);
-}
-
-.report::-webkit-scrollbar {
-  width: 6px;
-}
-
-.report::-webkit-scrollbar-track {
-  background: rgba(5, 46, 43, 0.3);
-  border-radius: 4px;
-}
-
-.report::-webkit-scrollbar-thumb {
-  background: #0f766e;
-  border-radius: 4px;
-}
-
-.report::-webkit-scrollbar-thumb:hover {
-  background: #22f5ff;
-}
-
-/* =========== RESPONSIVE DESIGN =========== */
-@media (max-width: 1200px) {
-  .hybrid-section {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .chart-container.small-chart {
-    height: 280px;
-  }
-}
-
-@media (max-width: 992px) {
-  .admin {
-    grid-template-columns: 1fr;
-  }
-  
-  .sidebar {
-    display: none;
-  }
-  
-  .summary-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .main {
-    padding: 15px;
-  }
-  
-  .summary-cards {
-    grid-template-columns: 1fr;
-  }
-  
-  .header {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-  
-  .chart-container {
-    height: 250px;
-  }
-  
-  .hybrid-section .table-container,
-  .hybrid-section .chart-container {
-    height: auto;
-    min-height: 350px;
-  }
-}
-
-/* =========== ANIMATIONS =========== */
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(34, 245, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(34, 245, 255, 0.6);
-  }
-}
-
-.card.glow {
-  animation: glow 2s infinite;
-}
-
-/* =========== LOADING STATES =========== */
-.loading {
-  position: relative;
-  overflow: hidden;
-}
-
-.loading::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-/* =========== UTILITY CLASSES =========== */
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-.mb-10 { margin-bottom: 10px; }
-.mb-20 { margin-bottom: 20px; }
-.mt-10 { margin-top: 10px; }
-.mt-20 { margin-top: 20px; }
-.p-10 { padding: 10px; }
-.p-20 { padding: 20px; }
-
-/* =========== TABLE RESPONSIVE =========== */
-.table-responsive {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Fix for long text in tables */
-.data-table td {
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Hover tooltip for truncated text */
-.data-table td[title]:hover::after {
-  content: attr(title);
-  position: absolute;
-  background: #052e2b;
-  color: #22f5ff;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #0f766e;
-  font-size: 12px;
-  z-index: 1000;
-  white-space: normal;
-  max-width: 300px;
-  word-wrap: break-word;
-}
-/* Change the hybrid section grid to give more space to table */
-.hybrid-section {
-  display: grid;
-  grid-template-columns: 1.5fr 0.5fr; /* Table gets 1.5 parts, graph gets 0.5 part */
-  gap: 25px;
-  align-items: stretch;
-  margin-top: 25px;
-}
-
-/* Make chart container smaller */
-.chart-container {
-  height: 320px; /* Keep same height */
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  padding: 15px;
-}
-
-/* Make the chart smaller inside */
-#feedbackChart {
-  max-height: 150px !important; /* Reduced from 210px */
-  width: auto !important;
-  margin: 0 auto;
-}
-
-/* Adjust category list if that's what you're using instead of chart */
-.category-list {
-  font-size: 13px;
-  margin-top: 5px;
-}
-
-.category-list div {
-  padding: 8px 12px;
-  border-bottom: 1px solid rgba(15, 118, 110, 0.2);
-  color: #94a3b8;
-}
-/* ================= CUSTOM SCROLLBAR ================= */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #020617;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, cyan, #00bcd4);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: cyan;
+  max-width: 100%;
 }

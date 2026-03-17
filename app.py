@@ -21,10 +21,76 @@ def get_db_connection():
         database="repo_management"
     )
     
+# Add this near the top after database connection function
+def init_database():
+    try:
+        db = get_db_connection()
+        cursor = db.cursor()
+        
+        # Check if repo_views table exists
+        cursor.execute("SHOW TABLES LIKE 'repo_views'")
+        if not cursor.fetchone():
+            cursor.execute("""
+                CREATE TABLE repo_views (
+                    view_id INT AUTO_INCREMENT PRIMARY KEY,
+                    repo_id INT NOT NULL,
+                    user_id INT NULL,
+                    viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (repo_id) REFERENCES repositories(repo_id) ON DELETE CASCADE,
+                    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
+                )
+            """)
+            db.commit()
+            print("✓ repo_views table created")
+        
+        cursor.close()
+        db.close()
+    except Exception as e:
+        print(f"Database init error: {e}")
+
+# Call it when app starts
+init_database()    
 # ========================= BEFORE LOGIN PAGES =========================
 @app.route("/")
 def home():
-    return render_template("index.html", active_page="home")
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    
+    # Get total repositories
+    cursor.execute("SELECT COUNT(*) as total FROM repositories")
+    total_repos = cursor.fetchone()['total'] or 0
+    
+    # Get total commits
+    cursor.execute("SELECT COUNT(*) as total FROM commits")
+    total_commits = cursor.fetchone()['total'] or 0
+    
+    # Get active users (users who have logged in within last 30 days or have activity)
+    cursor.execute("""
+        SELECT COUNT(DISTINCT u.user_id) as total 
+        FROM users u
+        LEFT JOIN commits c ON u.user_id = c.author_id
+        LEFT JOIN repositories r ON u.user_id = r.owner_id
+        LEFT JOIN issues i ON u.user_id = i.created_by
+        WHERE u.last_login >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+           OR c.commit_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+           OR r.created_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+           OR i.created_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+    """)
+    active_users = cursor.fetchone()['total'] or 0
+    
+    # Get total feedback submissions instead of "Projects Managed"
+    cursor.execute("SELECT COUNT(*) as total FROM feedback")
+    total_feedback = cursor.fetchone()['total'] or 0
+    
+    cursor.close()
+    db.close()
+    
+    return render_template("index.html", 
+                         active_page="home",
+                         total_repos=total_repos,
+                         total_commits=total_commits,
+                         active_users=active_users,
+                         total_feedback=total_feedback)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -1114,32 +1180,47 @@ def api_admin_activity():
         db = get_db_connection()
         cursor = db.cursor(dictionary=True)
         
-        # Get user activity stats (repos + commits + issues per user)
+        # Get ALL users with their activity stats - FIXED VERSION
         cursor.execute("""
             SELECT 
                 u.user_id,
                 u.username,
-                COUNT(DISTINCT r.repo_id) as total_repos,
-                COUNT(DISTINCT c.commit_id) as total_commits,
-                COUNT(DISTINCT i.issue_id) as total_issues,
+                COALESCE(repo_stats.repo_count, 0) as total_repos,
+                COALESCE(commit_stats.commit_count, 0) as total_commits,
+                COALESCE(issue_stats.issue_count, 0) as total_issues,
                 GREATEST(
-                    COALESCE(MAX(r.created_date), '2000-01-01'),
-                    COALESCE(MAX(c.commit_date), '2000-01-01'),
-                    COALESCE(MAX(i.created_date), '2000-01-01')
+                    COALESCE(repo_stats.last_repo, '2000-01-01'),
+                    COALESCE(commit_stats.last_commit, '2000-01-01'),
+                    COALESCE(issue_stats.last_issue, '2000-01-01')
                 ) as last_activity_date
             FROM users u
-            LEFT JOIN repositories r ON u.user_id = r.owner_id
-            LEFT JOIN commits c ON u.user_id = c.author_id
-            LEFT JOIN issues i ON u.user_id = i.created_by
-            GROUP BY u.user_id, u.username
-            HAVING total_repos > 0 OR total_commits > 0 OR total_issues > 0
-            ORDER BY total_commits DESC
-            LIMIT 20
+            LEFT JOIN (
+                SELECT owner_id, COUNT(*) as repo_count, MAX(created_date) as last_repo
+                FROM repositories 
+                GROUP BY owner_id
+            ) repo_stats ON u.user_id = repo_stats.owner_id
+            LEFT JOIN (
+                SELECT author_id, COUNT(*) as commit_count, MAX(commit_date) as last_commit
+                FROM commits 
+                GROUP BY author_id
+            ) commit_stats ON u.user_id = commit_stats.author_id
+            LEFT JOIN (
+                SELECT created_by, COUNT(*) as issue_count, MAX(created_date) as last_issue
+                FROM issues 
+                GROUP BY created_by
+            ) issue_stats ON u.user_id = issue_stats.created_by
+            ORDER BY total_commits DESC, u.username ASC
         """)
         
         activities = cursor.fetchall()
         
-        # Format last activity
+        # Debug print to check the data
+        print(f"=== ACTIVITY API DEBUG ===")
+        print(f"Total users fetched: {len(activities)}")
+        for user in activities[:10]:  # Print first 10 users
+            print(f"User: {user['username']}, Repos: {user['total_repos']}, Commits: {user['total_commits']}, Issues: {user['total_issues']}")
+        
+        # Format last activity for each user
         from datetime import datetime, timedelta
         for act in activities:
             if act['last_activity_date'] and act['last_activity_date'] != '2000-01-01':
@@ -1158,13 +1239,16 @@ def api_admin_activity():
                     elif time_diff.days < 30:
                         weeks = time_diff.days // 7
                         act['last_activity'] = f"{weeks} week{'s' if weeks > 1 else ''} ago"
-                    else:
+                    elif time_diff.days < 365:
                         months = time_diff.days // 30
                         act['last_activity'] = f"{months} month{'s' if months > 1 else ''} ago"
+                    else:
+                        years = time_diff.days // 365
+                        act['last_activity'] = f"{years} year{'s' if years > 1 else ''} ago"
                 else:
                     act['last_activity'] = 'Recently'
             else:
-                act['last_activity'] = 'No activity'
+                act['last_activity'] = 'No Activity'
         
         # Get top contributors for chart (top 5)
         top_contributors = activities[:5]
@@ -1244,30 +1328,131 @@ def api_admin_popularity():
     if not session.get('logged_in') or not session.get('is_admin'):
         return jsonify({"error": "Unauthorized"}), 401
     
-    db = get_db_connection()
-    cursor = db.cursor(dictionary=True)
+    try:
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
 
-    cursor.execute("""
-        SELECT 
-            r.repo_id,
-            r.repo_name,
-            u.username AS owner,
-            COUNT(DISTINCT rs.star_id) AS stars,
-            COUNT(DISTINCT rv.view_id) AS views
-        FROM repositories r
-        JOIN users u ON r.owner_id = u.user_id
-        LEFT JOIN repo_stars rs ON r.repo_id = rs.repo_id
-        LEFT JOIN repo_views rv ON r.repo_id = rv.repo_id
-        GROUP BY r.repo_id
-        ORDER BY stars DESC
-        LIMIT 5;
-    """)
+        # First, check if views table exists and create it if needed
+        cursor.execute("SHOW TABLES LIKE 'repo_views'")
+        views_table_exists = cursor.fetchone()
 
+        if not views_table_exists:
+            # Create views table
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS repo_views (
+                    view_id INT AUTO_INCREMENT PRIMARY KEY,
+                    repo_id INT NOT NULL,
+                    user_id INT NULL,
+                    viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (repo_id) REFERENCES repositories(repo_id) ON DELETE CASCADE,
+                    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
+                )
+            """)
+            db.commit()
+            
+            # Generate sample views data
+            generate_views_data(cursor, db)
+            db.commit()
+
+        # Now fetch the popularity data with views, commits and issues
+        cursor.execute("""
+            SELECT 
+                r.repo_id,
+                r.repo_name,
+                u.username AS owner,
+                COUNT(DISTINCT v.view_id) AS views,
+                COUNT(DISTINCT c.commit_id) AS commits,
+                COUNT(DISTINCT i.issue_id) AS issues,
+                DATE_FORMAT(r.created_date, '%Y-%m-%d') as created_date
+            FROM repositories r
+            JOIN users u ON r.owner_id = u.user_id
+            LEFT JOIN repo_views v ON r.repo_id = v.repo_id
+            LEFT JOIN commits c ON r.repo_id = c.repo_id
+            LEFT JOIN issues i ON r.repo_id = i.repo_id
+            GROUP BY r.repo_id, r.repo_name, u.username, r.created_date
+            ORDER BY views DESC, commits DESC
+            LIMIT 20
+        """)
+
+        repos = cursor.fetchall()
+        
+        # If no views data yet, return repos with zero views
+        if len(repos) == 0:
+            cursor.execute("""
+                SELECT 
+                    r.repo_id,
+                    r.repo_name,
+                    u.username AS owner,
+                    0 as views,
+                    COUNT(DISTINCT c.commit_id) AS commits,
+                    COUNT(DISTINCT i.issue_id) AS issues,
+                    DATE_FORMAT(r.created_date, '%Y-%m-%d') as created_date
+                FROM repositories r
+                JOIN users u ON r.owner_id = u.user_id
+                LEFT JOIN commits c ON r.repo_id = c.repo_id
+                LEFT JOIN issues i ON r.repo_id = i.repo_id
+                GROUP BY r.repo_id, r.repo_name, u.username, r.created_date
+                ORDER BY commits DESC
+                LIMIT 20
+            """)
+            repos = cursor.fetchall()
+        
+        cursor.close()
+        db.close()
+
+        return jsonify(repos)
+
+    except Exception as e:
+        print(f"ERROR in popularity API: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+def generate_views_data(cursor, db):
+    """Generate sample view data for repositories"""
+    import random
+    
+    # Get all repositories
+    cursor.execute("SELECT repo_id FROM repositories")
     repos = cursor.fetchall()
-    cursor.close()
-    db.close()
-
-    return jsonify(repos)
+    
+    # Get all users
+    cursor.execute("SELECT user_id FROM users")
+    users = cursor.fetchall()
+    user_ids = [u['user_id'] for u in users] if users else [1]
+    
+    print(f"Generating views data for {len(repos)} repositories...")
+    
+    for repo in repos:
+        repo_id = repo['repo_id']
+        
+        # Generate views (20-500 views per repo based on popularity)
+        # More commits = more views
+        cursor.execute("SELECT COUNT(*) as count FROM commits WHERE repo_id = %s", (repo_id,))
+        commit_count = cursor.fetchone()['count']
+        
+        # Base views on commit count for realism
+        if commit_count > 50:
+            num_views = random.randint(300, 500)
+        elif commit_count > 20:
+            num_views = random.randint(150, 300)
+        elif commit_count > 5:
+            num_views = random.randint(50, 150)
+        else:
+            num_views = random.randint(10, 50)
+        
+        for _ in range(num_views):
+            user_id = random.choice(user_ids) if user_ids and random.random() > 0.3 else None
+            days_ago = random.randint(0, 90)
+            try:
+                cursor.execute("""
+                    INSERT INTO repo_views (repo_id, user_id, viewed_at)
+                    VALUES (%s, %s, DATE_SUB(NOW(), INTERVAL %s DAY))
+                """, (repo_id, user_id, days_ago))
+            except:
+                pass
+    
+    print(f"Views data generated successfully!")
 
 @app.route("/api/admin/feedback")
 def api_admin_feedback():
@@ -1527,6 +1712,227 @@ def api_admin_issues():
         print(f"ERROR in issues API: {str(e)}")
         import traceback
         traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+        # ========================= REPOSITORY API ENDPOINTS =========================
+@app.route("/api/repo/<int:repo_id>/edit", methods=["POST"])
+def api_edit_repo(repo_id):
+    """Edit repository name"""
+    if not session.get('logged_in'):
+        return jsonify({"success": False, "error": "Not authenticated"}), 401
+    
+    try:
+        data = request.get_json()
+        new_name = data.get('name', '').strip()
+        
+        if not new_name:
+            return jsonify({"success": False, "error": "Repository name cannot be empty"})
+        
+        if len(new_name) < 3:
+            return jsonify({"success": False, "error": "Repository name must be at least 3 characters"})
+        
+        user_id = session.get('user_id')
+        
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+        
+        # Check if repository exists and belongs to user
+        cursor.execute("""
+            SELECT * FROM repositories 
+            WHERE repo_id = %s AND owner_id = %s
+        """, (repo_id, user_id))
+        
+        repo = cursor.fetchone()
+        
+        if not repo:
+            cursor.close()
+            db.close()
+            return jsonify({"success": False, "error": "Repository not found or you don't have permission"})
+        
+        # Check if new name already exists for this user
+        cursor.execute("""
+            SELECT * FROM repositories 
+            WHERE repo_name = %s AND owner_id = %s AND repo_id != %s
+        """, (new_name, user_id, repo_id))
+        
+        existing = cursor.fetchone()
+        if existing:
+            cursor.close()
+            db.close()
+            return jsonify({"success": False, "error": "You already have a repository with this name"})
+        
+        # Update repository name
+        cursor.execute("""
+            UPDATE repositories 
+            SET repo_name = %s 
+            WHERE repo_id = %s AND owner_id = %s
+        """, (new_name, repo_id, user_id))
+        
+        db.commit()
+        cursor.close()
+        db.close()
+        
+        return jsonify({"success": True})
+        
+    except Exception as e:
+        print(f"Error editing repository: {str(e)}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/repo/<int:repo_id>/visibility", methods=["POST"])
+def api_toggle_visibility(repo_id):
+    """Toggle repository visibility"""
+    if not session.get('logged_in'):
+        return jsonify({"success": False, "error": "Not authenticated"}), 401
+    
+    try:
+        data = request.get_json()
+        new_visibility = data.get('visibility')
+        
+        if new_visibility not in ['public', 'private']:
+            return jsonify({"success": False, "error": "Invalid visibility value"})
+        
+        user_id = session.get('user_id')
+        
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+        
+        # Check if repository exists and belongs to user
+        cursor.execute("""
+            SELECT * FROM repositories 
+            WHERE repo_id = %s AND owner_id = %s
+        """, (repo_id, user_id))
+        
+        repo = cursor.fetchone()
+        
+        if not repo:
+            cursor.close()
+            db.close()
+            return jsonify({"success": False, "error": "Repository not found or you don't have permission"})
+        
+        # Update visibility
+        cursor.execute("""
+            UPDATE repositories 
+            SET visibility = %s 
+            WHERE repo_id = %s AND owner_id = %s
+        """, (new_visibility, repo_id, user_id))
+        
+        db.commit()
+        cursor.close()
+        db.close()
+        
+        return jsonify({"success": True})
+        
+    except Exception as e:
+        print(f"Error toggling visibility: {str(e)}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/repo/<int:repo_id>/delete", methods=["POST"])
+def api_delete_repo(repo_id):
+    """Delete repository and all associated data"""
+    if not session.get('logged_in'):
+        return jsonify({"success": False, "error": "Not authenticated"}), 401
+    
+    try:
+        user_id = session.get('user_id')
+        
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+        
+        # Check if repository exists and belongs to user
+        cursor.execute("""
+            SELECT * FROM repositories 
+            WHERE repo_id = %s AND owner_id = %s
+        """, (repo_id, user_id))
+        
+        repo = cursor.fetchone()
+        
+        if not repo:
+            cursor.close()
+            db.close()
+            return jsonify({"success": False, "error": "Repository not found or you don't have permission"})
+        
+        # Get repository name for logging
+        repo_name = repo['repo_name']
+        
+        # Delete related data in correct order (foreign key constraints)
+        
+        # 1. Delete repo stars if table exists
+        try:
+            cursor.execute("DELETE FROM repo_stars WHERE repo_id = %s", (repo_id,))
+        except:
+            pass  # Table might not exist
+        
+        # 2. Delete repo views if table exists
+        try:
+            cursor.execute("DELETE FROM repo_views WHERE repo_id = %s", (repo_id,))
+        except:
+            pass  # Table might not exist
+        
+        # 3. Delete commits
+        cursor.execute("DELETE FROM commits WHERE repo_id = %s", (repo_id,))
+        
+        # 4. Delete issues
+        cursor.execute("DELETE FROM issues WHERE repo_id = %s", (repo_id,))
+        
+        # 5. Finally delete the repository
+        cursor.execute("DELETE FROM repositories WHERE repo_id = %s AND owner_id = %s", (repo_id, user_id))
+        
+        db.commit()
+        cursor.close()
+        db.close()
+        
+        print(f"Repository '{repo_name}' (ID: {repo_id}) deleted successfully by user {user_id}")
+        
+        return jsonify({"success": True})
+        
+    except Exception as e:
+        print(f"Error deleting repository: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+# Optional: Add a route to get repository details
+@app.route("/api/repo/<int:repo_id>", methods=["GET"])
+def api_get_repo(repo_id):
+    """Get repository details"""
+    if not session.get('logged_in'):
+        return jsonify({"error": "Not authenticated"}), 401
+    
+    try:
+        user_id = session.get('user_id')
+        
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+        
+        cursor.execute("""
+            SELECT 
+                r.repo_id,
+                r.repo_name,
+                r.description,
+                r.visibility,
+                r.created_date,
+                u.username as owner,
+                (SELECT COUNT(*) FROM commits WHERE repo_id = r.repo_id) as commit_count,
+                (SELECT COUNT(*) FROM issues WHERE repo_id = r.repo_id AND status != 'closed') as open_issues
+            FROM repositories r
+            JOIN users u ON r.owner_id = u.user_id
+            WHERE r.repo_id = %s AND (r.owner_id = %s OR r.visibility = 'public')
+        """, (repo_id, user_id))
+        
+        repo = cursor.fetchone()
+        cursor.close()
+        db.close()
+        
+        if not repo:
+            return jsonify({"error": "Repository not found"}), 404
+        
+        return jsonify(repo)
+        
+    except Exception as e:
+        print(f"Error fetching repository: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 # ========================= RUN APP =========================

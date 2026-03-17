@@ -1,97 +1,35 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at top, #0f2c2c, #000);
+  background: radial-gradient(circle at 0% 0%, #002b2b 0%, #000000 70%),
+              radial-gradient(circle at 100% 100%, #003333 0%, #000000 70%);
   color: #fff;
+  min-height: 100vh;
+  position: relative;
 }
 
-.header {
-  padding: 20px 40px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 22px;
-  color: #00fff0;
-}
-
-.issue-container {
-  display: flex;
-  justify-content: center;
-  padding: 60px 20px;
-}
-
-.issue-card {
-  width: 520px;
-  background: #0b0b0b;
-  border-radius: 18px;
-  padding: 40px;
-  box-shadow: 0 0 40px rgba(0,255,240,0.2);
-}
-
-.issue-card h1 {
-  color: #00fff0;
-  margin-bottom: 8px;
-}
-
-.subtitle {
-  color: #aaa;
-  margin-bottom: 30px;
-}
-
-.form-group {
-  margin-bottom: 22px;
-}
-
-label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  color: #ccc;
-}
-
-input, textarea, select {
+/* Subtle floating particles */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #00fff055;
-  background: #000;
-  color: #fff;
-  outline: none;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.03) 0%, transparent 30%),
+    radial-gradient(circle at 80% 70%, rgba(0, 255, 255, 0.02) 0%, transparent 35%),
+    radial-gradient(circle at 40% 50%, rgba(0, 200, 255, 0.02) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+  animation: subtleFloat 20s ease-in-out infinite alternate;
 }
 
-textarea {
-  resize: none;
-  height: 120px;
+@keyframes subtleFloat {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0.5; transform: scale(1.05); }
 }
 
-.radio-group {
-  display: flex;
-  gap: 20px;
-}
-
-.radio-group label {
-  font-size: 14px;
-  color: #ddd;
-}
-
-.create-btn {
-  width: 100%;
-  padding: 14px;
-  background: #00fff0;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.create-btn:hover {
-  background: #00d6c9;
-}
 /* ================= AUTH NAVBAR ================= */
 .auth-header {
   height: 72px;
@@ -99,9 +37,12 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(0,255,255,0.2);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+  position: relative;
+  z-index: 1000;
+  box-shadow: 0 5px 30px rgba(0, 255, 255, 0.15);
 }
 
 .auth-brand {
@@ -113,9 +54,15 @@ textarea {
 .auth-brand .logo {
   width: 34px;
   height: 34px;
-  background: cyan;
+  background: linear-gradient(135deg, cyan, #00b8b8);
   border-radius: 10px;
-  box-shadow: 0 0 18px cyan;
+  box-shadow: 0 0 20px cyan, 0 0 40px rgba(0, 255, 255, 0.3);
+  animation: logoPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { box-shadow: 0 0 20px cyan, 0 0 40px rgba(0, 255, 255, 0.3); }
+  50% { box-shadow: 0 0 30px cyan, 0 0 60px rgba(0, 255, 255, 0.5); }
 }
 
 .auth-nav {
@@ -126,24 +73,47 @@ textarea {
 
 .auth-nav a,
 .auth-nav span {
-  color: rgba(255,255,255,0.85);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-size: 14px;
   cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.auth-nav a::after,
+.auth-nav span::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, cyan, #00ffff);
+  transition: width 0.3s ease;
+}
+
+.auth-nav a:hover::after,
+.auth-nav span:hover::after {
+  width: 100%;
 }
 
 .auth-nav a:hover,
 .auth-nav span:hover {
   color: cyan;
+  text-shadow: 0 0 10px cyan;
 }
-.auth-nav a.active, .auth-nav span.active {
-    color: cyan;
-    border-bottom: 2px solid cyan;
-    padding-bottom: 4px;
-    font-weight: bold;
-    text-shadow: 0 0 6px cyan;
+
+.auth-nav a.active, 
+.auth-nav span.active {
+  color: cyan;
+  border-bottom: 2px solid cyan;
+  padding-bottom: 4px;
+  font-weight: bold;
+  text-shadow: 0 0 10px cyan;
 }
-/* Dropdown */
+
+/* ================= DROPDOWN ================= */
 .dropdown {
   position: relative;
   cursor: pointer;
@@ -160,10 +130,12 @@ textarea {
   top: 130%;
   right: 0;
   min-width: 180px;
-  background: #0b0f0f;
+  background: linear-gradient(145deg, rgba(0, 30, 30, 0.98), rgba(0, 10, 10, 0.99));
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 255, 255, 0.3);
   border-radius: 10px;
   padding: 6px 0;
-  box-shadow: 0 12px 30px rgba(0, 255, 255, 0.18);
+  box-shadow: 0 15px 40px rgba(0, 255, 255, 0.3);
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
@@ -186,17 +158,208 @@ textarea {
   color: #e6ffff;
   text-decoration: none;
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdown-menu a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.dropdown-menu a:hover::before {
+  left: 100%;
 }
 
 .dropdown-menu a:hover {
-  background: rgba(0, 255, 255, 0.12);
+  background: rgba(0, 255, 255, 0.15);
+  color: cyan;
+  padding-left: 20px;
 }
 
 .dropdown-menu a.logout {
   color: #ff6b6b;
 }
 
-/* Custom Scrollbar (subtle & professional) */
+.dropdown-menu a.logout:hover {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff8a8a;
+}
+
+/* ================= ISSUE CONTAINER ================= */
+.issue-container {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ================= ISSUE CARD ================= */
+.issue-card {
+  width: 520px;
+  background: rgba(10, 20, 20, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle card glow */
+.issue-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, cyan, transparent);
+  animation: scanLine 4s linear infinite;
+}
+
+@keyframes scanLine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.issue-card:hover {
+  border-color: rgba(0, 255, 255, 0.4);
+  box-shadow: 0 25px 50px rgba(0, 255, 255, 0.2);
+}
+
+.issue-card h1 {
+  color: cyan;
+  margin-bottom: 8px;
+  font-size: 2rem;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.subtitle {
+  color: #aadddd;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+/* ================= FORM ================= */
+.form-group {
+  margin-bottom: 22px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #ddd;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+textarea {
+  resize: none;
+  height: 120px;
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: rgba(0, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: cyan;
+  box-shadow: 0 0 20px cyan;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* ================= RADIO GROUP ================= */
+.radio-group {
+  display: flex;
+  gap: 20px;
+}
+
+.radio-group label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+  cursor: pointer;
+  color: #ddd;
+  font-size: 14px;
+}
+
+.radio-group input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: cyan;
+  cursor: pointer;
+}
+
+/* ================= CREATE BUTTON ================= */
+.create-btn {
+  width: 100%;
+  padding: 14px;
+  background: cyan;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  color: #000;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.create-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.create-btn:hover::before {
+  left: 100%;
+}
+
+.create-btn:hover {
+  background: cyan;
+  box-shadow: 0 0 30px cyan;
+  transform: translateY(-2px);
+}
+
+.create-btn:active {
+  transform: translateY(0);
+}
+
+/* ================= CUSTOM SCROLLBAR ================= */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -212,4 +375,43 @@ textarea {
 
 ::-webkit-scrollbar-thumb:hover {
   background: cyan;
+  box-shadow: 0 0 10px cyan;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .auth-header {
+    padding: 0 20px;
+  }
+  
+  .auth-nav {
+    gap: 15px;
+  }
+  
+  .issue-container {
+    padding: 40px 20px;
+  }
+  
+  .issue-card {
+    padding: 30px 20px;
+  }
+  
+  .issue-card h1 {
+    font-size: 1.8rem;
+  }
+  
+  .radio-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-nav {
+    gap: 10px;
+  }
+  
+  .issue-card {
+    padding: 25px 15px;
+  }
 }
