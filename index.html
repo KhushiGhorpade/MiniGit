@@ -1,3 +1,355 @@
-<script>
-  window.location.href = "templates/index.html";
-</script>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khushi Ghorpade — Cybersecurity Enthusiast</title>
+  <meta name="description" content="Portfolio of Khushi Ghorpade, BCA graduate and cybersecurity enthusiast. Skills, project, certifications, resume and contact." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated network-graph background canvas. Purely decorative; sits
+       behind everything. See js/script.js -> initNetworkCanvas() -->
+  <canvas id="netCanvas" aria-hidden="true"></canvas>
+
+  <!-- =========================================================
+       NAVIGATION
+  ========================================================= -->
+  <header class="site-header" id="top">
+    <nav class="nav" aria-label="Primary">
+      <a href="#top" class="nav__brand">KG<span class="nav__brand-dot">_</span></a>
+
+      <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav__menu" id="navMenu">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Project</a></li>
+        <li><a href="#certifications">Certifications</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#contact" class="nav__cta">Contact</a></li>
+      </ul>
+
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme" title="Toggle theme">
+        <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" fill="currentColor"/></svg>
+        <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.4" y1="4.4" x2="6.5" y2="6.5"/><line x1="17.5" y1="17.5" x2="19.6" y2="19.6"/><line x1="4.4" y1="19.6" x2="6.5" y2="17.5"/><line x1="17.5" y1="6.5" x2="19.6" y2="4.4"/></g></svg>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- =========================================================
+         HERO
+    ========================================================= -->
+    <section class="hero" id="hero">
+      <div class="hero__inner">
+        <h1 class="hero__name reveal">Khushi Ghorpade</h1>
+
+        <p class="hero__role reveal">
+          <span class="terminal-prompt">&gt;</span>
+          <span id="typedRole" class="typed-role"></span><span class="typed-cursor">|</span>
+        </p>
+
+        <p class="hero__tagline reveal">
+          BCA graduate (CGPA 8.0) with a strong interest in cybersecurity &mdash;
+          currently working toward the Certified Ethical Hacker (CEH) certification and
+          aiming to start my career in a Security Operations Center (SOC) role.
+        </p>
+
+        <div class="hero__actions reveal">
+          <a href="#projects" class="btn btn--primary">See My Work</a>
+          <a href="resume.pdf" class="btn btn--ghost" download>Download Resume</a>
+        </div>
+
+        <p class="hero__status reveal">
+          <span class="status-dot" aria-hidden="true"></span>
+          Currently pursuing CEH &middot; open to SOC / Cybersecurity internship &amp; entry roles
+        </p>
+      </div>
+
+      <div class="hero__socials reveal" aria-label="Social links">
+        <a href=" https://github.com/KhushiGhorpade" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.15c-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.42.36.78 1.08.78 2.17v3.22c0 .3.21.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"fill="currentColor"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/khushighorpade26" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0Z"fill="currentColor"/></svg>
+        </a>
+        <a href="https://wa.me/918669152401" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.51 2 12.04 2Zm5.8 14.02c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.13.11-1.82-.11a16.6 16.6 0 0 1-1.66-.61c-2.92-1.26-4.83-4.2-4.98-4.4-.15-.19-1.19-1.58-1.19-3.01 0-1.43.75-2.13 1.02-2.42.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.24.58.82 2.01.9 2.15.07.15.12.32.02.51-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.12 1 2.07 1.31 2.36 1.46.29.15.46.13.63-.08.17-.2.72-.84.92-1.13.19-.28.38-.24.64-.14.26.1 1.66.79 1.95.93.29.15.48.22.55.34.07.13.07.72-.17 1.4Z"fill="currentColor"/></svg>
+        </a>
+        <a href="mailto:ghorpadekhushi1@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5v-13Zm2.2.5 7.8 6.2L19.8 6H4.2Zm15.8 1.6-7.4 5.9a1 1 0 0 1-1.2 0L4 7.6V18h16V7.6Z" fill="currentColor"/></svg>
+        </a>
+      </div>
+
+      <div class="hero__scroll-hint reveal" aria-hidden="true">
+        <span></span> scroll
+      </div>
+    </section>
+
+    <!-- =========================================================
+         ABOUT
+    ========================================================= -->
+    <section class="section" id="about">
+      <div class="section__inner">
+        <h2 class="section__title reveal">About Me</h2>
+
+        <div class="about__grid">
+          <div class="about__text reveal">
+            <p>
+              I'm a BCA graduate with a CGPA of 8.0 and a growing passion for cybersecurity.
+              I'm currently pursuing the Certified Ethical Hacker (CEH) course while expanding
+              my knowledge through self-learning and hands-on workshops.
+            </p>
+            <p>
+              I'm eager to begin my career in the cybersecurity domain, particularly in a
+              Security Operations Center (SOC) role, where I can put my analytical thinking
+              and problem-solving skills to work. Alongside technical learning, I bring good
+              communication and presentation skills, and a strong willingness to grow in a
+              professional environment.
+            </p>
+          </div>
+
+          <ul class="about__facts reveal">
+            <li><span class="about__fact-label">Based in</span><span>Sangli, Maharashtra</span></li>
+            <li><span class="about__fact-label">Education</span><span>BCA, CGPA 8.0</span></li>
+            <li><span class="about__fact-label">Focus</span><span>Cybersecurity &amp; SOC</span></li>
+            <li><span class="about__fact-label">Currently</span><span>Pursuing CEH</span></li>
+            <li><span class="about__fact-label">Languages</span><span>English, Hindi, Marathi</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SKILLS
+    ========================================================= -->
+    <section class="section section--muted" id="skills">
+      <div class="section__inner">
+        <h2 class="section__title reveal">Skills</h2>
+
+        <div class="skills__grid">
+          <div class="skills__group reveal">
+            <h3>Security</h3>
+            <ul class="chip-list">
+              <li>Cybersecurity Fundamentals</li>
+              <li>Basic Networking Concepts</li>
+              <li>Information Security Basics</li>
+            </ul>
+          </div>
+
+          <div class="skills__group reveal">
+            <h3>Programming &amp; Data</h3>
+            <ul class="chip-list">
+              <li>Python (Basic)</li>
+              <li>HTML</li>
+              <li>CSS</li>
+              <li>MySQL</li>
+            </ul>
+          </div>
+
+          <div class="skills__group reveal">
+            <h3>Professional Skills</h3>
+            <ul class="chip-list">
+              <li>Analytical Thinking</li>
+              <li>Problem Solving</li>
+              <li>Continuous Learning</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         PROJECT
+         EDIT: duplicate a .project-card to add more projects
+         once you build them — for now this holds your one real project.
+    ========================================================= -->
+    <section class="section" id="projects">
+      <div class="section__inner">
+        <h2 class="section__title reveal">Project</h2>
+
+        <div class="projects__grid">
+          <article class="project-card reveal">
+            <div class="project-card__image">
+              <img src="project-minigit.svg"" alt="MiniGit web application preview" loading="lazy" />
+            </div>
+            <div class="project-card__body">
+              <h3>MiniGit &mdash; Web Application Project</h3>
+              <p class="project-card__meta">2025 &ndash; 2026</p>
+              <p>
+                A web-based version control application built with Python (Flask) and MySQL.
+                Includes user authentication, repository management, and full CRUD operations,
+                with the frontend and backend integrated using HTML, CSS, Flask, and MySQL.
+              </p>
+              <ul class="chip-list chip-list--sm">
+                <li>Python</li>
+                <li>Flask</li>
+                <li>MySQL</li>
+                <li>HTML/CSS</li>
+              </ul>
+              <div class="project-card__links">
+                <!-- EDIT: add your live demo / source links once available -->
+                <a href="https://github.com/KhushiGhorpade/MiniGit" target="_blank" rel="noopener">Source Code &rarr;</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card project-card--placeholder reveal">
+            <div class="project-card__body project-card__body--center">
+              <h3>Next project in progress</h3>
+              <p>I'm actively building &mdash; this space will hold my next cybersecurity or development project soon.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         EDUCATION
+    ========================================================= -->
+    <section class="section section--muted" id="education">
+      <div class="section__inner">
+        <h2 class="section__title reveal">Education</h2>
+
+        <ol class="timeline">
+          <li class="timeline__item reveal">
+            <span class="timeline__type">2023 &ndash; 2026</span>
+            <div class="timeline__content">
+              <h3>Bachelor of Computer Application (BCA)</h3>
+              <p class="timeline__meta">Chintamanrao Institute of Management, Development and Research, Sangli &middot; CGPA 8.0</p>
+            </div>
+          </li>
+
+          <li class="timeline__item reveal">
+            <span class="timeline__type">2021</span>
+            <div class="timeline__content">
+              <h3>Higher Secondary (HSC)</h3>
+              <p class="timeline__meta">St. Thomas English School, Sangli &middot; 88.40%</p>
+            </div>
+          </li>
+
+          <li class="timeline__item reveal">
+            <span class="timeline__type">2021</span>
+            <div class="timeline__content">
+              <h3>Secondary (SSC)</h3>
+              <p class="timeline__meta">Deccan Education Society's Willingdon College, Sangli &middot; 62.83%</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         CERTIFICATIONS
+    ========================================================= -->
+    <section class="section" id="certifications">
+      <div class="section__inner">
+        <h2 class="section__title reveal">Certifications</h2>
+
+        <ul class="cert-list">
+          <li class="cert-list__item reveal">
+            <span class="cert-list__status cert-list__status--progress">In progress</span>
+            Certified Ethical Hacker (CEH)
+          </li>
+          <li class="cert-list__item reveal">
+            <span class="cert-list__status">Completed</span>
+            Edureka Internship Completion Certificate
+          </li>
+          <li class="cert-list__item reveal">
+            <span class="cert-list__status">Completed</span>
+            Introduction to Cybersecurity &mdash; Great Learning
+          </li>
+          <li class="cert-list__item reveal">
+            <span class="cert-list__status">Completed</span>
+            Ethical Hacking Workshop Certificate
+          </li>
+          <li class="cert-list__item reveal">
+            <span class="cert-list__status">Completed</span>
+            HackingFlix Cybersecurity Workshop Certificate
+          </li>
+          <li class="cert-list__item reveal">
+            <span class="cert-list__status">Completed</span>
+            Communication Skills Certificate
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         RESUME
+    ========================================================= -->
+    <section class="section section--muted resume-section" id="resume">
+      <div class="section__inner resume-section__inner">
+        <h2 class="section__title reveal">Resume</h2>
+        <p class="resume-section__text reveal">
+          Get a full copy of my resume as a PDF, or view it directly in your browser.
+        </p>
+        <div class="hero__actions resume-section__actions reveal">
+          <a href="resume.pdf"" class="btn btn--primary" download>Download PDF</a>
+          <a href="resume.html" class="btn btn--ghost" target="_blank" rel="noopener">View in Browser</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         CONTACT
+    ========================================================= -->
+    <section class="section" id="contact">
+      <div class="section__inner">
+        <h2 class="section__title reveal">Get in Touch</h2>
+        <p class="contact__intro reveal">Have a role, internship, or opportunity in mind? Send a message below.</p>
+
+        <div class="contact__grid">
+          <form id="contactForm" class="contact-form reveal" novalidate>
+            <label for="from_name">Name</label>
+            <input type="text" id="from_name" name="from_name" required />
+
+            <label for="reply_to">Email</label>
+            <input type="email" id="reply_to" name="reply_to" required />
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+
+            <button type="submit" class="btn btn--primary" id="contactSubmit">Send Message</button>
+            <p class="contact-form__status" id="contactStatus" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="contact__direct reveal">
+            <h3>Direct</h3>
+            <ul>
+              <li><span class="about__fact-label">Email</span><a href="mailto:ghorpadekhushi1@gmail.com">ghorpadekhushi1@gmail.com</a></li>
+              <li><span class="about__fact-label">Phone</span><a href="tel:+918669152401">+91 86691 52401</a></li>
+              <li><span class="about__fact-label">WhatsApp</span><a href="https://wa.me/918669152401" target="_blank" rel="noopener">Message on WhatsApp</a></li>
+              <li><span class="about__fact-label">Location</span><span>Sangli, Maharashtra</span></li>
+              <li><span class="about__fact-label">GitHub</span><a href="https://github.com/Khu" target="_blank" rel="noopener">github.com/Khu</a></li>
+              <li><span class="about__fact-label">LinkedIn</span><a href="https://www.linkedin.com/in/khushighorpade26" target="_blank" rel="noopener">linkedin.com/in/khushighorpade26</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="section__inner site-footer__inner">
+      <p>&copy; <span id="year"></span> Khushi Ghorpade. Built with HTML, CSS &amp; JavaScript.</p>
+      <button onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    Back to top ↑
+</button>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
